@@ -37,9 +37,11 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 **Play**
 - The goal for every game: a complete campaign of 5–6 stages with a boss or climax, story scenes between stages and a funny ending.
 - Desktop (keyboard and mouse) and phone (touch) controls in every game; a single self-contained HTML file per game that works offline.
-- Bilingual: 繁體中文 (default) and English (Civil Slug done; the rest in progress).
+- Bilingual: 繁體中文 (default) and English (★ games done; the rest in progress).
 
 ## Games
+
+★ = complete release: full story, Metal Slug-style ending, 繁體中文 (default) and English.
 
 | # | Game | Genre | About |
 |---|------|-------|-------|
@@ -49,10 +51,10 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 04 | [Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about an undead KMT conscript. Five areas, five bosses, ending in YOU RETREATED. |
 | 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version of Dark Yuan: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. |
 | 06 | [Ming An: Expedition 48](games/06-ming-an-expedition-48/) | Turn-based RPG with real-time dodging | Explore Shanghai in 3D and fight turn-based battles with timed dodges and parries, in the spirit of Clair Obscur: Expedition 33. |
-| 07 | [Civil Fighter 1949](games/07-civil-fighter-1949/) | Fighting game | Four fighters, best of three rounds, specials and supers. Arcade mode or two players on one keyboard. |
+| 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) ★ | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
 | 08 | [Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) | Rhythm game | Two propaganda troupes, one village square, four lanes. Hit the notes to keep the crowd. |
 | 09 | [Gold Run 1949](games/09-gold-run-1949/) | Tower defense | Guard the gold reserves on the Shanghai docks until the last boat sails. Tower prices rise every wave. |
-| 10 | [Ration Crush 1949](games/10-ration-crush-1949/) | Match-3 puzzle | Ten weeks of cooking for whichever army occupies the village. Posters, grenades and Land Reform specials. |
+| 10 | [伙夫消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
 | 11 | [Sky of Gold Yuan](games/11-sky-of-gold-yuan/) | Shoot 'em up | A vertical shooter in a borrowed biplane. Three stages, power-ups, money bombs and the Printer's airship. |
 | 12 | [Last Ferry Rush](games/12-last-ferry-rush/) | Racing | A pseudo-3D arcade racer: drive a truck of passengers from the village to the docks before the last ferry leaves. |
 | 13 | [Paper Generals 1949](games/13-paper-generals-1949/) | Turn-based tactics | Five grid battles for either army. Morale is a resource, and soldiers whose morale runs out switch sides. |

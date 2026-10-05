@@ -1,6 +1,19 @@
-<title>Civil Fighter 1949</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>國共快打 Civil Fighter 1949</title>
+<meta name="description" content="Civil Fighter 1949 (國共快打): a free pixel fighting-game satire of the Chinese Civil War. Six arcade stages, Gold Yuan hyperinflation, a mirror match, a million-man final boss and one very temporary relocation. 繁體中文 / English.">
+<meta name="theme-color" content="#0c0908">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Civil Fighter">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23120d0c'/%3E%3Crect x='1' y='1' width='14' height='14' fill='none' stroke='%23c8372d' stroke-width='2'/%3E%3Crect x='5' y='4' width='6' height='2' fill='%232f4f8a'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e9c9a0'/%3E%3Crect x='4' y='10' width='8' height='3' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: letterboxed pixel canvas; candle-dark serif overlays for title, the tea stove and the ending */
 :root{
@@ -8,7 +21,8 @@
   --red:#b3261e; --gold:#d9a441; --ember:#ff8a3a; --soul:#b9e0a0;
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
@@ -64,26 +78,43 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 #tH{--r:20px;--b:30px;width:74px;height:74px;border-color:var(--red)}
 #tS{--r:40px;--b:116px;width:62px;height:62px;border-color:var(--gold)}
 #tX{--r:120px;--b:90px;width:52px;height:52px;border-color:#c08aff;color:#c08aff}
+.lang{display:flex;position:fixed;z-index:11;top:calc(env(safe-area-inset-top,0px) + 10px);right:calc(env(safe-area-inset-right,0px) + 10px)}
+.lang button{font:11px var(--px);padding:9px 12px;border:2px solid var(--dim);background:rgba(12,9,8,.85);color:var(--dim);cursor:pointer;min-width:64px}
+.lang button+button{border-left:0}
+.lang button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh);padding:7px 12px}
+#hud #bLang{font:700 12px/1 var(--zh);padding:6px 8px}
+html[lang^=zh] #hud #bLang{font:9px var(--px);padding:6px 7px}
+html[lang^=zh] #hud button:not(#bLang){font:700 12px var(--zh);padding:5px 7px}
+html[lang^=zh] p{font-family:var(--zh);font-size:clamp(14px,3.6vw,17px);line-height:1.5}
+html[lang^=zh] .btn{font:700 15px var(--zh);letter-spacing:.1em}
+html[lang^=zh] .tb{font:700 13px/1.2 var(--zh)}
+html[lang^=zh] h1{letter-spacing:.06em}
+#rot{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 50px);text-align:center;font:9px var(--px);color:var(--dim);display:none;z-index:5;pointer-events:none}
+html[lang^=zh] #rot{font:700 13px var(--zh)}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:block}}
 .modes{display:flex;flex-direction:column;gap:10px;align-items:center}
 .modes .btn{width:min(320px,100%)}
 </style>
 
-<div id="app"><canvas id="cv" width="384" height="216" aria-label="Dark Yuan game screen"></canvas></div>
-<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="app"><canvas id="cv" width="384" height="216" aria-label="國共快打 1949 遊戲畫面"></canvas></div>
+<div id="hud" hidden><button id="bLang" aria-label="切換語言 / Switch language" lang="zh-Hant">中文</button><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="rot" data-t="rot">Turn your phone sideways for a bigger war</div>
 <div id="touch" hidden>
   <div id="stickBase" hidden><div id="stickKnob"></div></div>
-  <div class="tb R" id="tL" data-k="L">LIGHT</div>
-  <div class="tb R" id="tH" data-k="H">HEAVY</div>
-  <div class="tb R" id="tS" data-k="S">SPECIAL</div>
-  <div class="tb R" id="tX" data-k="X">SUPER</div>
+  <div class="tb R" id="tL" data-k="L" data-t="tL">LIGHT</div>
+  <div class="tb R" id="tH" data-k="H" data-t="tH">HEAVY</div>
+  <div class="tb R" id="tS" data-k="S" data-t="tS">SPECIAL</div>
+  <div class="tb R" id="tX" data-k="X" data-t="tX">SUPER</div>
 </div>
 <div id="title" class="ov">
+  <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">中文</button><button data-l="en" lang="en" aria-pressed="false">EN</button></div>
   <div class="card">
     <div class="seal">內戰</div>
-    <h1>CIVIL FIGHTER<span>1949 · BROTHERS, PUNCHING</span></h1>
-    <p class="tag">Four fighters. Two armies. One printing press. Settle the civil war the only fair way: best of three rounds.</p>
-    <div class="modes"><button class="btn" id="mArcade">ARCADE</button><button class="btn alt" id="mCpu">VERSUS CPU</button><button class="btn alt" id="m2p">2 PLAYERS (ONE KEYBOARD)</button></div>
-    <p class="keys">Player 1: A D walk · W jump · S crouch · hold back to block · J light · K heavy · L special · I super<br>Special + direction: neutral = projectile · forward = rush · down = anti-air · back = counter. Classic motions work too (↓↘→ + attack, →↓↘ + attack).<br>Player 2: arrow keys · 1 2 3 0 (numpad) or , . / ;<br>Phone: left thumb moves, buttons on the right.</p>
-    <p class="fine">Satire. Nobody wins a civil war. Some people win rounds.</p>
+    <h1 data-t="h1">CIVIL FIGHTER<span>1949 · BROTHERS, PUNCHING</span></h1>
+    <p class="tag" data-t="tag">You fight for the Nationalists (blue caps). Arcade: six stages from the frozen Northeast to the last pier, against the Reds, your own colleagues, your own propaganda poster, the printing press and a one-million-man army. Best of three rounds. Win them all. See how much it helps.</p>
+    <div class="modes"><button class="btn" id="mArcade" data-t="arc">ARCADE</button><button class="btn alt" id="mCpu" data-t="cpu">VERSUS CPU</button><button class="btn alt" id="m2p" data-t="p2">2 PLAYERS (ONE KEYBOARD)</button></div>
+    <p class="keys" data-t="keys">Player 1: A D walk · W jump · S crouch · hold back to block · J light · K heavy · L special · I super<br>Special + direction: neutral = projectile · forward = rush · down = anti-air · back = counter. Classic motions work too (↓↘→ + attack, →↓↘ + attack).<br>Player 2: arrow keys · 1 2 3 0 (numpad) or , . / ;<br>Phone: left thumb moves, buttons on the right.</p>
+    <p class="fine" data-t="fine">Satire. Nobody wins a civil war. Arcade and Versus CPU: you play a Nationalist, the Communists are your opponents. 2 Players: Player 1 is a Nationalist, Player 2 may pick anyone.</p>
   </div>
 </div>

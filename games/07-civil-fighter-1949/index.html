@@ -1,6 +1,19 @@
-<title>Civil Fighter 1949</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>國共快打 Civil Fighter 1949</title>
+<meta name="description" content="Civil Fighter 1949 (國共快打): a free pixel fighting-game satire of the Chinese Civil War. Six arcade stages, Gold Yuan hyperinflation, a mirror match, a million-man final boss and one very temporary relocation. 繁體中文 / English.">
+<meta name="theme-color" content="#0c0908">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Civil Fighter">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23120d0c'/%3E%3Crect x='1' y='1' width='14' height='14' fill='none' stroke='%23c8372d' stroke-width='2'/%3E%3Crect x='5' y='4' width='6' height='2' fill='%232f4f8a'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e9c9a0'/%3E%3Crect x='4' y='10' width='8' height='3' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: letterboxed pixel canvas; candle-dark serif overlays for title, the tea stove and the ending */
 :root{
@@ -8,7 +21,8 @@
   --red:#b3261e; --gold:#d9a441; --ember:#ff8a3a; --soul:#b9e0a0;
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
@@ -64,27 +78,44 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 #tH{--r:20px;--b:30px;width:74px;height:74px;border-color:var(--red)}
 #tS{--r:40px;--b:116px;width:62px;height:62px;border-color:var(--gold)}
 #tX{--r:120px;--b:90px;width:52px;height:52px;border-color:#c08aff;color:#c08aff}
+.lang{display:flex;position:fixed;z-index:11;top:calc(env(safe-area-inset-top,0px) + 10px);right:calc(env(safe-area-inset-right,0px) + 10px)}
+.lang button{font:11px var(--px);padding:9px 12px;border:2px solid var(--dim);background:rgba(12,9,8,.85);color:var(--dim);cursor:pointer;min-width:64px}
+.lang button+button{border-left:0}
+.lang button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh);padding:7px 12px}
+#hud #bLang{font:700 12px/1 var(--zh);padding:6px 8px}
+html[lang^=zh] #hud #bLang{font:9px var(--px);padding:6px 7px}
+html[lang^=zh] #hud button:not(#bLang){font:700 12px var(--zh);padding:5px 7px}
+html[lang^=zh] p{font-family:var(--zh);font-size:clamp(14px,3.6vw,17px);line-height:1.5}
+html[lang^=zh] .btn{font:700 15px var(--zh);letter-spacing:.1em}
+html[lang^=zh] .tb{font:700 13px/1.2 var(--zh)}
+html[lang^=zh] h1{letter-spacing:.06em}
+#rot{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 50px);text-align:center;font:9px var(--px);color:var(--dim);display:none;z-index:5;pointer-events:none}
+html[lang^=zh] #rot{font:700 13px var(--zh)}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:block}}
 .modes{display:flex;flex-direction:column;gap:10px;align-items:center}
 .modes .btn{width:min(320px,100%)}
 </style>
 
-<div id="app"><canvas id="cv" width="384" height="216" aria-label="Dark Yuan game screen"></canvas></div>
-<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="app"><canvas id="cv" width="384" height="216" aria-label="國共快打 1949 遊戲畫面"></canvas></div>
+<div id="hud" hidden><button id="bLang" aria-label="切換語言 / Switch language" lang="zh-Hant">中文</button><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="rot" data-t="rot">Turn your phone sideways for a bigger war</div>
 <div id="touch" hidden>
   <div id="stickBase" hidden><div id="stickKnob"></div></div>
-  <div class="tb R" id="tL" data-k="L">LIGHT</div>
-  <div class="tb R" id="tH" data-k="H">HEAVY</div>
-  <div class="tb R" id="tS" data-k="S">SPECIAL</div>
-  <div class="tb R" id="tX" data-k="X">SUPER</div>
+  <div class="tb R" id="tL" data-k="L" data-t="tL">LIGHT</div>
+  <div class="tb R" id="tH" data-k="H" data-t="tH">HEAVY</div>
+  <div class="tb R" id="tS" data-k="S" data-t="tS">SPECIAL</div>
+  <div class="tb R" id="tX" data-k="X" data-t="tX">SUPER</div>
 </div>
 <div id="title" class="ov">
+  <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">中文</button><button data-l="en" lang="en" aria-pressed="false">EN</button></div>
   <div class="card">
     <div class="seal">內戰</div>
-    <h1>CIVIL FIGHTER<span>1949 · BROTHERS, PUNCHING</span></h1>
-    <p class="tag">Four fighters. Two armies. One printing press. Settle the civil war the only fair way: best of three rounds.</p>
-    <div class="modes"><button class="btn" id="mArcade">ARCADE</button><button class="btn alt" id="mCpu">VERSUS CPU</button><button class="btn alt" id="m2p">2 PLAYERS (ONE KEYBOARD)</button></div>
-    <p class="keys">Player 1: A D walk · W jump · S crouch · hold back to block · J light · K heavy · L special · I super<br>Special + direction: neutral = projectile · forward = rush · down = anti-air · back = counter. Classic motions work too (↓↘→ + attack, →↓↘ + attack).<br>Player 2: arrow keys · 1 2 3 0 (numpad) or , . / ;<br>Phone: left thumb moves, buttons on the right.</p>
-    <p class="fine">Satire. Nobody wins a civil war. Some people win rounds.</p>
+    <h1 data-t="h1">CIVIL FIGHTER<span>1949 · BROTHERS, PUNCHING</span></h1>
+    <p class="tag" data-t="tag">You fight for the Nationalists (blue caps). Arcade: six stages from the frozen Northeast to the last pier, against the Reds, your own colleagues, your own propaganda poster, the printing press and a one-million-man army. Best of three rounds. Win them all. See how much it helps.</p>
+    <div class="modes"><button class="btn" id="mArcade" data-t="arc">ARCADE</button><button class="btn alt" id="mCpu" data-t="cpu">VERSUS CPU</button><button class="btn alt" id="m2p" data-t="p2">2 PLAYERS (ONE KEYBOARD)</button></div>
+    <p class="keys" data-t="keys">Player 1: A D walk · W jump · S crouch · hold back to block · J light · K heavy · L special · I super<br>Special + direction: neutral = projectile · forward = rush · down = anti-air · back = counter. Classic motions work too (↓↘→ + attack, →↓↘ + attack).<br>Player 2: arrow keys · 1 2 3 0 (numpad) or , . / ;<br>Phone: left thumb moves, buttons on the right.</p>
+    <p class="fine" data-t="fine">Satire. Nobody wins a civil war. Arcade and Versus CPU: you play a Nationalist, the Communists are your opponents. 2 Players: Player 1 is a Nationalist, Player 2 may pick anyone.</p>
   </div>
 </div>
 
@@ -769,8 +800,8 @@ const MIN_TEX_KEYS='#PQWF';
 const X={swing:lim(()=>{noise(.12,.13,2200,'bandpass',0,SFXBUS,1.4);tone(520,180,.09,'sine',.025)}),heavy:lim(()=>{noise(.28,.22,800,'bandpass',0,SFXBUS,1);tone(220,70,.22,'sine',.09)}),
  flesh:lim(()=>{noise(.09,.32,1100,'lowpass');tone(170,55,.12,'square',.06);noise(.05,.12,3000,'bandpass')}),block:lim(()=>{tone(1300,800,.1,'square',.04);noise(.06,.2,4000,'highpass')}),
  parry:()=>{tone(2700,2500,.3,'triangle',.09);tone(1850,1800,.35,'square',.035);noise(.06,.25,6500,'highpass')},roll:lim(()=>noise(.2,.12,500,'lowpass'))};
-const SERIF=s=>`900 ${s}px "Noto Serif TC","Songti TC",Georgia,serif`;
-function stxt(s,x,y,c,size,a=1,al='center'){ctx.font=SERIF(size);ctx.textAlign=al;ctx.textBaseline='middle';ctx.globalAlpha=a;ctx.fillStyle='#000';ctx.fillText(s,x+2,y+2);ctx.fillStyle=c;ctx.fillText(s,x,y);ctx.globalAlpha=1}
+const SERIF=s=>`900 ${s}px "Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU",Georgia,serif`;
+function stxt(s,x,y,c,size,a=1,al='center'){s=tr(String(s));if(isZ(s)&&size>22)size=Math.round(size*.8);ctx.font=SERIF(size);ctx.textAlign=al;ctx.textBaseline='middle';ctx.globalAlpha=a;ctx.fillStyle='#000';ctx.fillText(s,x+2,y+2);ctx.fillStyle=c;ctx.fillText(s,x,y);ctx.globalAlpha=1}
 function groundAt(){return GY}
 const FY=GY+5,SW=640;
 PAL.uni={h:'#4a2a5a',hs:'#2a1a3a',s:'#d9a441',u:'#6a4a80',uh:'#8a6aa0',d:'#4a3a60',p:'#7a6a8a'};
@@ -781,7 +812,8 @@ const ROSTER={
  wang:{name:'LAO WANG',han:'老王',fac:'kmt',hp:1000,spd:1.5,sc:2.6,dm:1,wpn:'dadao',stage:'village',
   sp:{proj:'yuan',aa:'rising',fwd:'rush',back:'withdraw',sup:'mtfk'},bio:'Conscript. Paid in Gold Yuan. Fights for back pay that will never arrive.',
   quotes:['Your army pays in rice? ...Can I see the menu?','I fought for my paycheck. It is now worth one egg.','DIE! CCP MTFK! ...Sorry. Reflex.'],
-  ending:{draw:'island',date:'1949',place:'TAIWAN STRAIT',fact:'Around 1949, between one and two million soldiers and civilians followed the Nationalist government to Taiwan.',joke:'Lao Wang wins the tournament. The prize, in Gold Yuan, buys him a ferry ticket. Standing room only.'}},
+  ending:{draw:'boats',date:'DECEMBER 1949',place:'THE LAST FERRY',fact:'As the mainland fell, one to two million soldiers and civilians followed the Nationalist government across the strait.',joke:'Lao Wang won every round. On deck his back pay arrives: forty million Gold Yuan. A sailor trades him one boiled egg for the lot. Generous.'},
+  taiwan:'Officially it is a temporary relocation. Very temporary. "We counterattack the mainland next year!" So Lao Wang unpacks one sock. Just one. No sense unpacking for a year.'},
  red:{name:'LITTLE RED',han:'小紅',fac:'ccp',hp:900,spd:1.85,sc:2.45,dm:.95,wpn:null,stage:'paddy',
   sp:{proj:'slogan',aa:'spin',fwd:'slide',back:'critique',sup:'megaphone'},bio:'Agitator. Megaphone in one hand, pamphlets in the other, opinions in both.',
   quotes:['I have prepared a pamphlet about your defeat.','Land to the tiller! Fist to the face!','You will now criticize yourself. Loudly.'],
@@ -789,7 +821,8 @@ const ROSTER={
  ma:{name:'GENERAL MA',han:'馬將軍',fac:'kmt',officer:1,hp:1200,spd:1.1,sc:3.0,dm:1.2,wpn:'dadao',stage:'snow',
   sp:{proj:'grab',aa:'leap',fwd:'charge',back:'supervise',sup:'squad'},bio:'Battle supervisor. Executes deserters. Has never been asked how many.',
   quotes:['Retreat is treason. Advance is also suspicious.','I have a form for your execution. Sign here.','My dadao has six names engraved. Yours is next.'],
-  ending:{draw:'table',date:'1949',place:'A NEGOTIATION TABLE',fact:'Repeated ceasefires and peace talks between the two sides collapsed between 1945 and 1949.',joke:'General Ma wins and attends the peace talks. He brings his dadao. The talks end early.'}},
+  ending:{draw:'goldship',date:'DECEMBER 1949',place:'THE LAST PIER',fact:'Before the end, the central bank\'s gold reserves were quietly shipped to Taiwan. The gold left first.',joke:'General Ma wins every bout and orders a glorious advance. Toward the boat. "It is not a retreat. The mainland is moving away."'},
+  taiwan:'Officially a temporary relocation. Very temporary. General Ma schedules the counterattack for next year. Every year. The calendar is now his most decorated subordinate.'},
  wei:{name:'COMMISSAR WEI',han:'魏政委',fac:'ccp',officer:1,hp:1000,spd:1.5,sc:2.7,dm:1,wpn:null,stage:'river',
   sp:{proj:'bomb',aa:'rect',fwd:'line',back:'defect',sup:'reform'},bio:'Political commissar. Can defect to the winning side mid-sentence.',
   quotes:['Your errors have been noted. In triplicate.','I was always on the winning side. Check the records. I edited them.','Rectify THIS.'],
@@ -797,9 +830,94 @@ const ROSTER={
  printer:{name:'THE PRINTER',han:'印鈔機',fac:'uni',officer:1,hp:1700,spd:1.0,sc:3.5,dm:1.25,wpn:null,stage:'city',boss:1,
   sp:{proj:'bills',aa:'hammer',fwd:'hammer',back:'bills',sup:'devalue'},bio:'The central bank\'s printing press, in a suit. Paints a bigger number every year.',
   quotes:['I do not lose. I issue new currency.','Your health has been revalued at 1/1000th.','Inflation is not a bug. It is my fighting style.'],
-  ending:{draw:'bankrun',date:'1949',place:'SHANGHAI',fact:'By 1949 the Gold Yuan, introduced in August 1948, had become close to worthless.',joke:'The Printer cannot be defeated, only replaced with a newer model.'}}};
+  ending:{draw:'bankrun',date:'1949',place:'SHANGHAI',fact:'By 1949 the Gold Yuan, introduced in August 1948, had become close to worthless.',joke:'The Printer cannot be defeated, only replaced with a newer model.'}},
+ million:{name:'MILLION-MAN ARMY',han:'百萬雄師',fac:'ccp',officer:1,hp:1900,spd:1.2,sc:3.6,dm:1.2,wpn:null,stage:'pier',boss:2,
+  sp:{proj:'bomb',aa:'rect',fwd:'charge',back:'critique',sup:'reform'},bio:'Not one soldier. A statistic in a cap. Defeat him and only 999,999 remain.',
+  quotes:['I am not one man. I am a rounding error of a million.','Beat me if you like. My cousins are queuing behind me.','The river was your line. We brought boats.'],
+  ending:{draw:'parade',date:'1949',place:'THE FAR SHORE',fact:'By the end of 1949 the People\'s Liberation Army numbered in the millions.',joke:'He is promoted to One Million And One.'}}};
+/* the arcade ladder: six stages, autumn 1948 to the last pier */
+PAL.poster={h:'#3a2a18',hs:'#2a1a10',s:'#e0b070',u:'#c8a050',uh:'#e0c070',d:'#8a6a30',p:'#f0d890'};
+const POSTERQ=['I have never lost a battle. I have never been in one.','I am you, but in a better font.','The Ministry says I win this. It is printed right here.'];
+const posterOf=c=>Object.assign({},c,LANG==='zh'?{name:'海報'+c.name,han:'海報',mirror:1,quotes:['我從沒打過敗仗。因為我從沒打過仗。','我就是你，只是字體比較好看。','部裡說這場我會贏。這裡印得清清楚楚。']}:{name:'POSTER '+c.name.split(' ').pop(),han:'海報',mirror:1,quotes:POSTERQ});
+function mkLadder(me){const riv=me==='wang'?'ma':'wang';return[{k:'red',stage:'snow',si:0},{k:'wei',stage:'village',si:1},{k:riv,stage:'river',si:2,riv},{k:me,mir:1,stage:'palace',si:3},{k:'printer',stage:'city',si:4},{k:'million',stage:'pier',si:5}]}
+const STORY={en:[
+ {draw:'snow',date:'SEPTEMBER 1948',place:'THE NORTHEAST',fact:'Autumn 1948. The war for the Northeast turns. Whole armies are surrounded; some simply change caps.',joke:'HQ issues {nm} a winter coat. On paper. The paper is quite warm if you burn it. A pamphleteer in a red armband blocks the road.'},
+ {draw:'wreck',date:'NOVEMBER 1948',place:'HUAIHAI',fact:'The Huaihai campaign: hundreds of thousands of men on each side, across the central plains.',joke:'Orders: hold the village to the last man. The last man is {nm}. The village has already left. Only a commissar with two flags remains.'},
+ {draw:'yangtze',date:'APRIL 1949',place:'THE YANGTZE',fact:'April 1949: the Communist armies cross the Yangtze. The river was supposed to be the line.',joke:'One seat left on the ferry. One other Nationalist wants it: {rn}. National unity begins with punching a colleague.'},
+ {draw:'palace',date:'23 APRIL 1949',place:'NANJING',fact:'Nanjing, the capital, falls. The government has already moved to Guangzhou. And will move again.',joke:'In the empty Ministry of Victory, {nm} meets his own propaganda poster. It has never lost a battle. It has never been in one.'},
+ {draw:'bankrun',date:'MAY 1949',place:'SHANGHAI',fact:'Shanghai falls. The Gold Yuan, launched in August 1948 to save the economy, is now worth less than the paper.',joke:'Rice costs a suitcase of money. The money costs nothing. Time to fight the only one on your side who is still winning: the printing press.'},
+ {draw:'pier',date:'DECEMBER 1949',place:'THE LAST PIER',fact:'The People\'s Liberation Army now numbers in the millions. The boats number rather fewer.',joke:'Final opponent: the Million-Man Army. Beat him and only 999,999 remain. The last boat leaves at dawn either way.'}],
+ zh:[
+ {draw:'snow',date:'1948年9月',place:'東北',fact:'1948年秋，東北戰局逆轉。整支整支的部隊被包圍，有些乾脆換一頂帽子。',joke:'司令部發給{nm}一件冬衣。紙上的。那張紙燒起來倒是挺暖。一個戴紅臂章的宣傳員擋在路中間。'},
+ {draw:'wreck',date:'1948年11月',place:'淮海',fact:'淮海戰役：雙方各數十萬大軍，在中原平原上正面對決。',joke:'命令：死守村子，戰到最後一人。最後一人就是{nm}。村子早就跑光了，只剩一位帶著兩面旗子的政委。'},
+ {draw:'yangtze',date:'1949年4月',place:'長江',fact:'1949年4月，共軍渡過長江。長江本來應該是防線。',joke:'渡輪只剩一個位子。另一位國軍也想要：{rn}。團結全國，從揍同事開始。'},
+ {draw:'palace',date:'1949年4月23日',place:'南京',fact:'首都南京失守。政府早就搬到廣州了。之後還會再搬。',joke:'在空無一人的「勝利部」裡，{nm}遇見了自己的宣傳海報。它從沒打過敗仗。因為它從沒打過仗。'},
+ {draw:'bankrun',date:'1949年5月',place:'上海',fact:'上海失守。1948年8月為了拯救經濟而發行的金圓券，現在比印它的紙還不值錢。',joke:'一斗米要一皮箱鈔票，鈔票本身一文不值。該去對付我方唯一還在打勝仗的傢伙了：印鈔機。'},
+ {draw:'pier',date:'1949年12月',place:'最後的碼頭',fact:'解放軍兵力已達數百萬。船的數量就少得多了。',joke:'最終對手：百萬雄師。打倒他，只剩999,999個。不管輸贏，最後一班船天一亮就開。'}]};
+function storyOf(L_){const me=F1?F1.key:'wang',riv=me==='wang'?'ma':'wang',sc=STORY[LANG][L_.si||0];const f=x=>x.replace('{nm}',ROSTER[me].name).replace('{rn}',ROSTER[riv].name);return Object.assign({},sc,{fact:f(sc.fact),joke:f(sc.joke)})}
+function curL(){if(typeof ladder[0]==='string')ladder=mkLadder(F1.key);return ladder[Math.min(ladderI,ladder.length-1)]}
 const CAST=['wang','red','ma','wei'];
-const STAGES={village:{theme:'village',name:'BURNING VILLAGE',weather:null},paddy:{theme:'paddy',name:'THE CONTESTED PADDY',weather:null},snow:{theme:'snow',name:'NORTHEAST FRONT',weather:'snow'},river:{theme:'river',name:'YANGTZE FERRY',weather:null},city:{theme:'city',name:'SHANGHAI MINT',weather:'money'}};
+/* the player always fights for the Nationalists: player 1 may only pick KMT fighters (CCP fighters stay as CPU opponents / player 2) */
+const P1OK=i=>ROSTER[CAST[i]].fac==='kmt';
+const p1Locked=()=>mode!=='cpu'||selStep===0;
+/* every arcade run ends the same way, true to history */
+const FINALE={draw:'island',date:'DECEMBER 1949',place:'TAIWAN',fact:'The government retreats to Taiwan. You won every single round. You still lost the war.',joke:'Officially a temporary relocation. "We counterattack the mainland next year!" everyone agrees. Every year.'};
+function endingFor(k){const c=ROSTER[k];return[c.ending,Object.assign({},FINALE,{joke:c.taiwan||FINALE.joke}),
+ LANG==='zh'?{draw:'tally',date:'1950、1951、1952……',place:'還在船上',fact:'最終戰績：贏得回合 '+stats.rw+' · 輸掉回合 '+stats.rl+' · 打贏內戰 0',joke:'金圓券獎金：一文不值（不過很輕）。反攻大陸：預定明年。全劇終。（暫時的。）'}
+ :{draw:'tally',date:'1950, 1951, 1952...',place:'THE BOAT, STILL',fact:'FINAL RECORD: ROUNDS WON '+stats.rw+' · ROUNDS LOST '+stats.rl+' · CIVIL WARS WON 0',joke:'Gold Yuan prize money: worthless (light, though). Counterattack: scheduled for next year. THE END. (Temporarily.)'}]}
+function drawGate(gx,b,flagRed){r(gx-10,b-6,200,6,'#5a5450');r(gx,b-66,180,60,'#8a8478');for(let x=gx+6;x<gx+180;x+=18)r(x,b-66,2,60,'#7a746a');
+ r(gx+20,b-42,30,36,'#1a1820');r(gx+75,b-50,30,44,'#1a1820');r(gx+130,b-42,30,36,'#1a1820');r(gx+20,b-44,30,2,'#5a5450');r(gx+75,b-52,30,2,'#5a5450');r(gx+130,b-44,30,2,'#5a5450');
+ r(gx-6,b-74,192,8,'#5a5450');r(gx+2,b-78,176,4,'#4a4440');r(gx+10,b-63,160,10,'#120d0c');txt('MINISTRY OF VICTORY',gx+90,b-62,'#d9a441','center');
+ r(gx+70,b-41,40,11,'#e9dcc2');txt('MOVED',gx+90,b-39,'#120d0c','center');
+ r(gx+89,b-110,2,32,'#3a2a20');const wv=Math.sin(T/9)*1.5;if(flagRed){r(gx+91,b-108+wv,24,14,'#b8322a');r(gx+94,b-106+wv,4,4,'#f1d27a')}else{r(gx+91,b-108+wv,24,14,'#2f4f8a');r(gx+99,b-104+wv,6,6,'#f2f2f2')}}
+function drawShip(sx,b,t){r(sx-90,b-22,210,22,'#2a2a30');r(sx-96,b-26,222,4,'#3a3a44');r(sx-40,b-46,90,20,'#3a3a44');for(let i=0;i<6;i++)r(sx-34+i*14,b-40,6,5,(i+(t>>5))%3?'#e0b050':'#5a5040');
+ r(sx+10,b-72,14,26,'#2a2a30');r(sx+10,b-72,14,3,'#b8322a');for(let k=0;k<5;k++){const py=b-80-((t*.4+k*12)%60);r(sx+12+Math.sin((t+k*30)/20)*4+k,py,6+k,5+k,'rgba(40,40,50,.6)')}
+ r(sx-80,b-20,74,9,'#e9dcc2');txt('LAST BOAT',sx-43,b-19,'#120d0c','center');for(let i=0;i<4;i++){r(sx+60+i*12,b-34,10,8,'#c8a040');r(sx+60+i*12,b-34,10,1,'#ffe27a')}}
+const FART={yangtze(t){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#2a1e3a');g.addColorStop(1,'#e8a060');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
+  r(0,78,W,58,'#34445f');for(let i=0;i<22;i++)r((i*37+t*.5)%W,84+(i%6)*8,10,1,'#6a8ab0');r(0,112,150,24,'#7a6448');r(0,112,150,2,'#a08860');
+  const bob=Math.round(Math.sin(t/20)*1.5);r(190,96+bob,120,12,'#5a4030');r(196,92+bob,108,4,'#7a5a38');r(240,80+bob,20,12,'#d9cfb8');txt('SEAT 1/1',250,70+bob,'#ffd24a','center');
+  const pull=Math.sin(t/7)*3;drawSoldier(88-pull,124,{fac:'kmt',face:1,emo:'grit',gun:null});drawSoldier(126+pull,124,{fac:'kmt',face:-1,emo:'grit',gun:null,officer:1});
+  r(100,104,10,3,SK);r(114,104,10,3,SK);txt('MINE!',70,92,'#e9dcc2','center');txt('MINE!',146,92,'#e9dcc2','center')},
+ palace(t){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#2a2a34');g.addColorStop(1,'#8a8a96');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);r(0,124,W,12,'#6a645c');
+  drawGate(170,126,(t>>6)%2);r(36,30,56,84,'#e0c070');r(38,32,52,80,'#c8a050');drawSoldier(56,104,{fac:'kmt',face:1,emo:'smug',gun:'rifle'});txt('HERO',64,36,'#5a3a10','center');
+  drawSoldier(118,128,{fac:'kmt',face:-1,emo:(t>>5)%2?'scared':'grit',gun:null});for(let i=0;i<50;i++)r((i*37+t*1.2)%W,(i*23+t*6)%136,1,5,'rgba(170,190,210,.5)')},
+ pier(t){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#05060f');g.addColorStop(1,'#3a2a4a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);for(let i=0;i<24;i++)r((i*53)%W,(i*29)%50,1,1,'#e9dcc2');
+  r(0,70,W,6,'#10142a');for(let i=0;i<60;i++)r((i*7+t*.15)%W,66+(i%3),2,4,i%2?'#3a5a32':'#2f4a2a');r(0,76,W,60,'#1a2440');for(let i=0;i<16;i++)r((i*29+t*.5)%W,84+(i%5)*6,12,1,'#3a4a70');
+  drawShip(250,112,t);r(0,108,170,10,'#4a3220');for(let x=6;x<170;x+=24)r(x,118,4,18,'#3a2618');seg(150,110,170,94,2,'#7a5230');
+  for(let i=0;i<5;i++){const x=(i*30+t*.35)%170;drawSoldier(x,108,{fac:'kmt',face:1,pose:'run',anim:t*.3+i*5,emo:i%2?'scared':'cry',gun:null,item:i%2?'case':null})}
+  r(14,14,150,14,'#120d0c');txt('THE ARMY OF 1,000,000',89,17,'#ff8a7a','center')},
+ tally(t){ctx.fillStyle='#0c1424';ctx.fillRect(0,0,W,136);r(0,96,W,40,'#1a2a48');for(let i=0;i<20;i++)r((i*31+t*.3)%W,100+(i%6)*6,10,1,'#3a5a80');
+  const yr=1950+Math.min(76,t/30|0);r(40,18,96,72,'#e9dcc2');r(40,18,96,16,'#b8322a');txt('CALENDAR',88,22,'#f1d27a','center');stxt(String(yr),88,52,'#120d0c',22);txt('COUNTERATTACK:',88,68,'#120d0c','center');txt('NEXT YEAR',88,80,'#b8322a','center');
+  r(200,92,46,8,'#6a4a2a');drawSoldier(212,92,{fac:'kmt',face:1,emo:(t>>6)%2?'sleep':'smug',gun:null,item:'case'});r(260,70,90,16,'#120d0c');txt('¥ 0.00',305,74,'#d9a441','center')},
+ goldship(t){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#05060f');g.addColorStop(1,'#26203a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
+  for(let i=0;i<24;i++)r((i*53)%W,(i*29)%60,1,1,'#e9dcc2');r(0,104,W,32,'#1a2440');for(let i=0;i<16;i++)r((i*29+t*.5)%W,108+(i%5)*5,12,1,'#3a4a70');
+  r(0,98,150,8,'#4a3220');for(let x=6;x<150;x+=24)r(x,106,4,30,'#3a2618');
+  const bob=Math.round(Math.sin(t/30)*1.5);r(190,82+bob,190,22,'#2a2a30');r(196,74+bob,170,8,'#3a3a44');r(300,46+bob,40,28,'#4a4a52');r(312,30+bob,10,16,'#2a2a30');
+  for(let i=0;i<5;i++){r(206+i*18,62+bob,15,12,'#c8a040');r(206+i*18,62+bob,15,2,'#ffe27a');txt('金',209+i*18,64+bob,'#5a3a10')}
+  r(200,86+bob,96,10,'#e9dcc2');txt('GOLD: ALREADY GONE',203,87+bob,'#120d0c');seg(150,100,196,84+bob,2,'#7a5230');
+  const x=Math.min(150,10+t*.3);drawSoldier(x,98,{fac:'kmt',face:1,officer:1,pose:x<150?'run':'idle',anim:t*.3,emo:'smug',gun:null});
+  for(let i=0;i<10;i++){const bx=(i*31+t*.7)%170,by=(i*17+t*.6)%120;r(bx,by,6,3,'#b0a070')}
+  r(20,18,96,16,'#120d0c');txt('ADVANCE →',26,22,'#9fb6e6')}};
+function endScene(sc,t){ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);ctx.save();ctx.beginPath();ctx.rect(0,0,W,136);ctx.clip();if(FART[sc.draw])FART[sc.draw](t);else sceneArt(sc.draw,t);ctx.restore();ctx.drawImage(VIG,0,0);
+ r(0,136,W,H-136,'#120d0c');r(0,136,W,2,'#d9a441');txt(sc.date,8,141,'#d9a441');txt(sc.place,W-8,141,'#a8977c','right');
+ const zh=isZ(sc.fact+sc.joke);let fl,jl,LH=10,gap=2,shown=Math.floor(t*1.4),n=0;
+ if(zh){let sz=12;for(;;){ctx.font=`500 ${sz}px ${ZFAM}`;fl=wrapPx(sc.fact,W-16);jl=wrapPx(sc.joke,W-16);LH=sz+1;if((fl.length+jl.length)*LH+3<=H-153||sz<=10)break;sz--}shown=Math.floor(t*.7);gap=3}
+ else{fl=wrap(sc.fact,47);jl=wrap(sc.joke,47);ctx.font=F;if(fl.length+jl.length>6){LH=9;gap=1}}
+ ctx.textAlign='left';ctx.textBaseline=zh?'middle':'top';const off=zh?LH/2:0,adv=zh?0:1;
+ fl.forEach((l,i)=>{const v=l.slice(0,Math.max(0,shown-n));n+=l.length+adv;ctx.fillStyle='#e9dcc2';ctx.fillText(v,8,153+i*LH+off)});
+ jl.forEach((l,i)=>{const v=l.slice(0,Math.max(0,shown-n));n+=l.length+adv;ctx.fillStyle='#ff9a6a';ctx.fillText(v,8,153+gap+(fl.length+i)*LH+off)});
+ ctx.textBaseline='top';if(shown>n+10&&T%40<26)_txt0('▶',W-16,H-12,'#d9a441');return shown>n}
+const STAGES={village:{theme:'village',name:'BURNING VILLAGE',weather:null},paddy:{theme:'paddy',name:'THE CONTESTED PADDY',weather:null},snow:{theme:'snow',name:'NORTHEAST FRONT',weather:'snow'},river:{theme:'river',name:'YANGTZE FERRY',weather:null},city:{theme:'city',name:'SHANGHAI MINT',weather:'money'},
+ palace:{theme:'palace',name:'NANJING · MINISTRY OF VICTORY',weather:'rain',bare:1},pier:{theme:'pier',name:'THE LAST PIER',weather:null,bare:1}};
+THEMES.palace={sky:['#24242e','#44444f','#7e7e8a'],m1:'#3a3a46',m2:'#30303c',house:'#26222a',ground:'#6a645c',top:'#8a847a',spk:'#4a463e',sun:null};
+THEMES.pier={sky:['#05060f','#141a34','#3a2a4a'],m1:'#141830',m2:'#10142a',house:'#0e0e18',ground:'#4a3626',top:'#7a5a3a',spk:'#2e2016',sun:'#e8e0c0'};
+/* extra set dressing for the two new stages, drawn over the shared parallax background */
+const STAGEFX={palace(){const o=camX*.5;drawGate(256-o-90,176,F1&&F2&&F1.hp/F1.max<F2.hp/F2.max);
+  for(const wx of[60,250,440,600]){const x=wx-camX;if(x<-20||x>W+10)continue;r(x+4,GY-50,2,50,'#2a2a30');r(x,GY-54,10,4,'#3a3a40');r(x+2,GY-50,6,3,'#ffe8a0')}
+  for(const wx of[150,380]){const x=wx-camX;if(x<-60||x>W+10)continue;r(x,GY-44,36,44,'#c8a050');r(x+2,GY-42,32,40,'#e0c070');txt('HERO',x+18,GY-40,'#5a3a10','center');drawSoldier(x+10,GY-6,{fac:'kmt',face:1,emo:'smug',gun:'rifle'})}},
+ pier(){const o=camX*.5;r(0,138,W,6,'#10142a');for(let i=0;i<80;i++){const x=((i*9-o*.4-T*.1)%(W+20)+W+20)%(W+20)-10;r(x,134+(i%3),2,4,i%2?'#3a5a32':'#2f4a2a')}
+  r(0,144,W,GY-144,'#1a2440');for(let i=0;i<24;i++)r(((i*37-camX*.6)%W+W)%W,150+(i%8)*4,8,1,'#3a4a70');drawShip(300-o,176,T);
+  for(let sx=-(camX%18);sx<W;sx+=18)r(sx,GY+2,1,H-GY,'#2e2016');for(const wx of[40,220,400,600]){const x=wx-camX;if(x<-10||x>W)continue;r(x,GY-8,8,8,'#2a2a30');r(x-1,GY-9,10,2,'#3a3a44')}}};
 
 /* ---------------- poses ---------------- */
 const PO={
@@ -866,8 +984,8 @@ function superMove(f){const k=f.c.sp.sup,dm=f.c.dm;
  }}
 
 /* ---------------- fighters ---------------- */
-let F1=null,F2=null,projs=[],sparks=[],texts=[],hitstop=0,shake=0,slowmo=0,superFlash=null,mode='arcade',ladder=[],ladderI=0,round=1,timer=99,tTick=0,rState='',rT=0,crowd=[],cpuLv=1,cont=0,stats={wins:0};
-function mkFighter(key,side,cpu){const c=ROSTER[key];return{key,c,side,cpu,x:side?SW/2+70:SW/2-70,y:FY,vx:0,vy:0,air:0,dir:side?-1:1,hp:c.hp,hpD:c.hp,max:c.hp,meter:0,wins:0,st:'stand',t:0,fi:0,ft:0,m:null,hitIds:new Set(),contact:0,inv:0,armor:0,counter:null,combo:0,comboDmg:0,emo:'normal',say(s,big){this.bubble={s,t:big?90:60,big}},bubble:null,inp:mkInput(),ai:{t:0,act:null},anim:0,opp:null,juggle:0,down:0}}
+let F1=null,F2=null,projs=[],sparks=[],texts=[],hitstop=0,shake=0,slowmo=0,superFlash=null,mode='arcade',ladder=[],ladderI=0,round=1,timer=99,tTick=0,rState='',rT=0,crowd=[],cpuLv=1,cont=0,stats={wins:0,rw:0,rl:0};
+function mkFighter(key,side,cpu,mir){const c=mir?posterOf(ROSTER[key]):ROSTER[key];return{key,c,side,cpu,x:side?SW/2+70:SW/2-70,y:FY,vx:0,vy:0,air:0,dir:side?-1:1,hp:c.hp,hpD:c.hp,max:c.hp,meter:0,wins:0,st:'stand',t:0,fi:0,ft:0,m:null,hitIds:new Set(),contact:0,inv:0,armor:0,counter:null,combo:0,comboDmg:0,emo:'normal',say(s,big){this.bubble={s,t:big?90:60,big}},bubble:null,inp:mkInput(),ai:{t:0,act:null},anim:0,opp:null,juggle:0,down:0}}
 function mkInput(){return{h:{},p:{},hist:[]}}
 const neutral=f=>['stand','walk','crouch'].includes(f.st);
 function hurtbox(f){const s=f.c.sc;if(f.st==='down'||f.st==='ko')return null;const cr=f.st==='crouch'||f.st==='cblock'||(f.m&&f.m.crouch)||f.cr;const h=(cr?22:31)*s,w=7*s;return{x:f.x-w,y:f.y-h,w:w*2,h}}
@@ -885,7 +1003,7 @@ function poseOf(f){if(f.st==='move'){const fr=f.m.f[f.fi];return PO[fr[1]]||PO.i
  case 'fall':case 'down':case 'ko':return PO.hurt;case 'thrown':return PO.hurt;case 'win':return PO.win;case 'intro':return PO.shout;default:return(f.anim>>4)%2?PO.idle2:PO.idle}}
 /* ---------------- drawing ---------------- */
 function rot(a,l){return[Math.sin(a)*l,Math.cos(a)*l]}
-function drawFighter(f){const c=f.c,s=c.sc,pc=PAL[c.fac]||PAL.civ,p=poseOf(f);const x=Math.round(f.x-camX),y=Math.round(f.y);
+function drawFighter(f){const c=f.c,s=c.sc,pc=(c.mirror?PAL.poster:PAL[c.fac])||PAL.civ,p=poseOf(f);const x=Math.round(f.x-camX),y=Math.round(f.y);
  ctx.save();ctx.translate(x,y);if(f.st==='down'||f.st==='ko'&&!f.air){ctx.translate(0,-2);ctx.rotate(-f.dir*Math.PI/2);ctx.translate(0,-6*s)}else if(f.st==='fall'||f.st==='ko'){ctx.rotate(-f.dir*clamp(f.t/12,0,1)*1.2)}else if(f.m&&f.m.spin&&f.fi>0&&f.fi<4)ctx.scale(Math.cos(f.ft*.8)>0?1:-1,1);
  ctx.scale(f.dir*s,s);
  const flash=f.flash>0&&T%2;const U=flash?'#fff':pc.u,D=flash?'#ddd':pc.d,Pn=flash?'#eee':pc.p;
@@ -897,6 +1015,7 @@ function drawFighter(f){const c=f.c,s=c.sc,pc=PAL[c.fac]||PAL.civ,p=poseOf(f);co
  if(c.key==='printer'||f.key==='printer'){r(-9+p.lean*.5,-22+p.dy,7,9,'#a08a5a');r(-8+p.lean*.5,-23+p.dy,5,1,'#7a6a42')}
  leg(p.fT,p.fS,U,1.5);
  seg(hip[0],hip[1]-1,sh[0],sh[1]+2,10,U);seg(hip[0],hip[1]-1,sh[0],sh[1]+2,1,D);r(hip[0]-5,hip[1]-2,10,1.6,BELT);r(hip[0]-1,hip[1]-2,2,1.6,'#d9a441');
+ if(f.key==='million'){r(sh[0]-1,sh[1]+4,3,3,'#ffd24a');r(sh[0]-6,sh[1]+3,3,4,'#c8372d')}
  if(c.officer){r(sh[0]-5,sh[1]-1,3,1.2,'#d9a441');r(sh[0]+2,sh[1]-1,3,1.2,'#d9a441')}
  // head
  ctx.save();ctx.translate(sh[0]-8,sh[1]+13+(f.st==='hit'?1:0));chibiHead(f.emo,(T+f.side*90)%200<6);cap(c.fac==='uni'?'civ':c.fac);if(c.fac==='uni'){r(1,-31,14,4,'#4a2a5a');r(3,-32,10,1,'#6a4a80');r(7,-30,3,2,'#d9a441')}ctx.restore();
@@ -908,7 +1027,7 @@ function drawFighter(f){const c=f.c,s=c.sc,pc=PAL[c.fac]||PAL.civ,p=poseOf(f);co
  if(f.armor&&T%4<2){ctx.globalAlpha=.3;r(x-10*s,y-30*s,20*s,30*s,'#ff8a3a');ctx.globalAlpha=1}}
 function drawProj(q){const x=q.x-camX,y=q.y;
  if(q.k==='yuan'){for(let i=0;i<3;i++){const fl=Math.sin(q.t*.5+i)*3;r(x-10+i*2,y-6+i*3+fl,18,6,i%2?'#b0a070':'#8aa070');r(x-9+i*2,y-5+i*3+fl,4,4,'#d9a441')}txt('¥',x-1,y-5,'#d9a441','center')}
- else if(q.k==='slogan'){ctx.font=F;const w=ctx.measureText(q.txt).width+8;r(x-w/2,y-7,w,14,'#b8322a');r(x-w/2,y-7,w,2,'#f1d27a');txt(q.txt,x,y-4,'#f1d27a','center')}
+ else if(q.k==='slogan'){const sl=tr(q.txt);ctx.font=fontFor(sl);const w=ctx.measureText(sl).width+8;r(x-w/2,y-7,w,14,'#b8322a');r(x-w/2,y-7,w,2,'#f1d27a');txt(sl,x,y-4,'#f1d27a','center')}
  else if(q.k==='bomb'){r(x-2,y-6,4,7,WOOD);r(x-4,y-11,8,6,'#3a4030');if(T%4<2)r(x,y+2,2,2,'#ffb04a')}
  else if(q.k==='bill'){const fl=Math.abs(Math.sin(q.t*.4))*6+1;r(x-7,y-fl/2,14,fl,'#8aa070');r(x-2,y-1,4,2,'#d9a441')}
  else if(q.k==='beam'){ctx.globalAlpha=.85;r(x-30,y-16,60,32,'#b8322a');r(x-30,y-16,60,3,'#f1d27a');ctx.globalAlpha=1;stxt('人民!',x,y,'#f1d27a',18)}
@@ -1037,26 +1156,28 @@ function hitByProj(q,d){const a=q.o;const fake={hitIds:new Set(),m:{special:1}};
  q.hits--;q.hitT=8;if(q.hits<=0)q.dead=true}
 
 /* ---------------- rounds & flow ---------------- */
-let selCur=[0,1],selDone=[false,false],selStep=0,vsT=0,endT=0,result=null;
-function setStage(k){const st=STAGES[k];L.theme=st.theme;L.weather=st.weather;L.walls=[90,330,520];LV=Object.keys(STAGES).indexOf(k);buildBG();crowd=[];const R_=seeded(7+LV);for(let i=0;i<14;i++)crowd.push({x:30+i*45+R_()*20,k:R_()<.5?'civ':R_()<.5?'kmt':'ccp',ph:R_()*6,cheer:0,hat:pick(['straw','cap','none'])})}
-function startMatch(p1,p2,cpu2){F1=mkFighter(p1,0,false);F2=mkFighter(p2,1,cpu2);F1.id=1;F2.id=2;F1.opp=F2;F2.opp=F1;F1.wins=0;F2.wins=0;round=1;setStage(ROSTER[p2].stage);startRound();state='fight';$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false}
+let selCur=[0,1],selDone=[false,false],selStep=0,vsT=0,endT=0,result=null,scene=null;
+let stageK='village';function setStage(k){const st=STAGES[k];stageK=k;L.theme=st.theme;L.weather=st.weather;L.walls=st.bare?[]:[90,330,520];LV=Object.keys(STAGES).indexOf(k);buildBG();if(st.bare)BGD.fg=[];crowd=[];const R_=seeded(7+LV);for(let i=0;i<14;i++)crowd.push({x:30+i*45+R_()*20,k:R_()<.5?'civ':R_()<.5?'kmt':'ccp',ph:R_()*6,cheer:0,hat:pick(['straw','cap','none'])})}
+function startMatch(p1,p2,cpu2,stage,mir){F1=mkFighter(p1,0,false);F2=mkFighter(p2,1,cpu2,mir);F1.id=1;F2.id=2;F1.opp=F2;F2.opp=F1;F1.wins=0;F2.wins=0;round=1;setStage(stage||ROSTER[p2].stage);startRound();state='fight';$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false}
 function startRound(){for(const f of[F1,F2]){f.x=f.side?SW/2+70:SW/2-70;f.y=FY;f.vx=f.vy=0;f.air=0;f.hp=f.max;f.hpD=f.max;f.st='intro';f.m=null;f.combo=0;f.dir=f.side?-1:1;f.inv=0;f.armor=0;f.counter=null;f.grabbing=null;f.flurry=null;f.t=0}
- camX=SW/2-W/2;projs=[];sparks=[];timer=99;tTick=0;rState='intro';rT=0;slowmo=0;music(F2.key==='printer'?'boss':pick(['m5','m1','m2']));
+ camX=SW/2-W/2;projs=[];sparks=[];timer=99;tTick=0;rState='intro';rT=0;slowmo=0;music(F2.c.boss===2?'final':F2.c.boss?'boss':pick(['m5','m1','m2']));
  if(round===1){F1.say(pick(F1.c.quotes));setTimeout(()=>{if(F2)F2.say(pick(F2.c.quotes))},900)}}
 function updRound(){rT++;
  if(rState==='intro'){if(rT===100){rState='fight';for(const f of[F1,F2])f.st='stand';SFX.alarm()}return}
  if(rState==='fight'){if(++tTick>=50){tTick=0;timer--;if(timer<=0){rState='time';rT=0;music('off')}}return}
- if(rState==='ko'||rState==='time'){if(rT===100){const w=F1.hp===F2.hp?null:F1.hp>F2.hp?F1:F2;if(w){w.wins++;w.st='win';w.say(pick(w.c.quotes))}result=w;if(rState==='ko'&&w&&w.hp===w.max)texts.push({s:'PERFECT',x:-1,y:0,t:0,c:'#ffd24a'})}
+ if(rState==='ko'||rState==='time'){if(rT===100){const w=F1.hp===F2.hp?null:F1.hp>F2.hp?F1:F2;if(w){w.wins++;w.st='win';w.say(pick(w.c.quotes))}if(mode==='arcade'){if(w===F1)stats.rw++;else if(w===F2)stats.rl++}result=w;if(rState==='ko'&&w&&w.hp===w.max)texts.push({s:'PERFECT',x:-1,y:0,t:0,c:'#ffd24a'})}
   if(rT===220){if(F1.wins>=2||F2.wins>=2)return endMatch();round++;startRound()}}}
-function endMatch(){const p1won=F1.wins>=2;if(mode==='arcade'){if(p1won){ladderI++;stats.wins++;if(ladderI>=ladder.length){state='ending';endT=0;scene={sc:ROSTER[F1.key].ending,t:0};music('ending');return}state='vs';vsT=0;return}state='continue';endT=0;music('off');return}
+function endMatch(){const p1won=F1.wins>=2;if(mode==='arcade'){if(p1won){ladderI++;stats.wins++;if(ladderI>=ladder.length){state='ending';endT=0;const q=endingFor(F1.key);scene={sc:q.shift(),t:0,q};music('ending');return}toStory();return}state='continue';endT=0;music('off');return}
  state='result';endT=0}
-function nextArcade(){startMatch(F1.key,ladder[ladderI],true);cpuLv=Math.min(4,1+ladderI*.8)}
+function nextArcade(){const L_=curL();startMatch(F1.key,L_.k,true,L_.stage,L_.mir);cpuLv=Math.min(4,1+ladderI*.6)}
+function toStory(){state='story';camX=0;scene={sc:storyOf(curL()),t:0};music('m3')}
 function update(){T++;
  if(state==='select'){updSelect();return}
+ if(state==='story'){scene.t++;if(scene.t%3===0&&scene.t<400&&!scene.done)SFX.type();if(scene.t>40&&anyPress()){if(!scene.done){scene.t=9999;scene.done=1}else{state='vs';vsT=0}}return}
  if(state==='vs'){vsT++;if(vsT>160||(vsT>40&&anyPress()))nextArcade();return}
- if(state==='continue'){endT++;if(endT>40&&anyPress(true)){cont++;startMatch(F1.key,F2.key,true)}if(endT>600)toTitle();return}
+ if(state==='continue'){endT++;if(endT>40&&anyPress(true)){cont++;nextArcade()}if(endT>600)toTitle();return}
  if(state==='result'){endT++;if(endT>60&&anyPress())openSelect(mode);return}
- if(state==='ending'){scene.t++;if(scene.t%3===0&&scene.t<500)SFX.type();if(scene.t>60&&anyPress()){if(!scene.done){scene.t=9999;scene.done=1}else toTitle()}return}
+ if(state==='ending'){scene.t++;if(scene.t%3===0&&scene.t<500)SFX.type();if(scene.t>60&&anyPress()){if(!scene.done){scene.t=9999;scene.done=1}else if(scene.q&&scene.q.length)scene={sc:scene.q.shift(),t:0,q:scene.q};else toTitle()}return}
  if(state!=='fight')return;
  if(superFlash){superFlash.t++;if(superFlash.t>40)superFlash=null;else return}
  if(hitstop>0){hitstop--;return}
@@ -1081,14 +1202,16 @@ function openSelect(m){mode=m;state='select';selStep=0;selCur=[0,1];selDone=[fal
 let selPrev={};
 function edge(n,k,v){const id=n+k;const r_=v&&!selPrev[id];selPrev[id]=v;return r_}
 function updSelect(){const h1=readHuman({},1),h2=readHuman({},2);
- const mv=(n,h)=>{if(edge(n,'l',h.l))selCur[n]=(selCur[n]+3)%4,SFX.tally();if(edge(n,'r',h.r))selCur[n]=(selCur[n]+1)%4,SFX.tally()};
- if(mode==='2p'){if(!selDone[0])mv(0,h1);if(!selDone[1])mv(1,h2);if(edge(0,'L',h1.L||h1.H)&&!selDone[0]){selDone[0]=true;SFX.pick()}if(edge(1,'L',h2.L||h2.H)&&!selDone[1]){selDone[1]=true;SFX.pick()}
+ const mv=(n,h)=>{const lk=n===0&&p1Locked();const step=d=>{let c=selCur[n];do c=(c+d+4)%4;while(lk&&!P1OK(c));selCur[n]=c;SFX.tally()};if(edge(n,'l',h.l))step(-1);if(edge(n,'r',h.r))step(1)};
+ if(p1Locked()&&!P1OK(selCur[0]))selCur[0]=CAST.findIndex(k=>ROSTER[k].fac==='kmt');
+ if(mode==='2p'){if(!selDone[0])mv(0,h1);if(!selDone[1])mv(1,h2);if(edge(0,'L',h1.L||h1.H)&&!selDone[0]&&P1OK(selCur[0])){selDone[0]=true;SFX.pick()}if(edge(1,'L',h2.L||h2.H)&&!selDone[1]){selDone[1]=true;SFX.pick()}
   if(selDone[0]&&selDone[1]){mode='2p';startMatch(CAST[selCur[0]],CAST[selCur[1]],false)}return}
- const n=selStep;mv(0,h1);if(edge(0,'L',h1.L||h1.H||h1.S)){SFX.pick();
-  if(mode==='arcade'){const me=CAST[selCur[0]];ladder=CAST.filter(k=>k!==me).sort(()=>rnd()-.5).concat(['printer']);ladderI=0;F1=mkFighter(me,0,false);state='vs';vsT=0;return}
-  if(selStep===0){selDone[0]=CAST[selCur[0]];selStep=1;selCur[0]=(selCur[0]+1)%4;return}
+ const n=selStep;mv(0,h1);if(edge(0,'L',h1.L||h1.H||h1.S)&&(!p1Locked()||P1OK(selCur[0]))){SFX.pick();
+  if(mode==='arcade'){const me=CAST[selCur[0]];ladder=mkLadder(me);ladderI=0;stats={wins:0,rw:0,rl:0};cont=0;F1=mkFighter(me,0,false);toStory();return}
+  if(selStep===0){selDone[0]=CAST[selCur[0]];selStep=1;selCur[0]=CAST.findIndex(k=>ROSTER[k].fac!=='kmt');return}
   startMatch(selDone[0],CAST[selCur[0]],true);cpuLv=2.5}}
-function selTap(x,y){if(state!=='select')return;const i=Math.floor((x-32)/80);if(y>40&&y<150&&i>=0&&i<4){if(selCur[0]===i){latch[1].L=1}else{selCur[0]=i;SFX.tally()}}}
+function selTap(x,y){if(state!=='select')return;const i=Math.floor((x-32)/80);if(y>40&&y<150&&i>=0&&i<4){if(p1Locked()&&!P1OK(i)){selNo=90;X.block();return}if(selCur[0]===i){latch[1].L=1}else{selCur[0]=i;SFX.tally()}}}
+let selNo=0;
 
 /* ---------------- render ---------------- */
 function drawCrowd(){for(const c of crowd){const x=c.x-camX*.85;if(x<-20||x>W+20)continue;const y=GY-1+(c.cheer>0?-Math.abs(Math.sin(T*.4+c.ph))*4:Math.sin(T*.05+c.ph));if(c.cheer>0)c.cheer--;
@@ -1099,21 +1222,21 @@ function hudFight(){const bw=150;
   ctx.drawImage(portrait(f.c.fac,f.emo),side?W-8-28:8,y+10,28,20);txt(f.c.name,side?W-40:40,y+12,'#e9dcc2',side?'right':'left');
   for(let k=0;k<2;k++)r(side?W-44-k*9:36+k*9,y+24,6,6,k<f.wins?'#ffd24a':'#3a2e26');
   const mx=side?W-8-80:8,my=H-14;r(mx-1,my-1,82,7,'#120d0c');r(mx,my,80,5,'#2a1a3a');r(side?mx+80-f.meter*.8:mx,my,f.meter*.8,5,f.meter>=100?(T%8<4?'#ffd24a':'#c08aff'):'#8a5ac0');txt(f.meter>=100?'SUPER!':'SUPER',side?mx:mx+82,my-10,f.meter>=100?'#ffd24a':'#6e6050',side?'left':'left');
-  if(f.comboShow&&f.comboShow.n>1){const cx=f.side?40:W-40;stxt(f.comboShow.n+' HITS',cx,70,'#ffd24a',16);txt(String(f.comboDmg),cx,82,'#e9dcc2','center')}}
+  if(f.comboShow&&f.comboShow.n>1){const cx=f.side?40:W-40;stxt(Lg(f.comboShow.n+' HITS',f.comboShow.n+' 連擊'),cx,70,'#ffd24a',16);txt(String(f.comboDmg),cx,82,'#e9dcc2','center')}}
  r(W/2-14,6,28,20,'#120d0c');txt(String(Math.max(0,timer)).padStart(2,'0'),W/2,10,timer<=10?'#ff5a3a':'#e9dcc2','center',F16);
- if(rState==='intro'){if(rT<60)stxt('ROUND '+round,W/2,H/2-20,'#e9dcc2',30,Math.min(1,rT/10));if(rT>=40&&rT<60)stxt('FIGHT FOR YOUR BACK PAY',W/2,H/2+8,'#a8977c',10);if(rT>=60)stxt('FIGHT!',W/2,H/2-14,'#ffd24a',36,Math.min(1,(rT-60)/6))}
+ if(rState==='intro'){if(rT<60)stxt(Lg('ROUND '+round,'第 '+round+' 回合'),W/2,H/2-20,'#e9dcc2',30,Math.min(1,rT/10));if(rT>=40&&rT<60)stxt('FIGHT FOR YOUR BACK PAY',W/2,H/2+8,'#a8977c',10);if(rT>=60)stxt('FIGHT!',W/2,H/2-14,'#ffd24a',36,Math.min(1,(rT-60)/6))}
  if(rState==='ko'&&rT<100){stxt('K.O.',W/2,H/2-20,'#b3261e',44,Math.min(1,rT/6));if(rT>30)stxt('BACK PAY CANCELLED',W/2,H/2+12,'#a8977c',10)}
  if(rState==='time'&&rT<100){stxt('TIME',W/2,H/2-20,'#e9dcc2',36);stxt('BOTH SIDES CLAIM VICTORY',W/2,H/2+12,'#a8977c',10)}
- if((rState==='ko'||rState==='time')&&rT>=100){const w=result;stxt(w?w.c.name+' WINS':'DRAW',W/2,46,'#ffd24a',20)}
+ if((rState==='ko'||rState==='time')&&rT>=100){const w=result;stxt(w?Lg(w.c.name+' WINS',w.c.name+' 獲勝'):'DRAW',W/2,46,'#ffd24a',20);if(w===F1&&F2.key==='million')txt('ONLY 999,999 TO GO',W/2,62,'#ff8a7a','center')}
  for(const t of texts){if(!t.s)continue;if(t.x===-1){stxt(t.s,W/2,H/2+36,t.c,24,1-t.t/70)}else{ctx.globalAlpha=1-t.t/70;txt(t.s,t.x-camX,t.y-t.t*.4,t.c,'center');ctx.globalAlpha=1}}}
 function render(){
  if(state==='title'){attract();return}
  if(state==='select'){renderSelect();return}
  if(state==='vs'){renderVS();return}
- if(state==='ending'){scene.done=drawScene(scene.sc,scene.t)||scene.done;if(scene.t>200)txt('PRESS ANY BUTTON',W-8,H-24,'#6e6050','right');return}
+ if(state==='ending'||state==='story'){scene.done=endScene(scene.sc,scene.t)||scene.done;if(scene.t>200&&scene.done)txt('PRESS ANY BUTTON',W-8,124,'#a8977c','right');if(state==='story')txt(Lg('STAGE '+(ladderI+1)+' / '+ladder.length,'第 '+(ladderI+1)+' / '+ladder.length+' 關'),8,6,'#ffd24a');return}
  if(!F1||!F2)return;
  ctx.save();if(shake>0&&!RM)ctx.translate(((rnd()-.5)*shake)|0,((rnd()-.5)*shake)|0);
- drawBG();drawCrowd();
+ drawBG();if(STAGEFX[stageK])STAGEFX[stageK]();drawCrowd();
  if(superFlash){ctx.globalAlpha=.7;r(0,0,W,H,'#0a0510');ctx.globalAlpha=1}
  const order=[F1,F2].sort((a,b)=>(a.st==='move')-(b.st==='move'));for(const f of order)drawFighter(f);
  for(const q of projs)drawProj(q);
@@ -1124,35 +1247,37 @@ function render(){
   const px=f.side?W-(k*140):-120+k*140;ctx.drawImage(portrait(f.c.fac,'shout'),px,H/2-30,96,64);stxt(SUPERN[f.c.sp.sup],f.side?120:W-120,H/2,'#ffd24a',18)}
  ctx.drawImage(VIG,0,0);hudFight();
  if(state==='continue'){r(0,0,W,H,'rgba(0,0,0,.7)');stxt('CONTINUE?',W/2,H/2-20,'#e9dcc2',28);txt('THE STATE WILL CONSCRIPT ANOTHER YOU',W/2,H/2+4,'#a8977c','center');txt(String(Math.max(0,10-(endT/60|0))),W/2,H/2+20,'#ffd24a','center',F16);txt('PRESS ANY BUTTON',W/2,H/2+44,'#6e6050','center')}
- if(state==='result'){r(0,0,W,H,'rgba(0,0,0,.6)');const w=F1.wins>=2?F1:F2;stxt(w.c.name+' WINS THE WAR',W/2,H/2-30,'#ffd24a',20);txt('"'+pick2(w.c.quotes,w.key)+'"',W/2,H/2,'#e9dcc2','center');txt('PRESS ANY BUTTON',W/2,H/2+30,'#6e6050','center')}
+ if(state==='result'){r(0,0,W,H,'rgba(0,0,0,.6)');const w=F1.wins>=2?F1:F2;stxt(Lg(w.c.name+' WINS THE MATCH',w.c.name+' 贏得比賽'),W/2,H/2-30,'#ffd24a',20);txt(w.c.fac==='kmt'?'THE WAR, HOWEVER, IS STILL BEING LOST.':'THE WAR CONTINUES REGARDLESS.',W/2,H/2+14,'#a8977c','center');txt(Qt(pick2(w.c.quotes,w.key)),W/2,H/2,'#e9dcc2','center');txt('PRESS ANY BUTTON',W/2,H/2+30,'#6e6050','center')}
  if(state==='pause'){r(0,0,W,H,'rgba(0,0,0,.6)');stxt('PAUSED',W/2,H/2,'#e9dcc2',24)}}
 const SUPERN={mtfk:'DIE! CCP MTFK!',megaphone:'THE PEOPLE HAVE SPOKEN',squad:'FIRING SQUAD',reform:'LAND REFORM',devalue:'DEVALUATION'};
 const pick2=(a,k)=>a[(k.length+(F1?F1.wins:0))%a.length];
-function drawBigFighter(key,x,y,sc,dir,emo='determined',pose){const f=mkFighter(key,dir<0?1:0,false);f.x=x+camX;f.y=y;f.dir=dir;f.c=Object.assign({},f.c,{sc});f.emo=emo;f.anim=T;f.st=pose||'stand';drawFighter(f)}
+function drawBigFighter(key,x,y,sc,dir,emo='determined',pose,mir){const f=mkFighter(key,dir<0?1:0,false,mir);f.x=x+camX;f.y=y;f.dir=dir;f.c=Object.assign({},f.c,{sc});f.emo=emo;f.anim=T;f.st=pose||'stand';drawFighter(f)}
 function renderSelect(){camX=0;ctx.fillStyle='#120d0c';ctx.fillRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#2a1c18');g.addColorStop(1,'#0c0908');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- stxt(mode==='arcade'?'CHOOSE YOUR CONSCRIPT':mode==='2p'?'PLAYER 1 · PLAYER 2':selStep?'CHOOSE THE OPPONENT':'CHOOSE YOUR FIGHTER',W/2,20,'#e9dcc2',14);
+ stxt(mode==='arcade'?'CHOOSE YOUR NATIONALIST':mode==='2p'?'PLAYER 1 (NATIONALIST) · PLAYER 2':selStep?'CHOOSE THE OPPONENT':'CHOOSE YOUR NATIONALIST',W/2,20,'#e9dcc2',14);
  CAST.forEach((k,i)=>{const c=ROSTER[k],x=32+i*80,y=40,s1=selCur[0]===i,s2=mode==='2p'&&selCur[1]===i;r(x,y,72,96,s1||s2?'#3a2a20':'#1a1310');r(x,y,72,2,c.fac==='kmt'?'#2f4f8a':'#b8322a');
-  ctx.drawImage(portrait(c.fac,s1||s2?'shout':'normal'),x+6,y+6,60,42);stxt(c.han,x+36,y+62,c.fac==='kmt'?'#9fb6e6':'#ff8a7a',13);txt(c.name,x+36,y+76,'#e9dcc2','center');
+  ctx.drawImage(portrait(c.fac,s1||s2?'shout':'normal'),x+6,y+6,60,42);stxt(c.han,x+36,y+62,c.fac==='kmt'?'#9fb6e6':'#ff8a7a',13);txt(LANG==='zh'?c.en||c.name:c.name,x+36,y+76,'#e9dcc2','center');
+  if(p1Locked()&&c.fac!=='kmt'&&!s2){r(x,y+2,72,94,'rgba(12,9,8,.55)');r(x+4,y+30,64,11,'#120d0c');txt(mode==='2p'?'P2 ONLY':'OPPONENT',x+36,y+32,'#ff6a5a','center')}
   if(s1){ctx.strokeStyle=selDone[0]===true?'#888':'#ffd24a';ctx.lineWidth=2;ctx.strokeRect(x-1,y-1,74,98);txt('P1',x+4,y+86,'#ffd24a')}if(s2){ctx.strokeStyle=selDone[1]?'#888':'#ff6a5a';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,70,94);txt('P2',x+52,y+86,'#ff6a5a')}});
- const c=ROSTER[CAST[selCur[0]]];const ls=wrap(c.bio,44);ls.forEach((l,i)=>txt(l,W/2,148+i*10,'#a8977c','center'));
- txt('HP '+c.hp+' · SPEED '+'■'.repeat(Math.round(c.spd*2))+' · POWER '+'■'.repeat(Math.round(c.dm*4)),W/2,172,'#e9dcc2','center');
- txt(touchUI?'TAP TO CHOOSE · TAP AGAIN TO CONFIRM':'A/D CHOOSE · J CONFIRM'+(mode==='2p'?' · P2: ←/→ AND 1':''),W/2,H-14,'#6e6050','center');ctx.drawImage(VIG,0,0)}
-function renderVS(){camX=0;const opp=ROSTER[ladder[ladderI]],me=F1.c;ctx.fillStyle='#0c0908';ctx.fillRect(0,0,W,H);r(0,0,W/2,H,'#14182a');r(W/2,0,W/2,H,'#2a1210');
- const k=Math.min(1,vsT/20);drawBigFighter(F1.key,-60+k*150,H-30,4.2,1,'shout');drawBigFighter(ladder[ladderI],W+60-k*150,H-30,opp.sc*1.5,-1,'smug');
- stxt('VS',W/2,H/2-10,'#ffd24a',44,k);stxt(me.name,90,26,'#9fb6e6',14);stxt(opp.name,W-90,26,'#ff8a7a',14);txt('STAGE '+(ladderI+1)+' / '+ladder.length,W/2,H/2+20,'#a8977c','center');
- const q='"'+opp.quotes[ladderI%opp.quotes.length]+'"',ls=wrap(q,30);ls.forEach((l,i)=>txt(l,W-110,44+i*10,'#e9dcc2','center'));ctx.drawImage(VIG,0,0)}
+ const c=ROSTER[CAST[selCur[0]]];const ls=wrapT(c.bio,44);ls.forEach((l,i)=>txt(l,W/2,146+i*(LANG==='zh'?12:10),'#a8977c','center'));
+ txt(Lg('HP ','血量 ')+c.hp+Lg(' · SPEED ',' · 速度 ')+'■'.repeat(Math.round(c.spd*2))+Lg(' · POWER ',' · 力量 ')+'■'.repeat(Math.round(c.dm*4)),W/2,LANG==='zh'?174:172,'#e9dcc2','center');
+ if(selNo>0){selNo--;txt('YOU FIGHT FOR THE NATIONALISTS. THE REDS ARE THE CPU.',W/2,H-26,'#ff6a5a','center')}
+ txt(touchUI?'TAP TO CHOOSE · TAP AGAIN TO CONFIRM':tr('A/D CHOOSE · J CONFIRM')+(mode==='2p'?Lg(' · P2: ←/→ AND 1',' · P2：←/→ 和 1'):''),W/2,H-14,'#6e6050','center');ctx.drawImage(VIG,0,0)}
+function renderVS(){camX=0;const L_=curL(),opp=L_.mir?posterOf(ROSTER[L_.k]):ROSTER[L_.k],me=F1.c;ctx.fillStyle='#0c0908';ctx.fillRect(0,0,W,H);r(0,0,W/2,H,'#14182a');r(W/2,0,W/2,H,'#2a1210');
+ const k=Math.min(1,vsT/20);drawBigFighter(F1.key,-60+k*150,H-30,4.2,1,'shout');drawBigFighter(L_.k,W+60-k*150,H-30,Math.min(4.6,opp.sc*1.5),-1,'smug',null,L_.mir);
+ stxt('VS',W/2,H/2-10,'#ffd24a',44,k);stxt(me.name,90,26,'#9fb6e6',14);stxt(opp.name,W-90,26,opp.mirror?'#e0c070':'#ff8a7a',opp.name.length>12?11:14);txt(Lg('STAGE '+(ladderI+1)+' / '+ladder.length,'第 '+(ladderI+1)+' / '+ladder.length+' 關'),W/2,H/2+20,'#a8977c','center');txt(STAGES[L_.stage].name,W/2,H/2+(LANG==='zh'?33:30),'#d9a441','center');if(ladderI===ladder.length-1)stxt('FINAL BATTLE',W/2,H/2+46,'#ff5a3a',12);
+ const q=Qt(opp.quotes[ladderI%opp.quotes.length]),ls=wrapT(q,LANG==='zh'?24:30);ls.forEach((l,i)=>txt(l,W-110,44+i*(LANG==='zh'?13:10),'#e9dcc2','center'));ctx.drawImage(VIG,0,0)}
 function attract(){camX=(T*.3)%(SW-W);if(!BGD){L.theme='village';LV=0;buildBG()}drawBG();drawCrowd();
  const a=Math.sin(T*.03);drawBigFighter('wang',W/2-60+a*6,FY,2.6,1,'shout');drawBigFighter('wei',W/2+60-a*6,FY,2.7,-1,'grit');ctx.drawImage(VIG,0,0)}
 
 /* ---------------- DOM, input wiring ---------------- */
 $('#mArcade').onclick=()=>{initAudio();openSelect('arcade')};$('#mCpu').onclick=()=>{initAudio();openSelect('cpu')};$('#m2p').onclick=()=>{initAudio();openSelect('2p')};
 function togglePause(){if(state==='fight')state='pause';else if(state==='pause')state='fight'}
-$('#bPause').onclick=e=>{togglePause();e.currentTarget.blur()};$('#bSnd').onclick=e=>{initAudio();setMute(!muted);e.currentTarget.textContent=muted?'MUTE':'SND';e.currentTarget.blur()};
+$('#bPause').onclick=e=>{togglePause();e.currentTarget.blur()};$('#bSnd').onclick=e=>{initAudio();setMute(!muted);sndLabel();e.currentTarget.blur()};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='fight')togglePause()});
 addEventListener('keydown',e=>{if(e.code==='KeyP'||e.code==='Escape'){if(state==='fight'||state==='pause'){togglePause();return}if(state==='select'||state==='result'){toTitle();return}}
  if(state==='title')return;initAudio();kb[e.code]=1;const a=K1[e.code]||(mode!=='2p'?K1alt[e.code]:null),b=mode==='2p'?K2[e.code]:null;if(a){keysP[1][a]=1;latch[1][a]=1}if(b){keysP[2][b]=1;latch[2][b]=1}if(a||b||e.code==='Space')e.preventDefault()});
 addEventListener('keyup',e=>{kb[e.code]=0;const a=K1[e.code]||K1alt[e.code],b=K2[e.code];if(a)keysP[1][a]=0;if(b)keysP[2][b]=0});
-cv.addEventListener('pointerdown',e=>{initAudio();const rc=cv.getBoundingClientRect();const x=(e.clientX-rc.left)/rc.width*W,y=(e.clientY-rc.top)/rc.height*H;if(state==='select')selTap(x,y);else if(['vs','result','ending','continue'].includes(state)){latch[1].L=1}});
+cv.addEventListener('pointerdown',e=>{initAudio();const rc=cv.getBoundingClientRect();const x=(e.clientX-rc.left)/rc.width*W,y=(e.clientY-rc.top)/rc.height*H;if(state==='select')selTap(x,y);else if(['story','vs','result','ending','continue'].includes(state)){latch[1].L=1}});
 let touchUI=false;const tpad=$('#touch'),sBase=$('#stickBase'),sKnob=$('#stickKnob');let stickId=null,sx0=0,sy0=0;const btnT={};
 if(matchMedia('(pointer:coarse)').matches)touchUI=true;
 addEventListener('touchstart',()=>{if(!touchUI){touchUI=true;if(state!=='title')tpad.hidden=false}},{passive:true});
@@ -1165,6 +1290,94 @@ function tEnd(e){e.preventDefault();for(const t of e.changedTouches){if(t.identi
 tpad.addEventListener('touchend',tEnd,{passive:false});tpad.addEventListener('touchcancel',tEnd,{passive:false});
 function fit(){const vw=innerWidth,vh=innerHeight,s=Math.min(vw/W,vh/H);cv.style.width=Math.floor(W*s)+'px';cv.style.height=Math.floor(H*s)+'px'}
 addEventListener('resize',fit);fit();
+/* ---------------- i18n: 繁體中文 (default) / English — shared data swapped in place, shared files untouched ---------------- */
+var LANG='zh';
+const LANG_KEY='civilfighter.lang';
+const ZFAM='"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC","Source Han Sans TC",sans-serif';
+const CJK_RE=/[⺀-鿿豈-﫿＀-￯　-〿]/;
+const isZ=s=>LANG==='zh'&&CJK_RE.test(String(s));
+const Lg=(en,zh)=>LANG==='zh'?zh:en;
+const Qt=s=>LANG==='zh'?'「'+s+'」':'"'+s+'"';
+function zf(font){const m=/(\d+)px/.exec(font||F),p=m?+m[1]:8;return p>=16?`700 16px ${ZFAM}`:p<=6?`500 8px ${ZFAM}`:`500 11px ${ZFAM}`}
+function fontFor(s,font=F){return isZ(s)?zf(font):font}
+function wrapPx(s,maxW){const toks=String(s).match(/[A-Za-z0-9¥$%'’.,!?:\/+\-–—()]+|\s+|[\s\S]/gu)||[];const out=[];let line='';
+ for(const tk of toks){const test=line+tk;
+  if(line.trim()&&ctx.measureText(test.trimEnd()).width>maxW&&!/^[，。、！？：；）」』…—,.!?)\s]/.test(tk)){out.push(line.trim());line=/^\s+$/.test(tk)?'':tk}else line=test}
+ if(line.trim())out.push(line.trim());return out}
+function wrapT(s,n){if(!isZ(s))return wrap(s,n);ctx.font=zf(F);return wrapPx(s,n*8)}
+const ZH_UI={
+ 'ADVANCE →':'前進 →','BACK PAY CANCELLED':'欠餉一筆勾銷','BOTH SIDES CLAIM VICTORY':'雙方都宣稱勝利','CALENDAR':'月曆','CHOOSE THE OPPONENT':'選擇對手',
+ 'CHOOSE YOUR NATIONALIST':'選擇你的國軍','CONTINUE?':'接關？','COUNTER':'反擊','COUNTERATTACK:':'反攻大陸：','DRAW':'平手','FIGHT FOR YOUR BACK PAY':'為了欠餉而戰',
+ 'FIGHT!':'開打！','FINAL BATTLE':'最終決戰','GOLD: ALREADY GONE':'黃金：早就走了','HERO':'英雄','LAST BOAT':'最後一班船','MINE!':'我的！','MINISTRY OF VICTORY':'勝　利　部',
+ 'MOVED':'已搬遷','NEXT YEAR':'明年','ONLY 999,999 TO GO':'只剩 999,999 個','OPPONENT':'對手','P2 ONLY':'限玩家2','PAUSED':'暫停','PERFECT':'完美勝利',
+ 'PLAYER 1 (NATIONALIST) · PLAYER 2':'玩家1（國軍）· 玩家2','PRESS ANY BUTTON':'按任意鍵','SEAT 1/1':'座位 1/1','SUPER!':'超必殺！','SUPER':'超必殺',
+ 'TAP TO CHOOSE · TAP AGAIN TO CONFIRM':'點選角色 · 再點一次確認','A/D CHOOSE · J CONFIRM':'A/D 選擇 · J 確認','THE ARMY OF 1,000,000':'百萬大軍',
+ 'THE STATE WILL CONSCRIPT ANOTHER YOU':'國家會再抓一個你來當兵','THE WAR CONTINUES REGARDLESS.':'戰爭照打不誤。','THE WAR, HOWEVER, IS STILL BEING LOST.':'不過，戰爭還是在輸。',
+ 'TIME':'時間到','YOU FIGHT FOR THE NATIONALISTS. THE REDS ARE THE CPU.':'你是國軍。共軍由電腦操控。','-50% VALUE':'價值 -50%','COUNTER ':'反擊',
+ 'DIE! CCP MTFK!':'殺！共匪混蛋！','THE PEOPLE HAVE SPOKEN!':'人民已經發聲了！','FIRING SQUAD!':'行刑隊！','LAND REFORM!':'土地改革！','YOUR VALUE: HALVED.':'你的價值：減半。',
+ 'STRATEGIC WITHDRAWAL!':'戰略性轉進！','SELF-CRITICIZE!':'自我批評！','DESERTER!':'逃兵！','DEFECTED!':'投誠了！','...SORRY. REFLEX.':'……抱歉，反射動作。',
+ 'SERVE THE PEOPLE!':'為人民服務！','DOWN WITH YOU!':'打倒你！','READ THIS!':'看傳單！',
+ 'COATS':'冬衣','APR':'四月','TEMPORARY':'暫時','FORM 1':'表格一','SND':'音效','MUTE':'靜音','VS':'VS'};
+const ZH_PREFIX=[['RICE: ¥','米價：¥']];
+function tr(s){if(LANG!=='zh')return s;const z=ZH_UI[s];if(z!=null)return z;for(const[a,b]of ZH_PREFIX)if(typeof s==='string'&&s.startsWith(a))return b+s.slice(a.length);return s}
+/* zh-TW data, merged over the English roster/stages on language change */
+const ZH_R={
+ wang:{name:'老王',bio:'壯丁一名。薪餉發金圓券。為了永遠領不到的欠餉而戰。',quotes:['你們那邊發米？……菜單可以借我看一下嗎？','我為薪水而戰。現在那份薪水值一顆蛋。','殺！共匪混蛋！……抱歉，反射動作。'],
+  ending:{date:'1949年12月',place:'最後一班渡輪',fact:'大陸淪陷之際，一兩百萬軍民跟著國民政府渡過了海峽。',joke:'老王每一回合都贏了。上了甲板，欠餉終於發下來：四千萬金圓券。一位水手好心用一顆水煮蛋跟他換全部。水手真是大方。'},
+  taiwan:'官方說法：這只是暫時撤退。非常暫時。「明年就反攻大陸！」所以老王只拆開一隻襪子。就一隻。反正只待一年，何必全拆。'},
+ red:{name:'小紅',bio:'宣傳員。一手大聲公，一手傳單，兩手都是意見。',quotes:['我已經準備好一份關於你戰敗的傳單。','耕者有其田！拳者有其臉！','你現在要做自我批評。大聲一點。'],
+  ending:{date:'1949年10月',place:'北京',fact:'1949年10月1日，中華人民共和國在北京宣告成立。',joke:'小紅贏了。她升任口號副助理，接著被要求針對「贏得太大聲」寫一份自我檢討。'}},
+ ma:{name:'馬將軍',bio:'督戰官。專斃逃兵。從來沒人敢問斃了幾個。',quotes:['撤退是叛國。前進也很可疑。','你的槍決單我已經填好了。這裡簽名。','我的大刀上刻了六個名字。下一個是你。'],
+  ending:{date:'1949年12月',place:'最後的碼頭',fact:'在最後關頭之前，中央銀行的黃金儲備已經悄悄運往台灣。黃金先走一步。',joke:'馬將軍每場都贏，下令光榮進軍。朝著船的方向。「這不是撤退，是大陸自己漂走了。」'},
+  taiwan:'官方說法：這只是暫時撤退。非常暫時。馬將軍把反攻排在明年。然後改期。年年改期。月曆成了他麾下戰功最彪炳的部屬。'},
+ wei:{name:'魏政委',bio:'政治委員。一句話講到一半，就能投靠勝利的一方。',quotes:['你的錯誤已經記錄在案。一式三份。','我一直站在勝利的一方。不信查檔案。檔案我改過了。','整風這一下！'],
+  ending:{date:'1949年',place:'每一個村子',fact:'戰線來回推移，許多村子易手好幾次，旗子也是。',joke:'魏政委贏了。兩面旗子都收在大衣裡。以防萬一。'}},
+ printer:{name:'印鈔機',bio:'中央銀行的印鈔機，穿著西裝。每年都畫一個更大的數字。',quotes:['我不會輸。我只會發行新鈔。','你的血量已重新估值為千分之一。','通膨不是bug，是我的武術流派。'],
+  ending:{date:'1949年',place:'上海',fact:'1948年8月發行的金圓券，到了1949年已經幾乎一文不值。',joke:'印鈔機無法被擊敗，只能被新型號取代。'}},
+ million:{name:'百萬雄師',bio:'不是一個兵，是一個戴帽子的統計數字。打倒他，只剩999,999個。',quotes:['我不是一個人。我是一百萬的四捨五入誤差。','要打就打。我的表兄弟在後面排隊。','長江是你們的防線。我們帶了船。'],
+  ending:{date:'1949年',place:'對岸',fact:'到1949年底，解放軍兵力已達數百萬。',joke:'他升官為一百萬零一。'}}};
+const ZH_ST={village:'燃燒的村莊',paddy:'爭奪中的稻田',snow:'東北前線',river:'長江渡口',city:'上海造幣廠',palace:'南京 · 勝利部',pier:'最後的碼頭'};
+const ZH_SUP={mtfk:'殺！共匪混蛋！',megaphone:'人民已經發聲',squad:'行刑隊',reform:'土地改革',devalue:'貨幣貶值'};
+const ZH_FIN={date:'1949年12月',place:'台灣',fact:'1949年12月：國民政府撤退到台灣。你每一回合都贏了。你還是輸了這場戰爭。',joke:'官方說法：暫時撤退。「明年就反攻大陸！」大家都同意。年年都同意。'};
+const EN_R={},EN_ST={},EN_SUP=Object.assign({},SUPERN),EN_FIN=Object.assign({},FINALE);
+for(const k in ZH_R){const c=ROSTER[k];EN_R[k]={name:c.name,bio:c.bio,quotes:c.quotes.slice(),ending:Object.assign({},c.ending),taiwan:c.taiwan};c.en=c.name}
+for(const k in STAGES)EN_ST[k]=STAGES[k].name;
+const isDark=c=>{const m=/^#([0-9a-f]{6})/i.exec(c);if(!m)return false;const v=parseInt(m[1],16);return((v>>16)*.3+((v>>8)&255)*.59+(v&255)*.11)<70};
+const _txt0=txt,_shout0=drawShout;
+txt=function(s,x,y,c='#e9dcc2',al='left',font=F){if(LANG==='zh')s=tr(String(s));if(LANG!=='zh'||!CJK_RE.test(s)){if(!isDark(c))return _txt0(s,x,y,c,al,font);ctx.font=font;ctx.textAlign=al;ctx.textBaseline='top';ctx.fillStyle=c;ctx.fillText(s,x,y);return}
+ const big=/16px/.test(font);ctx.font=zf(font);ctx.textAlign=al;ctx.textBaseline='middle';const yy=y+(big?8:4);ctx.fillStyle='#120d0c';
+ if(!isDark(c))for(const[a,b]of[[1,1],[-1,0],[1,0],[0,-1],[0,1]])ctx.fillText(s,x+a,yy+b);ctx.fillStyle=c;ctx.fillText(s,x,yy);ctx.textBaseline='top'};
+drawShout=function(s,x,y,hero){s=tr(s);if(!isZ(s))return _shout0(s,x,y,hero);
+ ctx.font=zf(F);const w=Math.ceil(ctx.measureText(s).width)+10,h=16,jig=hero&&T%6<3?1:0,bx=clamp(x-w/2,4,W-w-4),by=Math.max(26,y-h)+jig,bc=hero?'#c8372d':'#120d0c',fc=hero?'#fff4d0':'#d8ccb0';
+ r(bx-1,by-1,w+2,h+2,bc);r(bx,by,w,h,fc);const tx=clamp(x-1,bx+3,bx+w-6);r(tx,by+h+1,3,3,fc);r(tx+1,by+h+4,2,2,fc);
+ ctx.font=zf(F);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=hero?'#c8372d':'#3a2a20';ctx.fillText(s,bx+5,by+h/2+1);ctx.textBaseline='top'};
+/* HTML overlays */
+const ZH_HTML={
+ h1:'國共快打<span>CIVIL FIGHTER 1949 · 兄弟對打</span>',
+ tag:'你是國軍（藍帽子）。街機模式共六關：從冰天雪地的東北一路打到最後的碼頭，對手有共軍、自家同袍、你自己的宣傳海報、印鈔機，還有一支百萬大軍。三戰兩勝。每一場都打贏。看看有沒有用。',
+ arc:'街機模式',cpu:'對戰電腦',p2:'雙人對戰（同一鍵盤）',
+ keys:'玩家1：A D 移動 · W 跳 · S 蹲 · 按住後退防禦 · J 輕攻擊 · K 重攻擊 · L 必殺技 · I 超必殺<br>必殺技＋方向：不按＝飛行道具 · 前＝突進 · 下＝對空 · 後＝反擊。經典指令也行（↓↘→＋攻擊、→↓↘＋攻擊）。<br>玩家2：方向鍵 · 數字鍵 1 2 3 0 或 , . / ;<br>手機：左手拇指移動，按鈕在右邊。P 或 Esc 暫停。',
+ fine:'諷刺作品。內戰沒有贏家，反正你每一回合都會贏。街機與對戰電腦：你操作國軍，共軍是對手。雙人對戰：玩家1是國軍，玩家2隨便選。',
+ tL:'輕',tH:'重',tS:'必殺',tX:'超必殺',rot:'把手機轉成橫向，戰爭比較大場'};
+const EN_HTML={};document.querySelectorAll('[data-t]').forEach(el=>EN_HTML[el.dataset.t]=el.innerHTML);
+const ARIA={cv:['Civil Fighter 1949 game screen','國共快打 1949 遊戲畫面'],bPause:['Pause','暫停'],bSnd:['Toggle sound','切換音效'],bLang:['Switch to Chinese','切換成英文']};
+function sndLabel(){$('#bSnd').textContent=tr(muted?'MUTE':'SND')}
+function applyLang(l,save){LANG=l==='zh'?'zh':'en';const zh=LANG==='zh';
+ if(save)try{localStorage.setItem(LANG_KEY,LANG)}catch(e){}
+ for(const k in ZH_R){const c=ROSTER[k],e=EN_R[k],z=ZH_R[k];Object.assign(c,zh?{name:z.name,bio:z.bio,quotes:z.quotes,taiwan:z.taiwan||e.taiwan,ending:Object.assign({},e.ending,z.ending)}:{name:e.name,bio:e.bio,quotes:e.quotes,taiwan:e.taiwan,ending:Object.assign({},e.ending)})}
+ for(const k in STAGES)STAGES[k].name=zh&&ZH_ST[k]?ZH_ST[k]:EN_ST[k];Object.assign(SUPERN,zh?ZH_SUP:EN_SUP);Object.assign(FINALE,zh?ZH_FIN:EN_FIN);
+ for(const f of[F1,F2])if(f&&f.c.mirror)f.c=Object.assign(posterOf(ROSTER[f.key]),{sc:f.c.sc});
+ if(scene&&state==='story')scene.sc=storyOf(curL());
+ document.documentElement.lang=zh?'zh-Hant':'en';document.title=zh?'國共快打 Civil Fighter 1949':'Civil Fighter 1949';
+ document.querySelectorAll('[data-t]').forEach(el=>{const k=el.dataset.t;el.innerHTML=zh&&ZH_HTML[k]!=null?ZH_HTML[k]:EN_HTML[k]});
+ for(const id in ARIA){const el=$('#'+id);if(el)el.setAttribute('aria-label',ARIA[id][zh?1:0])}
+ document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===LANG)));
+ const bl=$('#bLang');bl.textContent=zh?'EN':'中文';bl.lang=zh?'en':'zh-Hant';sndLabel();
+ if(zh&&document.fonts)document.fonts.load(zf(F),'國軍').catch(()=>{})}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.l,true)));
+$('#bLang').addEventListener('click',e=>{applyLang(LANG==='zh'?'en':'zh',true);e.currentTarget.blur()});
+addEventListener('keydown',e=>{if(e.code==='KeyT'&&state!=='fight')applyLang(LANG==='zh'?'en':'zh',true)});
+applyLang((()=>{try{const v=localStorage.getItem(LANG_KEY);if(v==='en'||v==='zh')return v}catch(e){}return 'zh'})(),false);
 let last=performance.now(),acc=0;
 function loop(nt){acc+=Math.min(100,nt-last);last=nt;while(acc>=16.67){acc-=16.67;if(state!=='title'&&state!=='pause')update();else T++}render();requestAnimationFrame(loop)}
 (document.fonts?Promise.all([document.fonts.load(F),document.fonts.load(SERIF(20))]):Promise.resolve()).catch(()=>{}).finally(()=>requestAnimationFrame(loop));
