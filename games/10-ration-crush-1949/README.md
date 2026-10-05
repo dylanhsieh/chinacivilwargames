@@ -1,4 +1,4 @@
-# 伙夫消消樂 Ration Crush 1949
+# 軍糧消消樂 Ration Crush 1949
 
 **Genre / 類型:** Match-3 三消 · **Languages / 語言:** 繁體中文 (default 預設) · English
 **Part of:** [China Civil War Games](../../README.md) · **▶ Play:** open `index.html`

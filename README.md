@@ -54,7 +54,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) ★ | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
 | 08 | [Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) | Rhythm game | Two propaganda troupes, one village square, four lanes. Hit the notes to keep the crowd. |
 | 09 | [Gold Run 1949](games/09-gold-run-1949/) | Tower defense | Guard the gold reserves on the Shanghai docks until the last boat sails. Tower prices rise every wave. |
-| 10 | [伙夫消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
+| 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
 | 11 | [Sky of Gold Yuan](games/11-sky-of-gold-yuan/) | Shoot 'em up | A vertical shooter in a borrowed biplane. Three stages, power-ups, money bombs and the Printer's airship. |
 | 12 | [Last Ferry Rush](games/12-last-ferry-rush/) | Racing | A pseudo-3D arcade racer: drive a truck of passengers from the village to the docks before the last ferry leaves. |
 | 13 | [Paper Generals 1949](games/13-paper-generals-1949/) | Turn-based tactics | Five grid battles for either army. Morale is a resource, and soldiers whose morale runs out switch sides. |
