@@ -90,7 +90,7 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
   <div class="card">
     <div class="seal">金圓券</div>
     <h1>DARK YUAN<span>PREPARE TO INFLATE · 3D</span></h1>
-    <p class="tag">China, 1948. Soldiers who die without discharge papers get back up and keep fighting. You died in a roped column of conscripts. Nobody discharged you. Reach the last ferry.</p>
+    <p class="tag">China, 1948. Soldiers who die without discharge papers get back up and keep fighting. You are a Nationalist (KMT) conscript who died in a roped column. Nobody discharged you. The Communists want you dead; your own officers want you back. Reach the last ferry.</p>
     <div class="row"><button class="btn" id="bNew">NEW GAME</button><button class="btn alt" id="bCont" hidden>CONTINUE</button></div>
     <p class="keys">W A S D move · mouse look (click the game to capture the mouse) · left click / J attack · U heavy · right click / L guard (tap to parry) · Space roll (hold to sprint) · Q / middle click lock on · R rice wine · G grenade · E use · arrow keys turn camera · P pause<br>Phone: left thumb moves, drag the right side to turn the camera, buttons for the rest</p>
     <p class="fine">Satire. Very hard. Your Gold Yuan loses value every time you rest. When you die, it keeps losing value on the ground.</p>
@@ -127,11 +127,11 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 
 <div id="end" class="ov" hidden>
   <div class="card">
-    <div class="seal">退伍</div>
-    <h2 id="endH">DISCHARGED</h2>
+    <div class="seal">撤退</div>
+    <h2 id="endH">YOU RETREATED</h2>
     <p id="endP"></p>
     <dl id="endS"></dl>
-    <div class="row"><button class="btn" id="e1">NEW GAME+</button><button class="btn alt" id="e2">TITLE</button></div>
+    <div class="row"><button class="btn" id="e1">COUNTERATTACK (NG+)</button><button class="btn alt" id="e2">TITLE</button></div>
   </div>
 </div>
 
@@ -850,10 +850,44 @@ const ARENAS=[{k:'ma',fz:63,gz:80,z0:64,z1:79,cx:12.5,cz:72},{k:'bros',fz:105,gz
 const ZONES=[{z:0,name:'VILLAGE OF THE ROPED',han:'繩村',fog:0x4a2a24},{z:43,name:'THE BRIDGE NOBODY BLEW UP',han:'斷橋',fog:0x3a2a34},{z:81,name:'DOCKS OF THE LAST FERRY',han:'末班渡口',fog:0x1a1c2c}];
 const zoneAt=z=>z>=81?2:z>=43?1:0;
 const SPAWNS=[['conscript',12,14,'ccp'],['pitch',13.5,18],['conscript',11,24,'kmt'],['rifle',13,29.5,'kmt'],['mimic',5.5,18.5],
- ['conscript',8,34,'ccp'],['pitch',17,33],['gren',18,40,'kmt'],['conscript',15,39,'kmt'],['commissar',12.5,37,'ccp'],
- ['conscript',12.5,54,'ccp'],['rifle',11.5,58.5,'ccp'],['rifle',14.5,60,'kmt'],['shield',12.5,61.5],
- ['shield',12,88],['pitch',17,90],['conscript',8,92,'kmt'],['rifle',18,93,'ccp'],['gren',6,97,'ccp'],['conscript',15,97,'ccp'],['shield',12,100],['conscript',9,103,'kmt']];
-const ITEMS=[{id:'t1',x:6,z:22,k:'ticket'},{id:'y1',x:19,z:32,k:'yuan'},{id:'g1',x:6,z:40,k:'gren'},{id:'w1',x:13.5,z:49,k:'whet'},{id:'v1',x:19,z:87.5,k:'vest'},{id:'t2',x:20,z:98,k:'ticket'},{id:'w2',x:5.5,z:102,k:'whet'}];
+ ['conscript',8,34,'ccp'],['pitch',17,33],['gren',18,40,'kmt'],['conscript',15,39,'kmt'],
+ ['conscript',12.5,70,'ccp'],['rifle',11.5,74.5,'ccp'],['rifle',14.5,76,'kmt'],['shield',12.5,77.5],
+ ['shield',12,104],['conscript',8,107,'kmt'],['rifle',18,108,'kmt'],['pitch',12,111],['conscript',16,114,'kmt'],['gren',6,116,'kmt'],['shield',13,118],['conscript',9,120,'ccp'],['rifle',19,121,'kmt'],
+ ['conscript',12,148,'ccp'],['rifle',6,153,'ccp'],['conscript',18,154,'kmt'],['gren',20,159,'ccp'],['pitch',5,160],['commissar',12.5,161,'ccp'],['conscript',8,165,'ccp'],['rifle',17,165,'ccp'],
+ ['shield',12,192],['pitch',17,194],['conscript',8,196,'kmt'],['rifle',18,197,'ccp'],['gren',6,201,'ccp'],['conscript',15,201,'ccp'],['shield',12,204],['conscript',9,207,'kmt']];
+const ITEMS=[{id:'t1',x:6,z:22,k:'ticket'},{id:'y1',x:19,z:32,k:'yuan'},{id:'g1',x:6,z:40,k:'gren'},{id:'w1',x:13.5,z:65,k:'whet'},{id:'y3',x:20,z:104,k:'yuan'},{id:'g2',x:5,z:121,k:'gren'},{id:'t4',x:21,z:147,k:'ticket'},{id:'v1',x:19,z:191.5,k:'vest'},{id:'t2',x:20,z:202,k:'ticket'},{id:'w2',x:5.5,z:206,k:'whet'}];
+/* ---------------- the long road to the ferry: five areas, five bosses (Dark Yuan 3D only; the RPG keeps the map above) ---------------- */
+{grid.length=0;for(let z=0;z<236;z++)grid.push(new Array(MW).fill('#'));
+ carve(8,1,17,8);carve(10,9,15,30);carve(4,17,9,23);carve(5,31,20,42);carve(11,43,14,43,'F');carve(5,44,20,57);carve(11,58,14,58,'G');
+ carve(0,59,25,72,'~');carve(11,59,14,72,'=');carve(10,73,15,78);carve(11,79,14,79,'F');carve(5,80,20,95);carve(11,96,14,96,'G');
+ carve(9,97,16,101);carve(4,102,21,122);carve(11,123,14,123,'F');carve(5,124,20,139);carve(11,140,14,140,'G');
+ carve(9,141,16,145);carve(3,146,22,166);carve(11,167,14,167,'F');carve(5,168,20,183);carve(11,184,14,184,'G');
+ carve(9,185,16,189);carve(3,190,22,208);carve(3,190,4,208,'~');carve(21,190,22,203,'~');carve(11,209,14,209,'F');carve(4,210,21,225);carve(11,226,14,226,'G');
+ carve(0,227,25,235,'~');carve(11,227,14,233,'=');
+ for(const[x0,z0,x1,z1]of[[5,44,20,57],[5,80,20,95],[5,124,20,139],[5,168,20,183],[4,210,21,225]])for(let k=0;k<3;k++)for(let j=0;j<3-k;j++){grid[z0+k][x0+j]='#';grid[z0+k][x1-j]='#';grid[z1-k][x0+j]='#';grid[z1-k][x1-j]='#'}
+ // the mint: pillars and counters stacked with banknotes
+ for(const z of[106,112,118])for(const x of[7,8,17,18]){grid[z][x]='#';grid[z+1][x]='#'}
+ for(const[x,z]of[[10,109],[11,109],[15,115],[14,115],[5,103],[20,113],[6,110]])grid[z][x]='c';
+ // huaihai: sandbag trenches with gaps, a few ruined walls
+ for(let x=3;x<=9;x++)grid[150][x]='c';for(let x=16;x<=22;x++)grid[150][x]='c';for(let x=8;x<=17;x++)grid[157][x]='c';for(let x=3;x<=10;x++)grid[163][x]='c';for(let x=15;x<=22;x++)grid[163][x]='c';
+ for(const[x,z]of[[5,153],[6,153],[19,160],[20,160],[13,147]])grid[z][x]='#';
+ for(const[x,z]of[[8,194],[9,194],[15,198],[16,198],[16,199],[7,203],[13,205],[18,36],[6,33],[14,27]])grid[z][x]='c';
+ for(let z=0;z<grid.length;z++)for(let x=0;x<MW;x++){if(grid[z][x]!=='#')continue;let adj=false;for(const[dx,dz]of[[1,0],[-1,0],[0,1],[0,-1]]){const c=(grid[z+dz]||[])[x+dx];if(openC(c)&&c!=='~')adj=true}
+  if(!adj)continue;const h=((x*73856093)^(z*19349663))>>>0;if(z<59)grid[z][x]=h%7===0?'P':h%7===1?'Q':h%3===0?'W':'#';else if(z>189)grid[z][x]=h%3?'W':'#'}
+ FIRES.splice(0,FIRES.length,{x:12.5,z:3.5,name:'THE CONSCRIPT PIT'},{x:7,z:41,name:'VILLAGE SQUARE'},{x:12.5,z:99.5,name:'MINT GATE'},{x:12.5,z:143.5,name:'FROZEN TRENCH'},{x:12.5,z:187.5,name:'FERRY ROAD'},{x:19.5,z:206.5,name:'CUSTOMS HOUSE'});
+ ARENAS.splice(0,ARENAS.length,
+  {k:'wei',fz:43,gz:58,z0:44,z1:57,cx:12.5,cz:50.5,title:'COMMISSAR WEI',sub:'SELF-CRITICISM ENFORCER',fell:'COMMISSAR FELLED',fsub:'HE WILL WRITE A REPORT ABOUT THIS',item:'notebook'},
+  {k:'ma',fz:79,gz:96,z0:80,z1:95,cx:12.5,cz:87.5,title:'GENERAL MA',sub:'EXECUTIONER OF DESERTERS',fell:'WARLORD FELLED',item:'stamp'},
+  {k:'zhao',fz:123,gz:140,z0:124,z1:139,cx:12.5,cz:131.5,title:'TREASURER ZHAO',sub:'KEEPER OF THE PRESSES',fell:'TREASURER FELLED',fsub:'INFLATION, HOWEVER, IS UNDEFEATED',item:'plate'},
+  {k:'lu',fz:167,gz:184,z0:168,z1:183,cx:12.5,cz:175.5,title:'COLONEL LU',sub:'OF FLEXIBLE LOYALTY',fell:'COLONEL FELLED',fsub:'BOTH ARMIES CLAIM HE WAS THEIRS',item:'cap'},
+  {k:'bros',fz:209,gz:226,z0:210,z1:225,cx:12.5,cz:217.5,title:'THE BROTHERS',sub:'WHO AGREE ON ONE THING',fell:'UNITED FRONT DISSOLVED',item:'stamp2'});
+ ZONES.splice(0,ZONES.length,{z:0,name:'VILLAGE OF THE ROPED',han:'繩村',fog:0x4a2a24,bg:0x1c1420,hemi:1,sun:.65,rain:false},{z:59,name:'THE BRIDGE NOBODY BLEW UP',han:'斷橋',fog:0x3a2a34,bg:0x1c1420,hemi:1,sun:.65,rain:false},
+  {z:97,name:'THE MINT THAT NEVER SLEEPS',han:'印鈔廠',fog:0x1a2418,bg:0x0e120c,hemi:.75,sun:.35,sky:false,rain:false,fx:'money'},
+  {z:141,name:'HUAIHAI, WHERE THE ARMY WENT',han:'淮海',fog:0xc4ccd8,bg:0xb0bccc,hemi:1.25,sun:.8,sky:false,rain:false,fx:'snow'},
+  {z:185,name:'DOCKS OF THE LAST FERRY',han:'末班渡口',fog:0x1a1c2c,bg:0x0c0e1a,hemi:.7,sun:.3,rain:true,fx:'rain'})}
+const zoneOf=z=>{let i=0;ZONES.forEach((q,k)=>{if(z>=q.z)i=k});return i};
+let skyM=null;
+function setZone3(i){if(i===LV)return;setZone(i);const z=ZONES[i];if(S3){if(z.bg!=null)S3.background.setHex(z.bg);if(z.hemi)hemi.intensity=z.hemi;if(z.sun!=null)sunL.intensity=z.sun}if(skyM)skyM.visible=z.sky!==false}
 const IDESC={
  ticket:{n:'RATION TICKET',d:'+1 rice wine flask, refilled at every stove.',f:'Redeemable for one flask of rice wine, or one sip after the next price review.'},
  yuan:{n:'BRICK OF GOLD YUAN',d:'A great deal of money. For now.',f:'Worth a house in August. A bag of rice in October. Kindling by Christmas.'},
@@ -861,6 +895,9 @@ const IDESC={
  gren:{n:'STICK GRENADE POUCH',d:'+1 grenade carried.',f:'German design, local copy, fuse length a matter of faith.'},
  vest:{n:'PADDED COTTON VEST',d:'+15% max morale.',f:'Ordered for winter 1947. Delivered summer 1948.'},
  stamp:{n:'THE GENERAL\'S STAMP',d:'Half of your discharge papers.',f:'Pressed on six thousand execution orders. Now on your discharge. Ink is ink.'},
+ notebook:{n:'SELF-CRITICISM, 40 PAGES',d:'+1 grenade carried.',f:'The commissar\'s confession notebook. He ran out of paper long before he ran out of faults.'},
+ plate:{n:'ONE-MILLION NOTE PLATE',d:'+12% dadao damage. The edges are sharp.',f:'The official plate. The counterfeit plate is better. Nobody can tell the notes apart, including the bank.'},
+ cap:{n:'REVERSIBLE CAP',d:'+15% max morale.',f:'Blue on one side, green on the other. Not standard issue. Very popular in 1949.'},
  stamp2:{n:'THE UNITED FRONT\'S STAMP',d:'The other half. Board the ferry.',f:'Two seals side by side. They do not overlap. They never did.'}};
 const MSGS=[
  {x:10,z:2.5,t:['WASD MOVE · MOUSE LOOKS (CLICK TO CAPTURE) · LEFT CLICK ATTACK · U HEAVY','STICK MOVES · DRAG RIGHT SIDE TO LOOK · ATTACK · HEAVY']},
@@ -868,8 +905,10 @@ const MSGS=[
  {x:11,z:6,t:['Q LOCKS ON. CIRCLE THEM. THEY TURN SLOWER THAN YOU.','LOCK ON. CIRCLE THEM. THEY TURN SLOWER THAN YOU.']},
  {x:14,z:6,t:['RIGHT CLICK GUARDS. TAP IT AS A BLOW LANDS TO PARRY, THEN ATTACK TO RIPOSTE.','HOLD GUARD TO BLOCK. TAP IT AS A BLOW LANDS TO PARRY, THEN ATTACK.']},
  {x:12.5,z:9.5,t:['E RESTS AT THE TEA STOVE. THE DEAD RETURN. SO DO PRICES. R DRINKS WINE.','USE: REST AT THE STOVE. THE DEAD RETURN. SO DO PRICES.']},
- {x:12,z:12,t:'STRIKE FROM BEHIND: BACKSTAB'},{x:7,z:20,t:'SUPPLIES AHEAD! (TRUST ME)'},{x:12.5,z:31.5,t:'AMAZING COMMISSAR AHEAD'},{x:12.5,z:43.5,t:'BE WARY OF LEFT. AND RIGHT. AND WATER.'},
- {x:12.5,z:62.3,t:'VISIONS OF A GENERAL...'},{x:12.5,z:86.5,t:'PRAISE THE PAYCHECK \\o/'},{x:5.5,z:95,t:'HOLE. ALSO WATER.'},{x:12.5,z:104.3,t:'TWO BROTHERS AHEAD, THEREFORE FIGHT EACH OTHER?'}];
+ {x:12,z:12,t:'STRIKE FROM BEHIND: BACKSTAB'},{x:7,z:20,t:'SUPPLIES AHEAD! (TRUST ME)'},{x:12.5,z:31.5,t:'AMAZING COMMISSAR AHEAD'},{x:14.5,z:42,t:'CONFESSION AHEAD'},{x:12.5,z:59.5,t:'BE WARY OF LEFT. AND RIGHT. AND WATER.'},
+ {x:12.5,z:78.3,t:'VISIONS OF A GENERAL...'},{x:12.5,z:101,t:'BANK RUN AHEAD. THEREFORE RUN'},{x:10,z:113,t:'TRY SAVING'},{x:12.5,z:122.3,t:'VISIONS OF MONEY...'},
+ {x:12.5,z:145,t:'HALF A MILLION OF OURS WERE LOST HERE. YOU ARE ONE OF THEM. AGAIN.'},{x:14,z:155,t:'BE WARY OF FRIENDS'},{x:12.5,z:166.3,t:'COLONEL AHEAD. WHICH SIDE? YES.'},
+ {x:12.5,z:190.5,t:'PRAISE THE PAYCHECK \\o/'},{x:5.5,z:199,t:'HOLE. ALSO WATER.'},{x:12.5,z:208.3,t:'TWO BROTHERS AHEAD, THEREFORE FIGHT EACH OTHER?'}];
 const NEWS=['Prices rose 15% while you rested. Your savings rested too, permanently.','Government assures the Gold Yuan is stable. Rice is now quoted per grain.','New banknotes printed to fix the old banknotes. Prices +15%.','A wheelbarrow of Gold Yuan now buys a smaller wheelbarrow.'];
 const TIPS=['Yuan you carry loses value at every rest. Spend it here, now.','Parry: tap guard the moment a blow lands, then attack to riposte.','Lock on and circle-strafe: most enemies turn slower than you.','Dropped yuan inflates away on the ground, 1% a second. Hurry.','Heavy attacks break shields and poise. They also leave you open.','Roll through attacks, not away from them.'];
 
@@ -880,7 +919,7 @@ const SL=()=>G.vig+G.end+G.str-29;
 const maxHP=()=>Math.round((60+G.vig*6)*(1+G.vest*.15)),maxST=()=>50+G.end*5,ATK=()=>(8+G.str*1.25)*(1+G.whet*.12);
 const cost=()=>Math.round(450*Math.pow(1.12,SL()-1)*G.inf);
 const NGH=()=>1+G.ng*.6,NGD=()=>1+G.ng*.35;
-const SAVEK='darkyuan3d.v1';function save(){store.set(SAVEK,G)}
+const SAVEK='darkyuan3d.v2';function save(){store.set(SAVEK,G)}
 
 /* ---------------- audio extras ---------------- */
 const X={
@@ -906,7 +945,7 @@ let AMB=null;
 function ambient(){if(!AC||AMB)return;const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain(),s2=AC.createBufferSource(),f2=AC.createBiquadFilter(),g2=AC.createGain();
  s.buffer=NB;s.loop=true;f.type='lowpass';f.frequency.value=320;g.gain.value=.05;s.connect(f).connect(g).connect(MASTER);s.start();
  s2.buffer=NB;s2.loop=true;f2.type='highpass';f2.frequency.value=3500;g2.gain.value=0;s2.connect(f2).connect(g2).connect(MASTER);s2.start();AMB={g,g2}}
-function ambSet(){if(!AMB)return;const t=AC.currentTime;AMB.g2.gain.setTargetAtTime(LV===2&&state==='play'?.04:0,t,.5);AMB.g.gain.setTargetAtTime(state==='play'?.05:.015,t,.5)}
+function ambSet(){if(!AMB)return;const t=AC.currentTime;AMB.g2.gain.setTargetAtTime((ZONES[LV]&&ZONES[LV].rain!=null?ZONES[LV].rain:LV===2)&&state==='play'?.04:0,t,.5);AMB.g.gain.setTargetAtTime(state==='play'?.05:.015,t,.5)}
 
 /* ---------------- three.js scene ---------------- */
 const GLC=$('#gl');let renderer,S3,camera,hemi,sunL,PTS={},waterTex,fogTex,fogMeshes=[],stoveObjs=[],itemSpr={},msgMesh=[],stainSpr,ringMeshes=[],laser,ferry;
@@ -1035,7 +1074,7 @@ const EDEF={
  shield:{hp:80,poise:26,spd:.024,yuan:160,reach:1.3,turn:.05,shield:1,atks:[{w:36,a:8,r:30,dmg:24,lunge:.04,arc:.3}],wpn:'baton',sh:'door',fac:'civ'},
  rifle:{hp:34,poise:12,spd:.026,yuan:110,ranged:1,reach:1.4,turn:.08,atks:[{w:22,a:6,r:24,dmg:12,lunge:.04,arc:.5}],wpn:'rifle'},
  gren:{hp:30,poise:12,spd:.03,yuan:100,lob:1,reach:1.2,turn:.08,atks:[{w:20,a:6,r:24,dmg:12,lunge:.03,arc:.5}],wpn:null},
- commissar:{hp:320,poise:40,spd:.036,yuan:1600,reach:1.9,mini:1,s:1.4,turn:.06,atks:[{w:26,a:6,r:30,dmg:20,lunge:.06,n:3,w2:14,arc:.3}],wpn:'sword',sh:'mega',officer:1,name:'COMMISSAR WEI, SELF-CRITICISM ENFORCER'},
+ commissar:{hp:320,poise:40,spd:.036,yuan:1600,reach:1.9,mini:1,s:1.4,turn:.06,atks:[{w:26,a:6,r:30,dmg:20,lunge:.06,n:3,w2:14,arc:.3}],wpn:'sword',sh:'mega',officer:1,name:'COMMISSAR WEI\'S UNDERSTUDY'},
  mimic:{hp:150,poise:60,spd:.05,yuan:700,reach:1.5,mimic:1,turn:.1,atks:[{w:16,a:10,r:30,dmg:30,lunge:.08,arc:.3}]}};
 function spawnAll(){for(const e of ents)killMesh(e.m);ents=SPAWNS.filter(([k])=>!(k==='mimic'&&G.taken.includes('mimic'))).map(([k,x,z,fac])=>{const d=EDEF[k];
  const e={k,def:d,x,z,hx:x,hz:z,fa:Math.PI,fac:fac||d.fac||'kmt',hp:d.hp*NGH(),max:d.hp*NGH(),pz:0,state:d.mimic?'dorm':'idle',t:rnd()*60|0,cd:30,n:0,atk:d.atks[0],flash:0,dead:false,dt:0,anim:0,id:Math.random(),s:d.s||1,rad:.35*(d.s||1),ph:0};
@@ -1141,7 +1180,7 @@ function damage(e,dmg,poise,kind,sx,sz,crit){
  if(!crit){X.flesh();blood(e.x,.8*e.s,e.z,kind==='heavy'?16:8);hs=Math.max(hs,kind==='heavy'?6:3);shake=Math.max(shake,kind==='heavy'?5:2)}
  pops.push({x:e.x+(rnd()-.5)*.3,y:1.4*e.s,z:e.z,s:String(dmg),c:crit?'#ffd24a':'#fff',t:0});
  if(e.hp<=0){kill(e);return}
- if(e.state==='idle')e.state='chase';
+ if(e.state==='idle'&&!e.boss)e.state='chase';
  e.pz+=poise;const lim_=e.boss?e.poiseMax:e.def.poise;
  if(e.pz>=lim_&&!['critd','down','roar','intro','unite'].includes(e.state)){e.pz=0;if(e.boss){e.state='down';e.t=0;pop(e.x,2*e.s,e.z,'POISE BROKEN','#ffd24a')}else if(e.state!=='act'||kind!=='light'){e.state='stag';e.t=0}}}
 function kill(e){e.dead=true;e.dt=0;e.hp=0;G.kills++;if(lockT===e){lockT=null;lockAuto=20}
@@ -1163,7 +1202,7 @@ function hitPlayer(dmg,sx,sz,o={}){const p=PL;
 function die(fell){const p=PL;if(p.state==='dead')return;p.state='dead';p.t=0;G.deaths++;music('off');X.died();lockT=null;
  if(G.stain)G.lost+=G.stain.val;const sp=fell?(p.safe||[p.x,p.z]):[p.x,p.z];
  G.stain=G.yuan>0?{x:sp[0],z:sp[1],val:G.yuan,orig:G.yuan}:null;G.yuan=0;dead={t:0};save()}
-function respawn(i,warp){G.fire=i;const f=FIRES[i];PL=mkPlayer(f.x,f.z+1);PL.fa=0;cy=0;arena=null;for(const b of bosses)killMesh(b.m);bosses=[];for(const q of projs)if(q.mesh)S3.remove(q.mesh);projs=[];spawnAll();dead=null;lockT=null;fadeA=1;LV=-1;setZone(zoneAt(PL.z));state='play';music('off');ambSet();GLC.style.filter='';
+function respawn(i,warp){G.fire=i;const f=FIRES[i];PL=mkPlayer(f.x,f.z+1);PL.fa=0;cy=0;arena=null;for(const b of bosses)killMesh(b.m);bosses=[];for(const q of projs)if(q.mesh)S3.remove(q.mesh);projs=[];spawnAll();dead=null;lockT=null;fadeA=1;LV=-1;setZone3(zoneOf(PL.z));state='play';music('off');ambSet();GLC.style.filter='';
  if(!warp)pop(PL.x,1.8,PL.z,'YOU ROSE AGAIN. NOBODY NOTICED.','#a8977c');for(const m of fogMeshes){const A=m.userData.A;m.visible=!G.boss[A.k]}}
 function setZone(i){if(i===LV)return;LV=i;const z=ZONES[i];if(S3){S3.fog.color.setHex(z.fog);S3.background.setHex(i===2?0x0c0e1a:0x1c1420);hemi.intensity=i===2?.7:1;sunL.intensity=i===2?.3:.65}
  ambSet();if(state==='play'&&G&&!G.seen.includes(i)){G.seen.push(i);areaB={t:0,z}}}
@@ -1205,22 +1244,25 @@ function updEnemy(e){const d=e.def,dx=PL.x-e.x,dz=PL.z-e.z,dist=Math.hypot(dx,dz
 const BOSSDEF={
  ma:{name:'GENERAL MA, EXECUTIONER OF DESERTERS',hp:720,s:2,fac:'kmt',poise:110,wpn:'dadao',moves1:['combo','combo','leap','charge'],moves2:['combo','leap','charge','spin','spin'],yuan:9000,spd:.04},
  red:{name:'BROTHER RED, THE SWIFT',hp:430,s:1.55,fac:'ccp',poise:70,wpn:'spear',moves1:['lunge','lunge','jab','hop'],yuan:6000,spd:.05},
- blue:{name:'BROTHER BLUE, THE STOUT',hp:560,s:2.1,wide:1.3,fac:'kmt',poise:120,wpn:'sack',moves1:['slam','sweep','belly'],yuan:6000,spd:.026}};
+ blue:{name:'BROTHER BLUE, THE STOUT',hp:560,s:2.1,wide:1.3,fac:'kmt',poise:120,wpn:'sack',moves1:['slam','sweep','belly'],yuan:6000,spd:.026},
+ wei:{name:'COMMISSAR WEI, SELF-CRITICISM ENFORCER',hp:520,s:1.7,fac:'ccp',poise:80,wpn:'dadao',officer:1,moves1:['combo','word','charge','word'],moves2:['combo','word','word','leap','spin'],yuan:4000,spd:.045,shout:'CRITICIZE YOURSELF!',roar:'CONFESS! MTFK!'},
+ zhao:{name:'TREASURER ZHAO, KEEPER OF THE PRESSES',hp:780,s:2.2,wide:1.4,fac:'kmt',poise:130,wpn:'sack',moves1:['slam','sweep','print','belly'],moves2:['print','slam','print','sweep','belly'],yuan:12000,spd:.026,roar:'PRINT MORE! MTFK!'},
+ lu:{name:'COLONEL LU, OF FLEXIBLE LOYALTY',hp:640,s:1.7,fac:'kmt',poise:90,wpn:'spear',officer:1,moves1:['lunge','jab','hop','lunge'],moves2:['lunge','lunge','jab','hop','charge'],yuan:10000,spd:.05,shout:'FOR THE REPUBLIC!',shout2:'FOR THE PEOPLE!',roar:'I WAS ALWAYS RED!',defect:1}};
 function mkBoss(k,x,z){const d=BOSSDEF[k];const b={boss:1,k,def:d,name:d.name,x,z,y:0,fa:Math.PI,hp:d.hp*NGH(),max:d.hp*NGH(),s:d.s,rad:.38*d.s*(d.wide||1),fac:d.fac,state:'intro',t:0,cd:40,pz:0,poiseMax:d.poise,phase:1,moves:d.moves1.slice(),n:0,sub:0,vy:0,hitDone:false,flash:0,dead:false,dt:0,anim:0,id:Math.random(),f:1};
- b.m=mkChar({fac:d.fac,wpn:d.wpn,s:d.s,wide:d.wide,officer:k==='ma'});return b}
-function startBoss(A){arena=A;fadeA=.5;lockT=null;areaB=null;if(A.k==='ma'){bosses=[mkBoss('ma',A.cx,A.cz+4)];music('duel')}else{bosses=[mkBoss('red',A.cx+2.5,A.cz+4),mkBoss('blue',A.cx-2.5,A.cz+5)];music('final')}
- lockT=bosses[0];banner={t:0,dur:150,text:A.k==='ma'?'GENERAL MA':'THE BROTHERS',sub:A.k==='ma'?'EXECUTIONER OF DESERTERS':'WHO AGREE ON ONE THING',col:'#e9dcc2',size:26}}
+ b.m=mkChar({fac:d.fac,wpn:d.wpn,s:d.s,wide:d.wide,officer:k==='ma'||!!d.officer});return b}
+function startBoss(A){arena=A;fadeA=.5;lockT=null;areaB=null;if(A.k!=='bros'){bosses=[mkBoss(A.k,A.cx,A.cz+4)];music('duel')}else{bosses=[mkBoss('red',A.cx+2.5,A.cz+4),mkBoss('blue',A.cx-2.5,A.cz+5)];music('final')}
+ lockT=bosses[0];banner={t:0,dur:150,text:A.title,sub:A.sub,col:'#e9dcc2',size:26}}
 function bossDown(b){blood(b.x,1.2,b.z,60);shake=14;hs=16;const rest=bosses.filter(o=>!o.dead);
  if(rest.length){const o=rest[0];o.state='unite';o.t=0;lockT=o;return}
  const k=arena.k;G.boss[k]=1;const y=Math.round(b.def.yuan*G.inf*(1+G.ng*.5))*(k==='bros'?2:1);G.yuan+=y;pop(PL.x,1.9,PL.z,'+¥'+fmtBig(y),'#d9a441');
- banner={t:0,dur:260,text:k==='ma'?'WARLORD FELLED':'UNITED FRONT DISSOLVED',col:'#d9a441',size:24,delay:50};setTimeout(()=>X.felled(),400);music('off');arena=null;
- for(const m of fogMeshes)if(m.userData.A.k===k)m.visible=false;itemGet(k==='ma'?'stamp':'stamp2',k==='ma'?'stamp':'stamp2',120);save()}
+ const A=arena;banner={t:0,dur:260,text:A.fell,sub:A.fsub,col:'#d9a441',size:24,delay:50};setTimeout(()=>X.felled(),400);music('off');arena=null;
+ for(const m of fogMeshes)if(m.userData.A.k===k)m.visible=false;itemGet(A.item,A.item,120);save()}
 function ring(x,z,dmg,v=.09,c=0xe9dcc2){const m=new THREE.Mesh(new THREE.RingGeometry(.9,1,40),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.8,side:THREE.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(x,.08,z);S3.add(m);projs.push({k:'ring',x,z,y:0,r:.5,v,dmg,life:80,mesh:m,o:'e'})}
 function slam(b,R_,dmg){shake=12;SFX.stomp();dust(b.x,b.z,24);if(dmg)aoeHit(b,b.x,b.z,R_,dmg,{kb:.16});ring(b.x,b.z,18)}
 function updBoss(b){const dx=PL.x-b.x,dz=PL.z-b.z,dist=Math.hypot(dx,dz),ang=Math.atan2(dx,dz),f=b.f,d=b.def;b.t++;b.anim++;if(b.flash>0)b.flash--;if(b.pz>0)b.pz-=.12;b.moving=0;
  if(b.dead){b.dt++;return}const A=arena;
  const walk=(sp,a=b.fa)=>{const nx=b.x+Math.sin(a)*sp,nz=b.z+Math.cos(a)*sp;if(A){b.x=clamp(nx,5.6+b.rad,20.4-b.rad);b.z=clamp(nz,A.z0+.6+b.rad,A.z1+.4-b.rad)}b.moving=1};
- if(b.k==='ma'&&b.phase===1&&b.hp<b.max*.5&&!['critd','down','leap','roar'].includes(b.state)){b.state='roar';b.t=0}
+ if(d.moves2&&b.phase===1&&b.hp<b.max*.5&&!['critd','down','leap','roar'].includes(b.state)){b.state='roar';b.t=0}
  const melee=(R_,arc,dmg,o)=>enemyHit(b,R_,arc,dmg,o||{});const tr=(r)=>{b.fa=turn(b.fa,ang,r*(b.phase>1?1.4:1))};
  switch(b.state){
  case 'intro':tr(.05);if(b.t>=70){b.state='idle';b.t=0}break;
@@ -1228,7 +1270,7 @@ function updBoss(b){const dx=PL.x-b.x,dz=PL.z-b.z,dist=Math.hypot(dx,dz),ang=Mat
   if(b.cd<=0&&PL.state!=='dead'){let mv=pick(b.moves);const close=['combo','jab','sweep','slam'],far=['charge','lunge','leap','belly'];
    if(close.includes(mv)&&dist>2.2*b.s/2+2.2)mv=pick(b.moves.filter(m=>!close.includes(m)))||mv;
    if(far.includes(mv)&&dist<2&&rnd()<.6)mv=b.moves.find(m=>close.includes(m))||mv;
-   b.state=mv;b.t=0;b.n=0;b.sub=0;b.hitDone=false;if(mv==='combo')b.third=14+rnd()*34|0;if(mv==='charge'||mv==='lunge')b.shout={s:b.k==='ma'?'DIE, DESERTER!':'FOR THE PEOPLE!',t:60}}
+   b.state=mv;b.t=0;b.n=0;b.sub=0;b.hitDone=false;if(mv==='combo')b.third=14+rnd()*34|0;if(mv==='charge'||mv==='lunge')b.shout={s:(b.phase>1&&d.shout2)||d.shout||(b.k==='ma'?'DIE, DESERTER!':'FOR THE PEOPLE!'),t:60}}
   break}
  case 'combo':{const W0=b.n===0?34*f:b.n===2?b.third*f:15*f;
   if(b.sub===0){if(b.t<W0*.7)tr(.05);if(b.t>=W0){b.sub=1;b.t=0;b.hitDone=false;X.heavy()}}
@@ -1240,9 +1282,15 @@ function updBoss(b){const dx=PL.x-b.x,dz=PL.z-b.z,dist=Math.hypot(dx,dz),ang=Mat
   else{walk(.15);if(b.anim%5===0)dust(b.x,b.z,3);if(dist<1.2*b.s/2+.5&&!b.hitDone){b.hitDone=true;hitPlayer(24*NGD(),b.x,b.z,{kb:.2})}
    const past=(dx*Math.sin(b.fa)+dz*Math.cos(b.fa))<-2.5;if(b.t>=70||past){b.state='rec';b.rec=44;b.t=0}}break}
  case 'spin':{if(b.sub===0){if(b.t>=30*f){b.sub=1;b.t=0}}else{b.fa+=.45;walk(.035,ang);if(b.t%18===0){b.hitDone=false;X.swing()}if(!b.hitDone&&dist<2.4){b.hitDone=true;hitPlayer(16*NGD(),b.x,b.z,{kb:.12})}if(b.t>=100){b.state='rec';b.rec=60}}break}
- case 'roar':{if(b.t===20){b.phase=2;b.f=.75;b.moves=BOSSDEF.ma.moves2.slice();shake=16;b.shout={s:'DIE, DESERTER! MTFK!',t:90};SFX.alarm();ring(b.x,b.z,0,.15,0xffb04a);
+ case 'roar':{if(b.t===20){b.phase=2;b.f=.75;b.moves=d.moves2.slice();shake=16;b.shout={s:d.roar||'DIE, DESERTER! MTFK!',t:90};SFX.alarm();
+   if(d.defect){b.fac='ccp';b.name='COLONEL LU (DEFECTED)';const sc=b.m.root.scale.x;killMesh(b.m);b.m=mkChar({fac:'ccp',wpn:d.wpn,s:d.s,officer:1});b.m.root.scale.setScalar(sc);banner={t:0,dur:170,text:'COLONEL LU HAS DEFECTED',sub:'HE KEEPS THE SAME SPEAR',col:'#7ac06a',size:20}}ring(b.x,b.z,0,.15,0xffb04a);
    if(dist<4&&PL.state!=='dead'&&PL.state!=='roll'){PL.state='hurt';PL.t=0;PL.kx=dx/dist*.18;PL.kz=dz/dist*.18}music('final')}
   if(b.t>=70){b.state='idle';b.cd=20;b.t=0}break}
+ case 'word':case 'print':{const pr=b.state==='print';if(b.sub===0){tr(.08);if(b.t>=(pr?30:24)*f){b.sub=1;b.t=0}}
+  else{const n=pr?(b.phase>1?5:3):(b.phase>1?3:2),gap=pr?12:14;if(b.t%gap===1&&b.t<n*gap){tr(.25);const txt_=pick(pr?['¥1,000,000','¥5,000,000','NEW ISSUE!','STILL VALID!','¥10,000,000']:['SELF-CRITICIZE!','STRUGGLE SESSION!','CONFESS!','RECTIFY!','WRITE IT DOWN!']);
+   const c=wordSprite(txt_).n;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(c),depthWrite:false,color:pr?0xc8f0a0:0xffffff}));sp.scale.set(c.width/c.height*.35,.35,1);S3.add(sp);const a=b.fa+(rnd()-.5)*(pr?.6:.12);
+   projs.push({k:'word',x:b.x+Math.sin(b.fa)*b.rad,y:1.1,z:b.z+Math.cos(b.fa)*b.rad,vx:Math.sin(a)*.1,vy:0,vz:Math.cos(a)*.1,o:'e',dmg:pr?18:20,life:200,mesh:sp});if(pr)X.coin();else SFX.word()}
+   if(b.t>=n*gap+10){b.state='rec';b.rec=pr?40:30}}break}
  case 'lunge':{if(b.sub===0){tr(.07);if(b.t>=30*f){b.sub=1;b.t=0;b.hitDone=false;b.sx=b.x;b.sz=b.z;X.swing()}}
   else{walk(.22);melee(1.6*b.s/1.55+.6,.3,22,{kb:.14});if(Math.hypot(b.x-b.sx,b.z-b.sz)>6||b.t>=28){b.state='rec';b.rec=36;b.t=0}}break}
  case 'jab':{const W0=b.n===0?20*f:9*f;if(b.sub===0){if(b.t<W0*.7)tr(.08);if(b.t>=W0){b.sub=1;b.t=0;b.hitDone=false;X.swing()}}
@@ -1279,9 +1327,9 @@ function updProjs(){for(const q of projs){q.life--;
    if(res==='parry'){q.o='p';q.vx*=-1.4;q.vz*=-1.4;q.vy=0;q.dmg*=2.5;pop(q.x,1.8,q.z,'RETURN TO SENDER','#ffd24a')}else if(res!=='miss')q.life=0}}
  else for(const e of targets())if(e.state!=='dorm'&&Math.hypot(e.x-q.x,e.z-q.z)<e.rad+.2&&q.y<1.4*e.s){damage(e,q.dmg,20,'light',q.x-q.vx*3,q.z-q.vz*3);q.life=0;break}}
  for(const q of projs)if(q.life<=0&&q.mesh){S3.remove(q.mesh);q.mesh=null}projs=projs.filter(q=>q.life>0)}
-function itemGet(id,k,delay=0){if(!G.taken.includes(id))G.taken.push(id);if(itemSpr[id])itemSpr[id].visible=false;
+function itemGet(id,k0,delay=0){if(!G.taken.includes(id))G.taken.push(id);const k=({notebook:'gren',plate:'whet',cap:'vest'})[k0]||k0;if(itemSpr[id])itemSpr[id].visible=false;
  if(k==='ticket'){G.flaskMax++;PL.flask++}else if(k==='whet')G.whet++;else if(k==='gren'){G.grenMax++;PL.gren++}else if(k==='vest'){G.vest++;PL.hp+=maxHP()-Math.round(maxHP()/1.15)}else if(k==='yuan')G.yuan+=Math.round(2500*G.inf);
- setTimeout(()=>{itemBox={k,t:0};SFX.weapon()},delay*16);save()}
+ setTimeout(()=>{itemBox={k:k0,t:0};SFX.weapon()},delay*16);save()}
 function interact(n){const p=PL;
  if(n.k==='fire'){restAt(n.i);return}
  if(n.k==='msg'){reading={m:n.o,t:0};SFX.radio();return}
@@ -1294,7 +1342,7 @@ function findNear(){const p=PL;near=null;if(p.state!=='free')return;const d2=(x,
  for(const it of ITEMS)if(!G.taken.includes(it.id)&&d2(it.x,it.z)<1){near={k:'item',o:it,label:'PICK UP'};return}
  for(const e of ents)if(e.state==='dorm'&&d2(e.x,e.z)<1.3){near={k:'mimic',o:e,label:'OPEN THE CRATE'};return}
  for(const A of ARENAS)if(!G.boss[A.k]&&!arena&&p.z>A.fz-1.2&&p.z<A.fz&&p.x>11&&p.x<14){near={k:'fog',o:A,label:'ENTER THE FOG'};return}
- if(G.boss.bros&&p.z>128.5){near={k:'ferry',label:'BOARD THE LAST FERRY'};return}
+ if(G.boss.bros&&p.z>232.5){near={k:'ferry',label:'BOARD THE LAST FERRY'};return}
  for(const m of MSGS)if(d2(m.x,m.z)<.8){near={k:'msg',o:m,label:'READ MESSAGE'};return}}
 function restAt(i){const p=PL,first=!G.lit.includes(i);p.state='sit';p.t=0;G.fire=i;lockT=null;
  if(first){G.lit.push(i);banner={t:0,dur:170,text:'TEA STOVE LIT',col:'#ffb04a',size:24};X.lit()}
@@ -1333,7 +1381,7 @@ function charPose(o,c,isP){const st=o.state,t=o.t;c.root.position.set(o.x,(o.y||
 function enemyPose(e){const c=e.m;if(c.mimic){c.root.position.set(e.x,e.state==='dorm'?0:.25,e.z);c.root.rotation.y=e.fa;const open=e.state==='dorm'?0:e.state==='act'?1.1:e.state==='wind'?(e.t%10<5?.8:.3):.3;c.lidG.rotation.x=-open;
   c.legs.forEach((l,i)=>{l.visible=e.state!=='dorm';l.rotation.x=e.moving?Math.sin(e.anim*.4+i*3)*.6:0});if(e.dead){c.root.position.y=-Math.min(1,e.dt/80)*.8}flash(c,e.flash>0&&T%3<2);return}
  c.root.position.set(e.x,e.y||0,e.z);c.root.rotation.y=e.fa;e.ph=(e.ph||0)+(e.moving?.2:0);const P_={walk:e.moving?1:0,ph:e.ph},st=e.state,t=e.t,a=e.atk||{},w=e.k;
- const wind=st==='wind'||e.sub===0&&['combo','jab','lunge','slam','sweep','charge'].includes(st);
+ const wind=st==='wind'||e.sub===0&&['combo','jab','lunge','slam','sweep','charge','word','print'].includes(st);
  if(e.boss){const b=e;
   if(st==='combo'){const odd=b.n%2;P_.aR=b.sub===0?lerp(0,-2.8,b.t/12):lerp(-2.8,.4,b.t/6);if(odd){P_.aR=-1.4;P_.zR=b.sub===0?1.3:lerp(1.3,-1.2,b.t/6)}P_.walk=0}
   else if(st==='leap'||st==='belly'){P_.aR=-2.8;P_.crouch=b.sub===0?.2:0;P_.walk=0}
@@ -1346,7 +1394,8 @@ function enemyPose(e){const c=e.m;if(c.mimic){c.root.position.set(e.x,e.state===
   else if(st==='sweep'){P_.aR=-1.4;P_.zR=b.sub?-1.2:1.3;P_.twist=b.sub?-.7:.6;P_.walk=0}
   else if(st==='down'||st==='critd'){P_.crouch=.25;P_.lean=.5;P_.aR=.2}
   else if(st==='hop')P_.walk=0;
-  else P_.aR=b.k==='blue'?-.5:-.3;
+  else if(st==='word'||st==='print'){P_.aL=-1.6;P_.aR=b.sub?-1.6:-.6;P_.walk=0}
+  else P_.aR=b.def.wpn==='sack'?-.5:-.3;
   if(b.dead){P_.roll=-Math.min(1,b.dt/30)*Math.PI/2;P_.crouch=.3}
   setEmo(c,b.dead?'dead':st==='down'||st==='critd'?'hurt':st==='roar'||b.shout?'shout':wind?'grit':st==='unite'?'cry':st==='rec'?'determined':'smug');
   if(b.k==='ma'&&c.blade)c.blade.material.emissive.setHex(b.phase>1?(T%6<3?0xff6a1a:0xcc4400):0x222222)}
@@ -1385,7 +1434,9 @@ function sync(){const p=PL;
  const fill=(P_,list)=>{let n=0;const c=new THREE.Color();for(const q of list){if(n>=P_.n)break;P_.pos[n*3]=q.x;P_.pos[n*3+1]=q.y;P_.pos[n*3+2]=q.z;c.set(q.c);P_.col[n*3]=c.r;P_.col[n*3+1]=c.g;P_.col[n*3+2]=c.b;n++}P_.g.setDrawRange(0,n);P_.g.attributes.position.needsUpdate=true;P_.g.attributes.color.needsUpdate=true};
  const S_=[],F_=[];for(const q of fx)(q.f?F_:S_).push(q);
  for(const q of projs){if(q.k==='bul'){F_.push({x:q.x,y:q.y,z:q.z,c:q.o==='p'?'#ffd24a':'#ff6a3d'},{x:q.x-q.vx,y:q.y-q.vy,z:q.z-q.vz,c:'#a03a1a'})}else if(q.k==='gren')S_.push({x:q.x,y:q.y,z:q.z,c:'#3a4030'},{x:q.x,y:q.y+.06,z:q.z,c:'#7a5230'})}
- if(LV===2)for(let i=0;i<60;i++){const k=(i*97+T*7)%300;S_.push({x:p.x+((i*37)%20-10),y:6-(k%60)/10,z:p.z+((i*53)%20-10),c:'#8a9ab0'})}
+ const zfx=(ZONES[LV]||{}).fx;if(zfx==='rain')for(let i=0;i<60;i++){const k=(i*97+T*7)%300;S_.push({x:p.x+((i*37)%20-10),y:6-(k%60)/10,z:p.z+((i*53)%20-10),c:'#8a9ab0'})}
+ else if(zfx==='snow'||zfx==='money')for(let i=0;i<70;i++){const k=(i*97+T*(zfx==='snow'?1.2:1))%600;S_.push({x:p.x+((i*37)%20-10)+Math.sin((T+i*40)/40)*.4,y:6-(k%120)/20,z:p.z+((i*53)%20-10),c:zfx==='snow'?'#ffffff':(i%3?'#8aa070':'#b0a070')})}
+ if(skyM)skyM.position.z=camera.position.z;
  fill(PTS.s,S_);fill(PTS.f,F_)}
 function slashFX(p,c){const m=new THREE.Mesh(new THREE.RingGeometry(.7,1.5,16,1,0,Math.PI*(c.thrust?.3:.9)),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.55,side:THREE.DoubleSide,depthWrite:false}));
  m.position.set(p.x,.9,p.z);if(p.combo===1&&!p.heavy)m.rotation.set(-Math.PI/2,0,p.fa-Math.PI*.95,'YXZ');else m.rotation.set(0,p.fa+Math.PI/2,Math.PI/2+(c.thrust?.6:0),'YXZ');
@@ -1437,36 +1488,99 @@ function update(){T++;G.time++;
  for(const q of pops)q.t++;pops=pops.filter(q=>q.t<60);
  if(G.stain){const s=G.stain;if(T%60===0)s.val=Math.max(Math.round(s.orig*.2),Math.round(s.val*.99));if(Math.hypot(PL.x-s.x,PL.z-s.z)<.7&&PL.state!=='dead'){G.yuan+=s.val;pop(PL.x,1.9,PL.z,'+¥'+fmtBig(s.val)+' (NOW WORTH LESS)','#b9e0a0');spark(s.x,.4,s.z,20,'#b9e0a0');SFX.pick();G.stain=null}}
  if(T%300===0&&rnd()<.6)SFX.far();
- findNear();setZone(zoneAt(PL.z));
+ findNear();setZone3(zoneOf(PL.z));
  if(held('camL'))cy+=.04;if(held('camR'))cy-=.04;if(held('camU'))cp=clamp(cp+.02,-.15,1.1);if(held('camD'))cp=clamp(cp-.02,-.15,1.1);
  if(dead){dead.t++;GLC.style.filter=`grayscale(${Math.min(.8,dead.t/80)})`;if(dead.t>=230)respawn(G.fire)}
  for(const k in pressed)delete pressed[k]}
 
+/* ---------------- world for the long road (souls3d only) ---------------- */
+function dyTextures(){const o={};
+ const bills=(g,base)=>{R(g,0,0,64,64,base);const rr=seeded(21);for(let i=0;i<26;i++){const x=rr()*56|0,y=rr()*58|0,c=rr()<.5?'#8aa070':rr()<.5?'#b0a070':'#c9b98a';R(g,x,y,14,7,c);R(g,x+1,y+1,12,1,'#5a6a3a');R(g,x+5,y+2,4,3,'#6a5a30')}};
+ o['#M']=mk(64,64,g=>{bills(g,'#2a2a22');R(g,0,0,64,4,'#1a1a14')});o.PM=o.QM=o.WM=o['#M'];
+ o.cM=mk(32,32,g=>{R(g,0,0,32,32,'#7a6a42');for(let y=0;y<32;y+=6){R(g,0,y,32,5,y%12?'#8aa070':'#b0a070');R(g,0,y+5,32,1,'#3a3020');R(g,13,y,6,5,'#d9cfb8')}});
+ o['#S']=mk(64,64,g=>{R(g,0,0,64,64,'#6a6a72');const rr=seeded(23);for(let y=0;y<64;y+=8){const off=(y/8)%2*8;for(let x=-8;x<64;x+=16)R(g,x+off+1,y+1,14,6,rr()<.3?'#5a5a62':'#76767e')}R(g,0,0,64,8,'#f4f6fa');for(let x=0;x<64;x+=6)R(g,x,8,3,2+(x%4),'#e8ecf2')});o.PS=o.QS=o.WS=o['#S'];
+ o.cS=mk(32,32,g=>{R(g,0,0,32,32,'#8a7a5a');for(let y=0;y<32;y+=8)for(let x=(y/8)%2*8-8;x<32;x+=16){R(g,x+1,y+1,14,6,'#a08a62');R(g,x+1,y+6,14,1,'#5a4a32')}R(g,0,0,32,5,'#f4f6fa')});
+ o.snowG=mk(32,32,g=>{R(g,0,0,32,32,'#e4e9f0');const rr=seeded(29);for(let i=0;i<30;i++)R(g,rr()*32|0,rr()*32|0,2,1,rr()<.5?'#cfd6e0':'#ffffff');for(let i=0;i<4;i++)R(g,rr()*30|0,rr()*30|0,3,2,'#8a96a6')});
+ o.mintG=mk(32,32,g=>{R(g,0,0,32,32,'#2e3230');for(let y=0;y<32;y+=16)for(let x=0;x<32;x+=16){R(g,x+1,y+1,14,14,(x+y)%32?'#3a403a':'#343834')}const rr=seeded(31);for(let i=0;i<5;i++){const x=rr()*26|0,y=rr()*28|0;R(g,x,y,7,4,rr()<.5?'#8aa070':'#b0a070')}});
+ return o}
+function buildWorldDY(){buildTextures();
+ // walls: instanced per type
+ const types={};for(let z=0;z<grid.length;z++)for(let x=0;x<MW;x++){const c=grid[z][x];if(!isWall(c))continue;let vis=false;for(const[dx,dz]of[[1,0],[-1,0],[0,1],[0,-1]])if(openC((grid[z+dz]||[])[x+dx]))vis=true;if(vis){const zk=z>=97&&z<141?'M':z>=141&&z<185?'S':'';(types[c+zk]=types[c+zk]||[]).push([x,z])}}
+ const DYT=dyTextures(),snowTop=LM({color:0xeef2f8});
+ const topM=LM({color:0x2a1c18});
+ for(const ck in types){const c=ck[0],zk=ck[1]||'',h=WALLH[c],geo=new THREE.BoxGeometry(1,h,1),uv=geo.attributes.uv;for(let f=0;f<6;f++){if(f===2||f===3)continue;for(let i=0;i<4;i++){const k=f*4+i;uv.setY(k,uv.getY(k)*h/1.3)}}geo.translate(0,h/2,0);
+  const cv=DYT[ck]||(c==='c'?PROPS.crate().n:TEX[c]);const m=LM({map:tex(cv,true)});const tm_=zk==='S'?snowTop:topM;const mats=[m,m,c==='c'?m:tm_,tm_,m,m];
+  const im=new THREE.InstancedMesh(geo,mats,types[ck].length);const M=new THREE.Matrix4();types[ck].forEach(([x,z],i)=>{M.makeTranslation(x+.5,0,z+.5);im.setMatrixAt(i,M)});S3.add(im)}
+ // ground tiles
+ const dirt=mk(32,32,g=>{const R_=seeded(3);R(g,0,0,32,32,'#4a382a');for(let i=0;i<40;i++)R(g,R_()*32|0,R_()*32|0,2,1,R_()<.5?'#3a2c20':'#5a4634')});
+ const cob=mk(32,32,g=>{R(g,0,0,32,32,'#3e3634');const R_=seeded(5);for(let y=0;y<32;y+=8)for(let x=(y/8%2)*4;x<32;x+=8)R(g,x+1,y+1,6,6,R_()<.5?'#5a5250':'#4e4644')});
+ const plank=mk(32,32,g=>{for(let y=0;y<32;y+=8){R(g,0,y,32,8,y%16?'#6a4a30':'#5a3e28');R(g,0,y,32,1,'#2a1a10')}R(g,10,0,1,32,'#3a2818')});
+ const tiles={dirt:[],cob:[],plank:[],snow:[],mint:[]};for(let z=0;z<grid.length;z++)for(let x=0;x<MW;x++){const c=grid[z][x];if(c==='~'||isWall(c)&&c!=='c')continue;
+  const k=c==='='||z>=190&&z<=208?'plank':z>=97&&z<141?'mint':z>=141&&z<185?'snow':(z>=31&&z<=57)||(z>=80&&z<=95)||(z>=210&&z<=225)?'cob':'dirt';tiles[k].push([x,z])}
+ const pg=new THREE.PlaneGeometry(1,1);pg.rotateX(-Math.PI/2);
+ for(const k in tiles){const cv={dirt,cob,plank,snow:DYT.snowG,mint:DYT.mintG}[k];const im=new THREE.InstancedMesh(pg,LM({map:tex(cv)}),tiles[k].length);const M=new THREE.Matrix4();tiles[k].forEach(([x,z],i)=>{M.makeTranslation(x+.5,0,z+.5);im.setMatrixAt(i,M)});S3.add(im)}
+ // water
+ const wcv=mk(32,32,g=>{R(g,0,0,32,32,'#24344e');const R_=seeded(9);for(let i=0;i<18;i++)R(g,R_()*32|0,R_()*32|0,6,1,R_()<.5?'#4a6a90':'#34507a')});waterTex=tex(wcv,true);waterTex.repeat.set(30,240);
+ const wm=new THREE.Mesh(new THREE.PlaneGeometry(30,240),new THREE.MeshBasicMaterial({map:waterTex}));wm.rotation.x=-Math.PI/2;wm.position.set(13,-.45,118);S3.add(wm);
+ // bridge posts
+ for(const[z0,z1]of[[59,72],[227,233]])for(let z=z0;z<=z1;z+=3)for(const x of[11,15]){const m=new THREE.Mesh(BOX,LM({color:0x3a2818}));m.scale.set(.18,1.2,.18);m.position.set(x,-.2,z+.5);S3.add(m)}
+ // fog walls
+ const fcv=mk(32,64,g=>{const R_=seeded(12);for(let y=0;y<64;y++)for(let x=0;x<32;x+=2){const a=.25+R_()*.35;g.fillStyle=`rgba(240,236,228,${a})`;g.fillRect(x,y,2,1)}});fogTex=tex(fcv,true);
+ for(const A of ARENAS)for(const [z,kind] of[[A.fz+.5,'F'],[A.gz+.5,'G']]){const m=new THREE.Mesh(new THREE.PlaneGeometry(4,2.6),new THREE.MeshBasicMaterial({map:fogTex,transparent:true,opacity:.75,depthWrite:false,side:THREE.DoubleSide}));m.position.set(12.5,1.3,z);m.userData={A,kind};S3.add(m);fogMeshes.push(m)}
+ // stoves
+ FIRES.forEach((f,i)=>{const g=new THREE.Group();g.position.set(f.x,0,f.z);const b=new THREE.Mesh(BOX,LM({color:0x6a4a3a}));b.scale.set(.7,.55,.7);b.position.y=.275;g.add(b);
+  const mouth=new THREE.Mesh(BOX,LM({color:0x1a100c}));mouth.scale.set(.4,.25,.05);mouth.position.set(0,.2,.36);g.add(mouth);
+  const k=new THREE.Mesh(BOX,LM({color:0x3a3a40}));k.scale.set(.36,.22,.36);k.position.y=.66;g.add(k);
+  const rifle=new THREE.Mesh(BOX,LM({color:0x7a5230}));rifle.scale.set(.05,1,.07);rifle.position.set(.5,.45,0);rifle.rotation.z=.2;g.add(rifle);
+  const fl=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(flameCv[0]),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));fl.scale.set(.5,.6,1);fl.position.set(0,.3,.42);g.add(fl);
+  const L_=new THREE.PointLight(0xff9040,0,9,2);L_.position.set(0,1,0.6);g.add(L_);S3.add(g);stoveObjs.push({g,fl,L:L_})});
+ // messages
+ const mcv=mk(32,16,g=>{g.fillStyle='rgba(255,154,58,.9)';for(let i=0;i<5;i++){g.fillRect(4+i*5,6+(i%2)*3,4,1);g.fillRect(5+i*5,5+(i%3),1,4)}g.fillRect(3,12,26,1)});
+ for(const m of MSGS){const p=new THREE.Mesh(new THREE.PlaneGeometry(.8,.4),new THREE.MeshBasicMaterial({map:tex(mcv),transparent:true,depthWrite:false}));p.rotation.x=-Math.PI/2;p.position.set(m.x,.02,m.z);S3.add(p);msgMesh.push(p)}
+ // items
+ const icv=mk(16,16,g=>{const gr=g.createRadialGradient(8,8,0,8,8,8);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.3,'rgba(255,250,220,.7)');gr.addColorStop(1,'rgba(255,240,200,0)');g.fillStyle=gr;g.fillRect(0,0,16,16)});
+ for(const it of ITEMS){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(icv),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));s.scale.set(.5,.5,1);s.position.set(it.x,.35,it.z);S3.add(s);itemSpr[it.id]=s}
+ const scv=mk(16,16,g=>{const gr=g.createRadialGradient(8,8,0,8,8,8);gr.addColorStop(0,'rgba(220,255,200,1)');gr.addColorStop(.4,'rgba(150,230,120,.6)');gr.addColorStop(1,'rgba(120,200,100,0)');g.fillStyle=gr;g.fillRect(0,0,16,16)});
+ stainSpr=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(scv),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));stainSpr.scale.set(.8,.8,1);stainSpr.visible=false;S3.add(stainSpr);
+ // ferry
+ ferry=new THREE.Group();const hull=new THREE.Mesh(BOX,LM({color:0x4a3220}));hull.scale.set(3,.6,2.2);hull.position.y=-.1;ferry.add(hull);const mast=new THREE.Mesh(BOX,LM({color:0x3a2a20}));mast.scale.set(.12,3,.12);mast.position.y=1.5;ferry.add(mast);
+ const sail=new THREE.Mesh(BOX,LM({color:0xd9cfb8}));sail.scale.set(1.6,1.4,.04);sail.position.set(0,1.9,.1);ferry.add(sail);ferry.position.set(12.5,0,235.2);S3.add(ferry);
+ // burning houses: flame sprites on some village wall tops
+ const R_=seeded(77);for(let z=9;z<59;z++)for(let x=0;x<MW;x++){if(grid[z][x]!=='W'||R_()>.35)continue;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(flameCv[0]),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));s.scale.set(1,1.3,1);s.position.set(x+.5,2.8,z+.5);S3.add(s);flameSpr.push(s)}
+ skyM=S3.children.find(o=>o.geometry&&o.geometry.type==='CylinderGeometry')||null}
 /* ---------------- scenes & flow ---------------- */
-function myArt(name,t){if(name!=='pit')return false;const K='#120d0c';const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#3a3440');g.addColorStop(1,'#8a6a5a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);r(0,108,W,28,'#4a382a');r(0,108,W,2,'#6e5640');
+function retreatArt(t){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#05060f');g.addColorStop(1,'#1c2440');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
+ for(let i=0;i<24;i++)r((i*53)%W,(i*37)%60,1,1,'#8a8aa0');r(0,96,W,40,'#14203a');for(let i=0;i<22;i++)r((i*41+t*.5)%(W+20)-10,100+(i%5)*7,12,1,'#3a5a80');
+ r(0,84,60,14,'#0a0a10');r(0,78,34,8,'#0a0a10');for(let i=0;i<5;i++)if((t>>4)%5!==i)r(6+i*10,88,2,2,'#ff8a1a');
+ const bx=Math.min(W-90,90+t*.35),by=100+Math.sin(t/18)*1.5;r(bx,by,64,8,'#4a3220');r(bx+4,by+8,56,3,'#2a1a10');r(bx+30,by-38,2,38,'#3a2a20');r(bx+12,by-34,18,24,'#d9cfb8');
+ drawSoldier(bx+44,by+1,{fac:'kmt',face:1,pose:'sit',emo:'happy',gun:null});r(bx+6,by-6,10,6,'#d9a441');r(bx+7,by-5,8,1,'#120d0c');
+ const a=Math.max(0,Math.min(1,(t-40)/50));ctx.globalAlpha=a*.85;r(0,24,W,46,'#000');ctx.globalAlpha=1;stxt('YOU RETREATED',W/2,42,'#d9a441',30,a);
+ if(t>100)stxt('撤退 · TEMPORARILY · VERY TEMPORARILY',W/2,62,'#a8977c',8,Math.min(1,(t-100)/30));return true}
+function myArt(name,t){if(name==='retreat')return retreatArt(t);if(name!=='pit')return false;const K='#120d0c';const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#3a3440');g.addColorStop(1,'#8a6a5a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);r(0,108,W,28,'#4a382a');r(0,108,W,2,'#6e5640');
  for(let i=0;i<8;i++){if(i===4)continue;const f=i%2?1:-1;ctx.save();ctx.translate(26+i*44,108+(i%3)*5);ctx.rotate(-f*Math.PI/2);drawSoldier(-8,0,{fac:i%3?'kmt':'civ',face:f,emo:'dead',gun:null});ctx.restore()}
  seg(0,96,W,100,1,'#9c7c3c');for(let i=0;i<4;i++){const cx=(t*.8+i*110)%(W+40)-20,cy_=30+i*9+Math.sin(t/10+i)*3;r(cx,cy_,6,2,K)}
  const up=Math.min(1,t/90);ctx.save();ctx.translate(196,114);ctx.rotate(-Math.PI/2*(1-up));drawSoldier(-8,0,{fac:'kmt',face:1,emo:up<1?'sleep':'scared',gun:null});ctx.restore();return true}
 function playScene(sc,done){scene={sc,t:0,done};state='scene';$('#touch').hidden=true;if(document.pointerLockElement)document.exitPointerLock()}
-function soulScene(sc,t){ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);ctx.save();ctx.beginPath();ctx.rect(0,0,W,136);ctx.clip();if(!myArt(sc.draw,t))sceneArt(sc.draw,t);ctx.restore();
+function soulScene(sc,t){ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);ctx.save();ctx.beginPath();ctx.rect(0,0,W,136);ctx.clip();{const at=Math.min(t,2400);if(!myArt(sc.draw,at))sceneArt(sc.draw,at)};ctx.restore();
  ctx.drawImage(VIG,0,0);r(0,136,W,H-136,'#120d0c');r(0,136,W,2,'#d9a441');txt(sc.date,8,141,'#d9a441');txt(sc.place,W-8,141,'#a8977c','right');
  const shown=Math.floor(t*1.4),fl=wrap(sc.fact,47),jl=wrap(sc.joke,47);let n=0;ctx.font=F;ctx.textAlign='left';ctx.textBaseline='top';
  fl.forEach((l,i)=>{ctx.fillStyle='#e9dcc2';ctx.fillText(l.slice(0,Math.max(0,shown-n)),8,151+i*10);n+=l.length+1});
  jl.forEach((l,i)=>{ctx.fillStyle='#ff9a6a';ctx.fillText(l.slice(0,Math.max(0,shown-n)),8,153+fl.length*10+i*10);n+=l.length+1});
  if(shown>n+10&&T%40<26)txt('▶',W-16,H-12,'#d9a441');return shown>n}
-const SC_INTRO={draw:'pit',date:'AUTUMN 1948',place:'NORTH OF THE YANGTZE',fact:'Nationalist press gangs seized farmers off roads and fields and marched them roped together. Vast numbers died or deserted before ever reaching the front.',joke:'You died in the column. Then you got up. The sergeant still marked you present. Find the last ferry. Get discharged.'};
-const SC_END=[{draw:'boats',date:'1949',place:'THE LAST FERRY',fact:'As the mainland fell, the Nationalist government retreated to Taiwan with somewhere between one and two million soldiers and civilians. Many conscripts never saw home again.',joke:'The ferryman reads your papers. Both stamps. Very official. He nods, and drafts you into the navy.'},
- {draw:'island',date:'1949 – ???',place:'TAIWAN STRAIT',fact:'The "temporary" retreat lasted decades. The Gold Yuan, launched in August 1948 to save the economy, was close to worthless within a year.',joke:'You are finally discharged in 1987. Your back pay arrives in Gold Yuan. It buys one egg. A small egg.'}];
+const SC_INTRO={draw:'pit',date:'AUTUMN 1948',place:'NORTH OF THE YANGTZE',fact:'Nationalist press gangs seized farmers off roads and fields and marched them roped together. Vast numbers died or deserted before ever reaching the front.',joke:'You died in the column, a Nationalist conscript. Then you got up. The sergeant marked you present. Find the last ferry. Get discharged.'};
+const SC_END=[{draw:'boats',date:'DECEMBER 1949',place:'THE LAST FERRY',fact:'The Communists have taken the mainland. The Nationalist government relocates to Taiwan. The gold reserves left first, by ship.',joke:'The ferry is the final bonfire. Your Gold Yuan cannot buy a seat. The ferryman takes the stamps instead.'},
+ {draw:'retreat',date:'DECEMBER 1949',place:'TAIWAN STRAIT',fact:'Up to two million soldiers and civilians crossed. Officially it was a temporary relocation. Very temporary.',joke:'Your back pay is a suitcase of Gold Yuan. It buys one tangerine. The tangerine is overvalued.'},
+ {draw:'island',date:'1950 · 1951 · 1952 · ...',place:'TAIWAN',fact:'"We counterattack the mainland next year!" was announced every year. The Gold Yuan stayed worthless every year too.',joke:'You are discharged in 1987. You still have not unpacked. Next year, surely. NEW GAME+ is the counterattack.'}];
 let built=false;
 function newGame(cont){initAudio();ambient();$('#title').hidden=true;$('#end').hidden=true;$('#hud').hidden=false;
- if(!built){initGL();if(glOK)buildWorld();built=true}
+ if(!built){initGL();if(glOK)buildWorldDY();built=true}
  const sv=cont&&store.get(SAVEK,null);G=sv||newProgress();ending=false;
  const go=()=>{respawn(G.fire,true);if(touchUI)$('#touch').hidden=false;if(!G.seen.includes(LV)){G.seen.push(LV);areaB={t:0,z:ZONES[LV]}}};
  if(sv)go();else playScene(SC_INTRO,go)}
 function finish(){if(ending)return;ending=true;music('ending');G.done=1;save();
- playScene(SC_END[0],()=>playScene(SC_END[1],()=>{state='end';$('#hud').hidden=true;$('#touch').hidden=true;$('#end').hidden=false;
-  $('#endP').textContent=G.inf<1.01?'You reached the ferry with both stamps and never once rested. Inflation is impressed.':'You reached the ferry with both stamps. Prices on the mainland rose '+fmtBig((G.inf-1)*100)+'% while you rested. The war was not consulted.';
-  const tm=G.time/60|0;$('#endS').innerHTML=`<dt>Time</dt><dd>${tm/60|0}m ${tm%60}s</dd><dt>Deaths</dt><dd>${G.deaths}</dd><dt>Enemies felled</dt><dd>${G.kills}</dd><dt>Gold Yuan lost to inflation</dt><dd>¥ ${fmtBig(G.lost)}</dd><dt>Soul level</dt><dd>${SL()}</dd><dt>Cycle</dt><dd>${G.ng?'NG+'+G.ng:'First war'}</dd>`;setTimeout(()=>$('#e1').focus(),50)}))}
+ playScene(SC_END[0],()=>playScene(SC_END[1],()=>playScene(SC_END[2],()=>{state='end';$('#hud').hidden=true;$('#touch').hidden=true;$('#end').hidden=false;
+  $('#endP').textContent=(G.inf<1.01?'You reached the ferry with both stamps and never once rested. Inflation is impressed. ':'You reached the ferry with both stamps. Prices on the mainland rose '+fmtBig((G.inf-1)*100)+'% while you rested. ')+'The war is lost. The government has relocated to Taiwan, temporarily. Counterattack scheduled for next year. And the year after that.';
+  const tm=G.time/60|0;$('#endS').innerHTML=`<dt>Time</dt><dd>${tm/60|0}m ${tm%60}s</dd><dt>Deaths</dt><dd>${G.deaths}</dd><dt>Enemies felled</dt><dd>${G.kills}</dd><dt>Gold Yuan lost to inflation</dt><dd>¥ ${fmtBig(G.lost)}</dd><dt>Soul level</dt><dd>${SL()}</dd><dt>Cycle</dt><dd>${G.ng?'NG+'+G.ng:'First war'}</dd>`;setTimeout(()=>$('#e1').focus(),50)})))}
 $('#bNew').onclick=()=>newGame(false);$('#bCont').onclick=()=>newGame(true);
 $('#e1').onclick=()=>{const o=G;G=newProgress(o.ng+1,{vig:o.vig,end:o.end,str:o.str,whet:Math.min(o.whet,2),vest:Math.min(o.vest,1),flaskMax:o.flaskMax,grenMax:o.grenMax,deaths:o.deaths,lost:o.lost});save();newGame(true)};
 $('#e2').onclick=()=>{$('#end').hidden=true;$('#title').hidden=false;state='title';music('off');showCont()};

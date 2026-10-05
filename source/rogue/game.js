@@ -544,10 +544,17 @@ $('#campGo').onclick=()=>{$('#camp').hidden=true;$('#campG').textContent='';FL++
 function startFloor(){state='play';genFloor();camX=PL.x-W/2;camY=PL.y-H/2;$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false;T=0}
 function endRun(){state='over';music('off');$('#hud').hidden=true;$('#touch').hidden=true;
  const cause={bullet:'shot by a rifleman',bayonet:'bayoneted',boom:'blown up',slogan:'killed by a slogan',tank:'run over by a tank with six owners',laser:'lasered by an unapproved face',stomp:'stepped on by a billboard',cavalry:'trampled by a conscripted horse'}[runStats.cause]||'lost to the war';
- $('#endH').textContent='DEMOBILIZED (PERMANENTLY)';$('#endP').textContent=`Your ${PL.c.name.toLowerCase()} was ${cause} on floor ${FL+1}. ${pick(KT.over)}`;
+ $('#e1').textContent='DRAFT ANOTHER CONSCRIPT';$('#endH').textContent='DEMOBILIZED (PERMANENTLY)';$('#endP').textContent=`Your ${PL.c.name.toLowerCase()} was ${cause} on floor ${FL+1}. ${pick(KT.over)}`;
  $('#endS').innerHTML=`<dt>Floor reached</dt><dd>${FL+1}: ${FLOORS[FL].name}</dd><dt>Level</dt><dd>${PL.lvl}</dd><dt>Enemies dispatched</dt><dd>${runStats.kills}</dd><dt>Legendaries found</dt><dd>${runStats.legend}</dd><dt>Gold earned</dt><dd>${fmtGY(runStats.gold)} (≈ ${runStats.gold} eggs)</dd>`;$('#end').hidden=false}
-function winRun(){showScene({date:ENDING.date,place:ENDING.place,fact:ENDING.fact,joke:ENDING.kmt.joke,draw:'island'},()=>showScene({date:'AND THEN',place:'THE TAIWAN STRAIT',fact:ENDING.last,joke:'Your loot, for the record, was confiscated at the dock.',draw:'boats'},()=>{state='over';$('#endH').textContent='YOU REACHED THE LAST BOAT';$('#endP').textContent='The run is over. The war is over. The paperwork has just begun.';
- $('#endS').innerHTML=`<dt>Class</dt><dd>${PL.c.name}</dd><dt>Level</dt><dd>${PL.lvl}</dd><dt>Enemies dispatched</dt><dd>${runStats.kills}</dd><dt>Legendaries found</dt><dd>${runStats.legend}</dd><dt>Gold earned</dt><dd>${fmtGY(runStats.gold)} (≈ ${runStats.gold} eggs)</dd>`;$('#end').hidden=false}))}
+function winRun(){const loot=fmtGY(runStats.gold);const seq=[
+ {date:'MEANWHILE, 1949',place:'ABOVE GROUND',draw:'wreck',fact:"You climb out after six floors of unbroken victories. Upstairs, the government has lost Manchuria, Nanjing and Shanghai.",joke:"HQ confirms you are the only unit that won anything all year. Please keep it quiet. It ruins the narrative."},
+ {date:'DECEMBER 1949',place:'THE LAST BOAT',draw:'boats',fact:"The government announces a 'temporary relocation' to Taiwan. Very temporary. The gold reserves sailed ahead months ago, first class.",joke:`You offer your loot for a ticket: ${loot}. The purser takes your rice wine instead.`},
+ {date:'NEW YEAR, 1950',place:'TAIPEI',draw:'island',fact:"Headquarters promises: 'We will counterattack the mainland next year.' Your kit bag stays packed, just in case.",joke:"1951: 'Next year.' 1952: 'Next year.' 1953: 'Next year.' Your kit bag has started to grow mushrooms."}];
+ const run=k=>{if(k<seq.length){showScene(seq[k],()=>run(k+1));return}
+  state='over';$('#endH').textContent='UNDEFEATED. EVACUATED.';$('#endP').textContent=`Six floors, ${runStats.kills} ${runStats.kills===1?"enemy":"enemies"}, zero defeats, and you still ended up on the boat. The government has relocated to Taiwan "temporarily". The counterattack is scheduled for next year. Every year.`;
+  $('#endS').innerHTML=`<dt>Class</dt><dd>${PL.c.name}</dd><dt>Level</dt><dd>${PL.lvl}</dd><dt>Enemies dispatched</dt><dd>${runStats.kills}</dd><dt>Legendaries found</dt><dd>${runStats.legend}</dd><dt>Gold earned</dt><dd>${loot} (≈ ${runStats.gold} eggs)</dd><dt>Value on arrival</dt><dd>1 rice wine</dd>`;
+  $('#e1').textContent='COUNTERATTACK (NEXT YEAR)';$('#end').hidden=false};
+ run(0)}
 $('#e1').onclick=()=>{$('#end').hidden=true;$('#title').hidden=false;state='title'};
 $('#e2').onclick=()=>{$('#end').hidden=true;$('#title').hidden=false;state='title'};
 function showScene(sc,done){state='scene';scene={sc,t:0,done};music('ending');$('#touch').hidden=true;$('#hud').hidden=true}

@@ -41,6 +41,7 @@ p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-w
 .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .btn{font:12px var(--px);padding:14px 16px;border:3px solid var(--gold);background:#2a1d10;color:var(--gold);cursor:pointer}
 .btn.alt{border-color:var(--dim);color:var(--paper);background:transparent}
+#cont{align-self:center;max-width:420px;width:100%;font-size:10px;line-height:1.5}
 button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 dl{display:grid;grid-template-columns:auto auto;gap:4px 16px;justify-content:center;margin:0;font:20px var(--body)}
 dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-numeric:tabular-nums}
@@ -71,9 +72,10 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 <div id="title" class="ov">
   <div class="card">
     <div class="seal">兄弟鬩牆</div>
-    <h1>CIVIL SLUG<span>VILLAGE SIEGE · FIRST PERSON 3D</span></h1>
-    <p class="tag">One village. One tank with six owners. One conscript, paid in Gold Yuan.</p>
+    <h1>CIVIL SLUG<span>VILLAGE SIEGE · SIX STAGES · FIRST PERSON 3D</span></h1>
+    <p class="tag">Six battles from the village to the last pier. Six bosses, including a tank with six owners. One conscript, paid in Gold Yuan.</p>
     <button class="enlist" id="go"><b>國軍</b><i>NATIONALIST CONSCRIPT</i><small>Your pay is adjusted for inflation every ten seconds. Downward.</small><em>▶ ENLIST</em></button>
+    <button class="btn alt" id="cont" hidden>▶ CONTINUE</button>
     <p class="keys">Keys: W A S D move · mouse to aim (click the game to capture it) · click / J fire, knife up close · Space jump · G grenade · Q swap · ← → ↑ ↓ also aim · P pause<br>Phone: left thumb walks, right thumb drags to aim in any direction.</p>
     <p class="fine">Satire. Nobody in this war comes out looking good. Especially the villagers' landlord.</p>
   </div>

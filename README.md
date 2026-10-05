@@ -4,15 +4,50 @@ A series of browser games set in the same world: the Chinese Civil War, 1948–4
 
 Every game is a single self-contained HTML file. Open any `index.html` in a browser to play, on desktop (keyboard and mouse) or on a phone (touch controls).
 
+## Background story
+
+**China, 1946–1949.** Japan has surrendered and the Second World War is over, but the truce between the Nationalist government (Kuomintang, KMT, 國民黨) and the Communist Party (CCP, 共產黨) collapses within a year. Full civil war follows.
+
+- **1946:** American mediation fails. Each side blames the other for breaking the ceasefire.
+- **1948:** the government replaces the old currency with the **Gold Yuan (金圓券)**. Within months it is nearly worthless; prices double in days. Soldiers are paid in money that buys less by the time it arrives.
+- **1948–49:** the great campaigns in Manchuria, Huaihai and Pingjin go to the Communists. They cross the Yangtze in April 1949; Nanjing and Shanghai fall.
+- **October 1949:** the People's Republic of China is proclaimed in Beijing.
+- **December 1949:** the Republic of China government relocates to **Taiwan**. The national gold reserves had been shipped ahead. Officially the move is temporary; for decades the slogan is *"counterattack the mainland" (反攻大陸)*, always next year.
+
+**In the games**, you play the KMT side. You will win your battles. History will still put you on the boat: every full playthrough ends with the retreat to Taiwan, played as dark comedy. The stories follow ordinary people (conscripts, cooks, truck drivers, a village band) caught between two armies, with recurring characters like the Printer (inflation in person), General Ma, Commissar Wei and a very neutral donkey.
+
+## Style guide
+
+**Look**
+- Pixel art on a 384×216 canvas, scaled up crisp (`image-rendering: pixelated`). 3D games use blocky low-poly models with pixel textures.
+- Chibi soldiers: big heads, small bodies. **KMT:** blue-grey uniform, blue cap with the white sun badge. **CCP:** olive uniform, green cap with a red star. Civilians wear straw hats and faded blue.
+- Palette: candle-dark ink backgrounds (`#0c0908`), paper cream text (`#e9dcc2`), seal red (`#b3261e`), gold (`#d9a441`), ember orange (`#ff8a3a`).
+- Type: *Press Start 2P* for game text, *VT323* for body copy, *Noto Serif TC* (900) for titles and red seal stamps (e.g. 伙夫, 紙將), *Noto Sans TC* for Chinese game text.
+- Story scenes: a pixel tableau on top, a dated caption bar below ("1949年12月 · 台北（暫時）").
+
+**Sound**
+- No voice acting. All music and effects are synthesized live with WebAudio: military brass, march drums, chiptune leads.
+
+**Humour**
+- Dark, deadpan satire. The jokes are about the absurdity of war, bureaucracy and inflation, not about people's suffering.
+- Both sides get roasted: forms, meetings and slogans on one side; payroll, corruption and Gold Yuan on the other. The villagers are never the joke.
+- Running gags: Gold Yuan losing value on screen, *"temporary"* relocation, *"next year"* counterattack, defections over rice, the donkey staying neutral.
+- No real individual people are named; leaders are "Headquarters" or "the government".
+
+**Play**
+- The goal for every game: a complete campaign of 5–6 stages with a boss or climax, story scenes between stages and a funny ending.
+- Desktop (keyboard and mouse) and phone (touch) controls in every game; a single self-contained HTML file per game that works offline.
+- Bilingual: 繁體中文 (default) and English (Civil Slug done; the rest in progress).
+
 ## Games
 
 | # | Game | Genre | About |
 |---|------|-------|-------|
-| 01 | [Civil Slug 1946](games/01-civil-slug/) | Run-and-gun | Five side-scrolling missions in the style of classic arcade run-and-guns, with vehicles to hijack and prisoners to free. |
-| 02 | [Civil Slug: Village Siege](games/02-civil-slug-siege/) | First-person shooter (3D) | Defend, and then take, one village in first person. A tank with six owners, a conscript paid in Gold Yuan. |
+| 01 | [國共大戰 Civil Slug 1946](games/01-civil-slug/) ★ | Run-and-gun | The flagship. Five Metal Slug-style missions, KMT side, Taiwan ending. 繁體中文 / English. |
+| 02 | [Civil Slug: Village Siege](games/02-civil-slug-siege/) | First-person shooter (3D) | Six stages in first person, from the village to the last pier, each with a boss (a tank, an armored train, a bomber, a gunboat, a printing press, a walking billboard). |
 | 03 | [Conscript's Descent](games/03-conscripts-descent/) | Action RPG / roguelike | Six floors, one life. Click-to-move looting through a burning village and the Shanghai sewers. |
-| 04 | [Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about undead conscripts. Rest, parry, roll, and watch your Gold Yuan inflate. |
-| 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The 3D version of Dark Yuan, in blocky low-poly 3D: lock-on, rolls, parries and bosses on the way to the last ferry. |
+| 04 | [Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about an undead KMT conscript. Five areas, five bosses, ending in YOU RETREATED. |
+| 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version of Dark Yuan: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. |
 | 06 | [Ming An: Expedition 48](games/06-ming-an-expedition-48/) | Turn-based RPG with real-time dodging | Explore Shanghai in 3D and fight turn-based battles with timed dodges and parries, in the spirit of Clair Obscur: Expedition 33. |
 | 07 | [Civil Fighter 1949](games/07-civil-fighter-1949/) | Fighting game | Four fighters, best of three rounds, specials and supers. Arcade mode or two players on one keyboard. |
 | 08 | [Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) | Rhythm game | Two propaganda troupes, one village square, four lanes. Hit the notes to keep the crowd. |

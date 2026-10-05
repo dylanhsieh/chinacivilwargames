@@ -1,6 +1,19 @@
-<title>Civil Slug 1946</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>國共大戰 Civil Slug 1946</title>
+<meta name="description" content="Civil Slug 1946 (國共大戰): a free pixel run-and-gun satire of the Chinese Civil War. Five missions, Gold Yuan hyperinflation, one very temporary relocation. English / 繁體中文.">
+<meta name="theme-color" content="#120d0c">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Civil Slug">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23120d0c'/%3E%3Crect x='1' y='1' width='14' height='14' fill='none' stroke='%23c8372d' stroke-width='2'/%3E%3Crect x='5' y='4' width='6' height='2' fill='%232f4f8a'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e9c9a0'/%3E%3Crect x='4' y='10' width='8' height='3' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: one-screen arcade cabinet — letterboxed pixel canvas, poster-stamp overlays, thumb pads in the bottom corners */
 :root{
@@ -9,6 +22,7 @@
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
   --han:"Noto Serif TC","Songti TC","PMingLiU","SimSun",serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
@@ -28,8 +42,7 @@ h1 span{display:block;font-size:.32em;color:var(--gold);text-shadow:2px 2px 0 #0
 h2{font-size:clamp(16px,4.6vw,28px);color:var(--gold);text-shadow:3px 3px 0 #000}
 p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-width:60ch;margin-inline:auto}
 .tag{color:var(--dim)}
-.sides{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:480px){.sides{grid-template-columns:1fr}}
+.sides{display:grid;grid-template-columns:minmax(0,360px);justify-content:center;gap:12px}
 .side{display:flex;flex-direction:column;gap:8px;align-items:center;padding:14px 12px;cursor:pointer;color:var(--paper);border:3px solid;text-align:center;min-width:0;transition:transform .12s}
 .side:hover,.side:focus-visible,.side.sel{transform:translateY(-3px)}
 .side.kmt{background:linear-gradient(#1d2a44,#141c2c);border-color:var(--blue)}
@@ -66,38 +79,88 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 .tb[data-k=jump]{width:66px;height:66px;right:86px;bottom:0;border-color:var(--blue)}
 .tb[data-k=bomb]{width:54px;height:54px;right:96px;bottom:84px;border-color:var(--gold)}
 #rot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 190px);text-align:center;font:9px var(--px);color:var(--dim);display:none}
-body.pt #rot{display:block}
+body.noplay #stick,body.noplay #btns{visibility:hidden}
+body.pt #rot{display:block;bottom:calc(env(safe-area-inset-bottom,0px) + 250px)}
+body.pt #hud{bottom:calc(env(safe-area-inset-bottom,0px) + 196px)}
+.lang{display:flex;gap:0;position:fixed;z-index:11;top:calc(env(safe-area-inset-top,0px) + 10px);right:calc(env(safe-area-inset-right,0px) + 10px)}
+.lang button{font:11px var(--px);padding:9px 12px;border:2px solid var(--dim);background:rgba(18,13,12,.85);color:var(--dim);cursor:pointer;min-width:64px}
+.lang button+button{border-left:0}
+.lang button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh);padding:7px 12px}
+#hud #bLang{font:700 12px/1 var(--zh);padding:6px 8px}
+html[lang^=zh] #hud #bLang{font:10px var(--px);padding:7px 8px}
+/* 繁體中文: same layout, CJK-capable fonts and sizes */
+html[lang^=zh] h1{font-family:var(--zh);font-weight:700;letter-spacing:.06em}
+html[lang^=zh] h1 span{font-family:var(--px);font-size:.3em;letter-spacing:.12em}
+html[lang^=zh] h2{font-family:var(--zh);font-weight:700}
+html[lang^=zh] p{font:clamp(15px,3.4vw,18px)/1.55 var(--zh)}
+html[lang^=zh] .keys{font-size:14px}
+html[lang^=zh] .fine{font-size:13px}
+html[lang^=zh] .side i{font:700 14px var(--zh);letter-spacing:.2em}
+html[lang^=zh] .side small{font:15px/1.5 var(--zh)}
+html[lang^=zh] .side em{font:700 13px var(--zh)}
+html[lang^=zh] .btn{font:700 15px var(--zh);padding:12px 16px}
+html[lang^=zh] .mbtn span{font:700 17px/1.2 var(--zh)}
+html[lang^=zh] .mbtn small{font:14px var(--zh)}
+html[lang^=zh] dl{font:16px/1.5 var(--zh)}
+html[lang^=zh] #hud button:not(#bLang){font:700 12px var(--zh);padding:6px 8px}
+html[lang^=zh] .tb{font:700 14px var(--zh)}
+html[lang^=zh] .tb[data-k=bomb]{font-size:12px;letter-spacing:-.04em}
+html[lang^=zh] #rot{font:700 13px var(--zh)}
+/* short landscape phones: the whole title card (and ENLIST) fits without scrolling */
+@media (max-height:520px){
+  .card{gap:7px;padding-block:2px}
+  .seal{font-size:20px;padding:3px 8px 4px;border-width:3px}
+  h1{font-size:clamp(20px,4.6vw,30px);text-shadow:2px 2px 0 var(--red),4px 4px 0 #000}
+  h1 span{margin-top:5px}
+  .tag{display:none}
+  .side{padding:8px 12px;gap:4px}
+  .side b{font-size:22px}
+  .side small{font-size:16px}
+  .keys{font-size:15px}
+  .fine{font-size:14px}
+  html[lang^=zh] .side small{font-size:13px;line-height:1.4}
+  html[lang^=zh] .keys{font-size:12px}
+  html[lang^=zh] .fine{font-size:12px}
+  .mbtn{padding:7px 12px}
+  .ov{padding:8px 16px}
+}
+@media (max-height:520px) and (pointer:coarse){.kbd{display:none}}
+@media (max-height:360px){.keys{display:none}.side small{display:none}}
 @media (prefers-reduced-motion:reduce){.side{transition:none}}
 </style>
 
+</head>
+<body>
 <div id="app"><canvas id="cv" width="384" height="216" aria-label="Civil Slug game screen"></canvas></div>
 
 <div id="hud" hidden>
   <button id="bPause" aria-label="Pause">II</button>
   <button id="bSnd" aria-label="Toggle sound">SND</button>
+  <button id="bLang" aria-label="切換語言 / Switch language" lang="zh-Hant">中文</button>
 </div>
 
 <div id="touch" hidden>
-  <div id="rot">TURN SIDEWAYS FOR A BIGGER WAR</div>
+  <div id="rot" data-t="rot">TURN SIDEWAYS FOR A BIGGER WAR</div>
   <div id="stick"><div id="ring"></div><div id="knob"></div></div>
   <div id="btns">
-    <div class="tb" data-k="fire">FIRE</div>
-    <div class="tb" data-k="jump">JUMP</div>
-    <div class="tb" data-k="bomb">BOMB</div>
+    <div class="tb" data-k="fire" data-t="tfire">FIRE</div>
+    <div class="tb" data-k="jump" data-t="tjump">JUMP</div>
+    <div class="tb" data-k="bomb" data-t="tbomb">BOMB</div>
   </div>
 </div>
 
 <div id="title" class="ov">
   <div class="card">
     <div class="seal">兄弟鬩牆</div>
-    <h1>CIVIL SLUG<span>1946 – 1949 · FIVE MISSIONS</span></h1>
-    <p class="tag">A run-and-gun about a war where the enemy was usually somebody's cousin.</p>
+    <h1 data-t="h1">CIVIL SLUG<span>1946 – 1949 · FIVE MISSIONS</span></h1>
+    <p class="tag" data-t="tag">A run-and-gun about a war where the enemy was usually somebody's cousin.</p>
     <div class="sides">
-      <button class="side kmt sel" data-side="kmt"><b>國軍</b><i>NATIONALIST</i><small>Paid in Gold Yuan. Paid daily, because by tomorrow it's worthless.</small><em>▶ ENLIST</em></button>
-      <button class="side ccp" data-side="ccp"><b>共軍</b><i>COMMUNIST</i><small>Paid in Merit. Merit belongs to the Collective.</small><em>▶ VOLUNTEER</em></button>
+      <button class="side kmt sel" data-side="kmt"><b>國軍</b><i data-t="nat">NATIONALIST</i><small data-t="natd">Paid in Gold Yuan. Paid daily, because by tomorrow it's worthless. Win every battle. See how that works out.</small><em data-t="enlist">▶ ENLIST</em></button>
     </div>
-    <p class="keys">Keys: ← → move · ↑ aim up · ↓ crouch · J fire (knife up close) · K jump · L grenade / cannon · ↓+K leave vehicle · P pause<br>Phone: thumb-stick left, buttons right. Tap FIRE to skip story scenes.</p>
-    <p class="fine">Satire. Both armies get roasted equally. The villagers lost either way.</p>
+    <p class="keys" data-t="keys"><span class="kbd">Keys: ← → move · ↑ aim up · ↓ crouch · J fire (knife up close) · K jump · L grenade / cannon · ↓+K leave vehicle · P pause<br></span>Phone: thumb-stick left, buttons right. Tap the screen to skip story scenes.</p>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="en" aria-pressed="true" lang="en">EN</button><button data-l="zh" aria-pressed="false" lang="zh-Hant">中文</button></div>
+    <p class="fine" data-t="fine">Satire. Both armies get roasted equally. The villagers lost either way. Spoiler: so do you.</p>
   </div>
 </div>
 
@@ -105,7 +168,7 @@ body.pt #rot{display:block}
   <div class="card">
     <h2 id="mH">CHOOSE A MISSION</h2>
     <div class="mlist" id="mlist"></div>
-    <div class="row"><button class="btn alt" id="mBack">BACK</button></div>
+    <div class="row"><button class="btn alt" id="mBack" data-t="back">BACK</button></div>
   </div>
 </div>
 
@@ -114,6 +177,6 @@ body.pt #rot{display:block}
     <h2 id="endH">OUT OF CONSCRIPTS</h2>
     <p id="endP"></p>
     <dl id="endS"></dl>
-    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">DEFECT</button><button class="btn alt" id="e3">TITLE</button></div>
+    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">MISSIONS</button><button class="btn alt" id="e3">TITLE</button></div>
   </div>
 </div>

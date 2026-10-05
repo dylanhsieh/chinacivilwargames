@@ -26,7 +26,7 @@ function loadLevel(i){LV=i;L=LEVELS[i];buildBG();T=0;camX=0;lockX=null;shake=0;w
 function newPlayer(x,y){P={x,y,vx:0,vy:0,face:1,on:false,crouch:false,aim:0,wpn:'pistol',ammo:0,bombs:10,inv:150,dead:0,cool:0,anim:0,drop:0,muzz:0,slash:0,veh:null,vehCD:0,cryAt:0}}
 function radio(s){if(s)radioQ.push(s)}
 function pop(x,y,s,c='#e9dcc2',life=110){pops.push({x,y,s,c,life,max:life})}
-function addScore(n){score=Math.max(0,score+n);if(score>=nextLife){nextLife+=40000;lives++;SFX.oneup();pop(camX+W/2,60,'1UP! ANOTHER CONSCRIPT ARRIVES','#9fe0a0',150)}}
+function addScore(n){score=Math.max(0,score+n);if(score>=nextLife){nextLife+=40000;lives++;SFX.oneup();pop(camX+W/2,60,tr('1UP! ANOTHER CONSCRIPT ARRIVES'),'#9fe0a0',150)}}
 function cry(force){if(!P||P.dead||(!force&&cryCD>0))return;const s=pick(CRIES[S]);shouts=shouts.filter(b=>b.ent!==P);shouts.push({ent:P,s,t:85,hero:1});cryCD=300}
 function taunt(e){shouts.push({ent:e,s:pick(TAUNTS[EN]),t:85});e.shout=40}
 
@@ -117,34 +117,34 @@ function killEnemy(e,dir,big){e.dead=true;e.vy=big?-4.2:-2.6;e.vx=dir*(big?2.2:1
  blood(e.x+8,e.y-16,8,dir);parts.push({x:e.x+8,y:e.y-26,vx:dir*.8,vy:-2.8,life:80,c:PAL[EN].h,s:4,g:.12,hat:1});
  puff(e.x+8,e.y-12,6,['#7a6a5a','#4a3a33']);if(rnd()<.45)SFX.scream();
  if(e.t==='officer'){pickups.push({x:e.x+8,y:e.y-10,vy:-2,t:'gold'});pop(e.x+8,e.y-44,M().officer,'#ffd24a',140)}
- else if(e.t==='cavalry'){pop(e.x+16,e.y-50,'THE HORSE WAS ALSO CONSCRIPTED','#c9b9a0');SFX.horse()}
+ else if(e.t==='cavalry'){pop(e.x+16,e.y-50,tr('THE HORSE WAS ALSO CONSCRIPTED'),'#c9b9a0');SFX.horse()}
  else if(rnd()<.35)pop(e.x+8,e.y-44,pick(M().kills),'#ffd24a')}
 function hitEnemy(e,d,fromX){if(e.dead)return;
- if(e.surr){e.dead=true;e.vy=-2.4;e.vx=sgn(e.x-(fromX??P.x));addScore(-500);pop(e.x+8,e.y-46,'-500. EVEN THIS WAR HAS PAPERWORK','#ff6a5a');return}
+ if(e.surr){e.dead=true;e.vy=-2.4;e.vx=sgn(e.x-(fromX??P.x));addScore(-500);pop(e.x+8,e.y-46,tr('-500. EVEN THIS WAR HAS PAPERWORK'),'#ff6a5a');return}
  e.hp-=d;e.flash=6;SFX.hit();sparks(e.x+8,e.y-14,4,['#fff','#ffb04a','#a8261c']);
- if(e.para&&e.hp>0){e.para=0;pop(e.x+8,e.y-40,'CHUTE CUT','#e9dcc2',60)}
+ if(e.para&&e.hp>0){e.para=0;pop(e.x+8,e.y-40,tr('CHUTE CUT'),'#e9dcc2',60)}
  if(e.hp<=0)killEnemy(e,sgn(e.x-(fromX??P.x)),d>=3)}
-function killAlly(e){e.dead=true;e.vy=-2.4;e.vx=-1;pop(e.x+8,e.y-44,'DEFECTED ONCE. RETIRED FOR GOOD.','#c9b9a0')}
+function killAlly(e){e.dead=true;e.vy=-2.4;e.vx=-1;pop(e.x+8,e.y-44,tr('DEFECTED ONCE. RETIRED FOR GOOD.'),'#c9b9a0')}
 function hitPart(p,d){const b=boss;if(!b||b.dead||p.hp<=0)return;
- if(p.armor){if(T%6===0){SFX.clang();sparks(b.x+p.ox+p.w/2,b.y-p.oy+p.h/2,3,['#aaa','#fff'])}if(T%40===0)pop(b.x+p.ox+p.w/2,b.y-p.oy-6,'ARMORED','#aaa',40);return}
+ if(p.armor){if(T%6===0){SFX.clang();sparks(b.x+p.ox+p.w/2,b.y-p.oy+p.h/2,3,['#aaa','#fff'])}if(T%40===0)pop(b.x+p.ox+p.w/2,b.y-p.oy-6,tr('ARMORED'),'#aaa',40);return}
  p.hp-=d;p.flash=4;b.flash=3;if(T%3===0)SFX.clang();
- if(b.kind==='tank'){const ph=Math.min(PLATES.length-1,Math.floor((1-p.hp/160)*4)+1);if(p.hp>0&&ph!==b.plate){b.plate=ph;pop(b.x+40,b.y-70,'OWNERSHIP TRANSFERRED','#ffd24a',140)}}
+ if(b.kind==='tank'){const ph=Math.min(PLATES.length-1,Math.floor((1-p.hp/160)*4)+1);if(p.hp>0&&ph!==b.plate){b.plate=ph;pop(b.x+40,b.y-70,tr('OWNERSHIP TRANSFERRED'),'#ffd24a',140)}}
  if(b.kind==='press')b.printed*=1.5;
  if(p.hp<=0){p.hp=0;const bx=partBox(b,p);explode(bx.x+bx.w/2,bx.y+bx.h/2,24,true,true);addScore(1500);
   if(p.plat){p.plat.dead=1;plats=plats.filter(q=>q!==p.plat)}
-  const alive=b.parts.filter(q=>q.hp>0);if(alive.length===1&&alive[0].armor){alive[0].armor=0;pop(camX+W/2,64,'ARMOR GONE! HIT THE CORE!','#ff9a6a',120)}}
+  const alive=b.parts.filter(q=>q.hp>0);if(alive.length===1&&alive[0].armor){alive[0].armor=0;pop(camX+W/2,64,tr('ARMOR GONE! HIT THE CORE!'),'#ff9a6a',120)}}
  b.hp=b.parts.reduce((a,q)=>a+q.hp,0);
  if(b.parts.every(q=>q.hp<=0||!q.req)&&!b.dead){b.dead=true;b.dt=0;hitstop=12;flashA=1;music('off');addScore({truck:3000,tank:10000,train:12000,bomber:15000,car:5000,press:20000,gunboat:8000,mech:50000}[b.kind]||5000)}}
 function hitCrate(c,d){c.hp-=d;c.flash=4;SFX.hit();if(c.hp<=0){puff(c.x+7,c.y-6,10,['#7a5a35','#9c7a4c','#5a4025'],2,2);pickups.push({x:c.x+7,y:c.y-8,vy:-2.5,t:c.item});SFX.clang()}}
 function killPlayer(cause){if(P.dead)return;
- if(P.veh){const v=P.veh;if(P.inv>0)return;v.hp--;v.flash=8;P.inv=30;SFX.clang();sparks(v.x+v.w/2,v.y-16,8);if(v.kind==='donkey'&&v.hp>0&&rnd()<.4){SFX.bray();pop(v.x+18,v.y-48,'HEE-HAW (UNION GRIEVANCE)','#e9dcc2',70)}
+ if(P.veh){const v=P.veh;if(P.inv>0)return;v.hp--;v.flash=8;P.inv=30;SFX.clang();sparks(v.x+v.w/2,v.y-16,8);if(v.kind==='donkey'&&v.hp>0&&rnd()<.4){SFX.bray();pop(v.x+18,v.y-48,tr('HEE-HAW (UNION GRIEVANCE)'),'#e9dcc2',70)}
   if(v.hp<=0)ejectVehicle(true);return}
  if(P.inv>0&&cause!=='drown')return;
  P.dead=1;P.vy=-3.6;P.vx=-P.face*1.2;SFX.die();shake=8;MS.lost++;totals.lost++;flashA=.6;flashC='#c8372d';hitstop=8;
- if(cause==='drown'){P.vy=0;SFX.splash();pop(P.x+8,WATERY-30,"DROWNED. THE RIVER DOESN'T TAKE SIDES",'#9fc0e0',150)}
+ if(cause==='drown'){P.vy=0;SFX.splash();pop(P.x+8,WATERY-30,tr("DROWNED. THE RIVER DOESN'T TAKE SIDES"),'#9fc0e0',150)}
  else{blood(P.x+8,P.y-16,14,-P.face);parts.push({x:P.x+8,y:P.y-26,vx:-P.face,vy:-3.4,life:120,c:PAL[S].h,s:4,g:.12,hat:1})}}
 function ejectVehicle(destroyed){const v=P.veh;if(!v)return;v.rider=false;P.veh=null;P.vehCD=60;P.x=v.x+v.w/2-8;P.y=v.y-24;P.vy=-4.5;P.on=false;P.inv=destroyed?100:20;
- if(destroyed){v.dead=1;explode(v.x+v.w/2,v.y-14,26,true,true);pop(v.x+v.w/2,v.y-50,v.kind==='donkey'?'THE DONKEY HAS FILED FOR RETIREMENT':'SV-46 RETURNED TO ITS SEVENTH OWNER','#e9dcc2',140);if(v.kind==='donkey')SFX.bray()}}
+ if(destroyed){v.dead=1;explode(v.x+v.w/2,v.y-14,26,true,true);pop(v.x+v.w/2,v.y-50,tr(v.kind==='donkey'?'THE DONKEY HAS FILED FOR RETIREMENT':'SV-46 RETURNED TO ITS SEVENTH OWNER'),'#e9dcc2',140);if(v.kind==='donkey')SFX.bray()}}
 function freePow(w){if(w.st!=='tied')return;w.st='free';w.t=0;w.say=POW_LINES[(totals.freed+LV*3)%POW_LINES.length];MS.freed++;totals.freed++;addScore(500);SFX.pick();
  const t=['B','food',pick(['H','S','R','F']),'food','B'][(MS.freed-1)%5];pickups.push({x:w.x+16,y:w.y-10,vy:-2,t})}
 
@@ -168,8 +168,8 @@ function update(){
   if(a==='paras'||k==='paras')for(let i=0;i<3;i++)setTimeout(()=>{if(state==='play')spawn('para')},i*700)}
  while(si<L.spawns.length&&camX+W+30>=L.spawns[si][0]){const[x,t,a]=L.spawns[si++];if(x<camX-10&&a!=='L')continue;spawn(t,x,typeof a==='number'?a:0,a)}
  const A=L.arenas[arenaI];
- if(A&&!boss&&camX>=A.x){camX=lockX=A.x;spawnBoss(A.boss);radio(LT()[A.msg]);SFX.alarm();if(A.boss==='bomber'||A.boss==='mech')pop(camX+W/2,150,A.boss==='mech'?'TIP: GET UNDER IT. HOLD ↑ TO AIM UP':'TIP: HOLD ↑ TO AIM UP','#9fe0a0',240);music(A.boss==='mech'?'final':'boss');cry(true)}
- if(radioCur){if(--radioCur.t<=0)radioCur=null}else if(radioQ.length){const s=radioQ.shift();radioCur={s,t:120+s.length*3.2|0};radioCur.max=radioCur.t;SFX.radio()}
+ if(A&&!boss&&camX>=A.x){camX=lockX=A.x;spawnBoss(A.boss);radio(LT()[A.msg]);SFX.alarm();if(A.boss==='bomber'||A.boss==='mech')pop(camX+W/2,150,tr(A.boss==='mech'?'TIP: GET UNDER IT. HOLD ↑ TO AIM UP':'TIP: HOLD ↑ TO AIM UP'),'#9fe0a0',240);music(A.boss==='mech'?'final':'boss');cry(true)}
+ if(radioCur){if(--radioCur.t<=0)radioCur=null}else if(radioQ.length){const s=radioQ.shift();radioCur={s,t:120+s.length*(CJK_RE.test(s)?6:3.2)|0};radioCur.max=radioCur.t;SFX.radio()}
  // autoscroll + raft
  const pcam=camX;
  if(L.auto&&lockX==null&&camX<L.auto.to){camX=Math.min(L.auto.to,camX+L.auto.speed)}
@@ -190,7 +190,7 @@ function updPlayer(){
   if(pressed.jump){if(held('down')){ejectVehicle(false);return}if(v.on){v.vy=-3.9;SFX.jump()}}
   if(v.cool>0)v.cool--;
   if(held('fire')&&v.cool<=0){const up=v.aimUp,mx=v.x+v.w/2+(up?2*v.face:v.face*22),my=v.y-(up?44:22);bullets.push({x:mx,y:my,vx:up?(rnd()-.5)*.6:v.face*7.5,vy:up?-7.5:(rnd()-.5)*.5,f:1,dmg:1,big:1});SFX.hmg();v.cool=4;P.muzz=3;casing()}
-  if(pressed.bomb){if(v.ammo>0){v.ammo--;const up=v.aimUp;throwG(v.x+v.w/2+v.face*16,v.y-26,up?v.face*1:v.face*3.4+v.vx,up?-5:-2.2,1,'cannon');SFX.boom();shake=4;smoke(v.x+v.w/2+v.face*20,v.y-26,4);if(v.kind==='donkey'&&rnd()<.3)SFX.bray()}else pop(v.x+v.w/2,v.y-46,'OUT OF SHELLS','#ff9a6a',50)}
+  if(pressed.bomb){if(v.ammo>0){v.ammo--;const up=v.aimUp;throwG(v.x+v.w/2+v.face*16,v.y-26,up?v.face*1:v.face*3.4+v.vx,up?-5:-2.2,1,'cannon');SFX.boom();shake=4;smoke(v.x+v.w/2+v.face*20,v.y-26,4);if(v.kind==='donkey'&&rnd()<.3)SFX.bray()}else pop(v.x+v.w/2,v.y-46,tr('OUT OF SHELLS'),'#ff9a6a',50)}
   phys(v,v.w);v.x=clamp(v.x,camX+2,camX+W-v.w-2);if(boss&&!boss.dead&&boss.kind!=='bomber'){const bx=boss.x+(boss.parts[0].ox||0);if(v.x+v.w>bx+6&&boss.kind!=='train'&&boss.kind!=='mech')v.x=bx+6-v.w}
   P.x=v.x+v.w/2-8;P.y=v.y-18;P.face=v.face;P.vx=v.vx;P.on=v.on;if(P.inv>0)P.inv--;if(P.muzz>0)P.muzz--;return}
  P.crouch=!!held('down')&&P.on;if(mv)P.face=mv;const wade=inShallow(P.x+8)&&P.on;P.vx=mv*(P.crouch?.55:wade?.75:1.25);
@@ -205,7 +205,7 @@ function updPlayer(){
  P.x=clamp(P.x,camX+2,camX+W-18);if(raft&&L.auto&&camX<L.auto.to)P.x=clamp(P.x,raft.x,raft.x+raft.w-16);
  if(boss&&!boss.dead){const k=boss.kind;let bx=null;if(k==='truck'||k==='tank'||k==='car')bx=boss.x;else if(k==='press')bx=boss.x-4;else if(k==='train'&&P.y>GY-38)bx=boss.x;if(bx!=null&&P.x+13>bx+6)P.x=bx-7}
  if(groundAt(P.x+8)>1e3&&P.y>WATERY+4&&!P.on)killPlayer('drown');
- if(P.vehCD<=0)for(const v of vehicles)if(!v.rider&&!v.dead&&ov(hb(P),vBox(v))&&(held('down')||(P.vy>0&&!P.on))){P.veh=v;v.rider=true;v.face=P.face;SFX.weapon();if(v.kind==='donkey')SFX.bray();pop(v.x+v.w/2,v.y-50,v.kind==='donkey'?'DONKEY SLUG! (UNDER PROTEST)':'SV-46! (7TH OWNER)','#ffd24a',100);break}}
+ if(P.vehCD<=0)for(const v of vehicles)if(!v.rider&&!v.dead&&ov(hb(P),vBox(v))&&(held('down')||(P.vy>0&&!P.on))){P.veh=v;v.rider=true;v.face=P.face;SFX.weapon();if(v.kind==='donkey')SFX.bray();pop(v.x+v.w/2,v.y-50,tr(v.kind==='donkey'?'DONKEY SLUG! (UNDER PROTEST)':'SV-46! (7TH OWNER)'),'#ffd24a',100);break}}
 
 function updVehicles(){for(const v of vehicles){if(v.dead)continue;if(v.flash>0)v.flash--;if(!v.rider){v.vx=0;phys(v,v.w)}}
  vehicles=vehicles.filter(v=>!v.dead&&v.x>camX-80)}
@@ -243,15 +243,15 @@ function updBoss(){const b=boss;b.t++;
  if(b.dead){b.dt++;const bx=b.x+(b.parts[0].ox||0);if(b.kind==='bomber'){b.x+=b.face*1.5;b.y+=1.2}
   smoke(bx+rnd()*120,b.y-30,1,true);if(b.dt%7===0&&b.dt<90)explode(bx+rnd()*100,b.y-rnd()*40,1,true,b.dt%21===0);
   if(b.dt===92){explode(bx+50,b.kind==='bomber'?GY-10:b.y-20,40,true,true);flashA=1;hitstop=10}
-  if(b.kind==='mech'&&b.dt===100){pop(camX+W/2,60,'IT WAS A MIRROR. IT WAS ALWAYS A MIRROR.','#ffd24a',260)}
+  if(b.kind==='mech'&&b.dt===100){pop(camX+W/2,120,tr('IT WAS A MIRROR. IT WAS ALWAYS A MIRROR.'),'#ffd24a',260)}
   if(b.dt===(b.kind==='mech'?200:95)){for(const p of b.parts)if(p.plat)plats=plats.filter(q=>q!==p.plat);
    const A=L.arenas[arenaI];arenaI++;boss=null;lockX=null;
-   if(A&&A.final){radio(LT().win);winT=1;SFX.fanfare()}else{music(L.track);pop(camX+W/2,70,{truck:'TRUCK SILENCED. SLOGANS CONTINUE ELSEWHERE',car:'PEACE TALKS HAVE BROKEN DOWN. ALSO THE CAR.',gunboat:'GUNBOAT SUNK. CAPTAIN DEFECTS, AS PROMISED.'}[b.kind]||'CLEARED','#ffd24a',180)}}
+   if(A&&A.final){radio(LT().win);winT=1;SFX.fanfare()}else{music(L.track);pop(camX+W/2,70,tr({truck:'TRUCK SILENCED. SLOGANS CONTINUE ELSEWHERE',car:'PEACE TALKS HAVE BROKEN DOWN. ALSO THE CAR.',gunboat:'GUNBOAT SUNK. CAPTAIN DEFECTS, AS PROMISED.'}[b.kind]||'CLEARED'),'#ffd24a',180)}}
   return}
  const near=(t)=>{if(Math.abs(b.x-b.tx)>1)b.x+=sgn(b.tx-b.x)*(t||.6);else b.tx=camX+(b.kind==='truck'?230+rnd()*80:b.kind==='car'?200+rnd()*110:255+rnd()*45)};
  const alive=k=>b.parts.find(p=>p.kind===k&&p.hp>0);
  if(b.kind==='truck'){near();
-  if(--b.cool<=0&&b.x<camX+W-40){const t=pick(SLOGANS[EN]),w=t.length*8;bullets.push({txt:t,x:b.x-w+20,y:GY-28,vx:-1.4,vy:0,f:0,w,hp:3});SFX.word();b.cool=95+rnd()*30}
+  if(--b.cool<=0&&b.x<camX+W-40){const t=pick(SLOGANS[EN]),w=tw(t);bullets.push({txt:t,x:b.x-w+20,y:GY-28,vx:-1.4,vy:0,f:0,w,hp:3});SFX.word();b.cool=95+rnd()*30}
   if(--b.spawn<=0){spawn('rifle',b.x+62,0);b.spawn=230}}
  else if(b.kind==='tank'){near();
   if(--b.cool<=0&&b.x<camX+W-50){const dx=(P.x+8)-(b.x-6);throwG(b.x-6,b.y-29,clamp(dx/58,-4,-.6),-3.4,0,'shell');puff(b.x-8,b.y-29,8,['#fff3b0','#ffd24a','#777'],1.2,2);SFX.boom();b.cool=120+rnd()*50}
@@ -285,7 +285,7 @@ function updBoss(){const b=boss;b.t++;
   if(--b.stomp<=0){b.stomp=200/sp;SFX.stomp();shake=10;bullets.push({wave:1,x:b.x,y:GY-4,vx:-2.6,vy:0,f:0,w:14});bullets.push({wave:1,x:b.x+76,y:GY-4,vx:2.6,vy:0,f:0,w:14})}
   if(b.laser>0){b.laser--;b.eyeT=b.laser;if(b.laser<=40&&b.laser>0&&!P.dead){const hb_=P.veh?vBox(P.veh):hb(P);if(hb_.y<b.laserY+4&&hb_.y+hb_.h>b.laserY-4&&hb_.x<b.x)killPlayer()}if(b.laser===40)SFX.laser()}
   else if(T%Math.floor(260/sp)===0){b.laser=90;b.laserY=rnd()<.5?GY-6:GY-24}
-  if(T%Math.floor(120/sp)===0){const t=pick(SLOGANS[EN]),w=t.length*8;bullets.push({txt:t,x:b.x-w,y:GY-28,vx:-1.6,vy:0,f:0,w,hp:3});SFX.word()}
+  if(T%Math.floor(120/sp)===0){const t=pick(SLOGANS[EN]),w=tw(t);bullets.push({txt:t,x:b.x-w,y:GY-28,vx:-1.6,vy:0,f:0,w,hp:3});SFX.word()}
   if(b.phase>0&&T%Math.floor(150/sp)===0){bullets.push({homing:1,x:b.x+10,y:b.y-150,vx:-1,vy:-1,f:0,hp:2,w:8,life:300});SFX.rocket()}}}
 
 function bossHitTest(x,y){if(!boss||boss.dead)return null;for(const p of boss.parts)if(p.hp>0&&inR(x,y,partBox(boss,p)))return p;return null}
@@ -303,12 +303,12 @@ function updBullets(){
     if(!b.dead){const p=bossHitTest(b.x,b.y);if(p){if(b.flame){if(!b.hit.has(p)){b.hit.add(p);hitPart(p,b.dmg)}}else{b.dead=1;if(b.rocket)explode(b.x,b.y,22,true);else hitPart(p,b.dmg);puff(b.x,b.y,3,['#ffd24a','#fff'],1,1)}}}
     if(!b.dead)for(const w of pows)if(w.st==='tied'&&inR(b.x,b.y,{x:w.x,y:w.y-30,w:16,h:30})){b.dead=1;freePow(w)}
     if(!b.dead)for(const c of crates)if(c.hp>0&&inR(b.x,b.y,{x:c.x,y:c.y-12,w:14,h:12})){b.dead=!b.flame;hitCrate(c,b.flame?.2:1)}
-    if(!b.dead)for(const s of bullets)if((s.txt||s.note||s.homing)&&!s.dead&&inR(b.x,b.y,{x:s.x-(s.note?4:0),y:s.y-5,w:s.w,h:10})){b.dead=!b.flame;if(--s.hp<=0){s.dead=1;puff(s.x+s.w/2,s.y,10,['#e9dcc2','#c8372d','#8aa070'],1.6,2);if(s.txt)pop(s.x+s.w/2,s.y-8,'SLOGAN REFUTED','#9fe0a0',70);if(s.homing)explode(s.x,s.y,12,true)}}
+    if(!b.dead)for(const s of bullets)if((s.txt||s.note||s.homing)&&!s.dead&&inR(b.x,b.y,{x:s.x-(s.note?4:0),y:s.y-5,w:s.w,h:10})){b.dead=!b.flame;if(--s.hp<=0){s.dead=1;puff(s.x+s.w/2,s.y,10,['#e9dcc2','#c8372d','#8aa070'],1.6,2);if(s.txt)pop(s.x+s.w/2,s.y-8,tr('SLOGAN REFUTED'),'#9fe0a0',70);if(s.homing)explode(s.x,s.y,12,true)}}
     if(!b.dead&&!b.flame){const g=groundAt(b.x);if(b.y>g+1){b.dead=1;puff(b.x,g,3,['#8a7656','#6e5a40'],1,1);if(b.rocket)explode(b.x,g-4,22,true)}}}
-   else if(b.txt||b.wave){const box=b.wave?{x:b.x,y:b.y-6,w:b.w,h:8}:{x:b.x,y:b.y-4,w:b.w,h:8};if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),box)){b.dead=1;killPlayer();if(b.txt&&!P.veh)pop(P.x+8,P.y-46,'KILLED BY A SLOGAN','#ff6a5a')}
+   else if(b.txt||b.wave){const box=b.wave?{x:b.x,y:b.y-6,w:b.w,h:8}:{x:b.x,y:b.y-4,w:b.w,h:8};if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),box)){b.dead=1;killPlayer();if(b.txt&&P.dead===1)pop(P.x+8,P.y-46,tr('KILLED BY A SLOGAN'),'#ff6a5a')}
     if(b.wave&&T%3===0)puff(b.x+7,GY,2,['#8a7656','#6e5a40'],1,2)}
    else{if(!b.note&&!b.homing&&b.y>groundAt(b.x)+2){b.dead=1;break}
-    const pb=P.veh?vBox(P.veh):hb(P);if(!P.dead&&P.inv<=0&&inR(b.x,b.y,pb)){b.dead=1;if(b.homing)explode(b.x,b.y,16,false);else killPlayer();if(b.note&&!P.dead&&!P.veh)pop(P.x+8,P.y-46,'CRUSHED BY INFLATION','#8aa070')}
+    const pb=P.veh?vBox(P.veh):hb(P);if(!P.dead&&P.inv<=0&&inR(b.x,b.y,pb)){b.dead=1;if(b.homing)explode(b.x,b.y,16,false);else killPlayer();if(b.note&&P.dead===1)pop(P.x+8,P.y-46,tr('CRUSHED BY INFLATION'),'#8aa070')}
     else for(const e of enemies)if(e.ally&&!e.dead&&inR(b.x,b.y,hb(e))){b.dead=1;if(--e.hp<=0)killAlly(e);break}}}
   if(b.x<camX-200||b.x>camX+W+60||b.y<-60||b.y>H+10)b.dead=1}
  bullets=bullets.filter(b=>!b.dead)}
@@ -329,9 +329,9 @@ function updMisc(){
  for(const p of pickups){p.vy=Math.min(p.vy+.15,p.para?.55:4);p.y+=p.vy;const g=groundAt(p.x);
   if(raft&&p.x>raft.x&&p.x<raft.x+raft.w&&p.y>=raft.y&&p.y<raft.y+6){p.y=raft.y;p.vy=0;p.para=0;p.x+=raft.vx}else if(g<1e3&&p.y>=g){p.y=g;p.vy=0;p.para=0}else if(g>1e3&&p.y>WATERY+6)p.dead=1;
   if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),{x:p.x-6,y:p.y-10,w:12,h:10})){p.dead=1;
-   if(WPN_OF[p.t]){if(P.veh){P.veh.ammo+=10;pop(p.x,p.y-20,'SHELLS +10','#ffd24a')}else{const nw=WPN_OF[p.t];P.ammo=P.wpn===nw?P.ammo+WEAPONS[p.t].ammo:WEAPONS[p.t].ammo;P.wpn=nw;pop(p.x,p.y-20,WEAPONS[p.t].name+'!','#ffd24a')}SFX.weapon()}
-   else if(p.t==='B'){P.bombs+=8;if(P.veh)P.veh.ammo+=8;pop(p.x,p.y-20,'GRENADES +8','#ffd24a');SFX.pick()}
-   else if(p.t==='gold'){addScore(3000);pop(p.x,p.y-20,'+3000 GOLD (CONFISCATED)','#ffd24a');SFX.pick()}
+   if(WPN_OF[p.t]){if(P.veh){P.veh.ammo+=10;pop(p.x,p.y-20,tr('SHELLS +10'),'#ffd24a')}else{const nw=WPN_OF[p.t];P.ammo=P.wpn===nw?P.ammo+WEAPONS[p.t].ammo:WEAPONS[p.t].ammo;P.wpn=nw;pop(p.x,p.y-20,WEAPONS[p.t].name+'!','#ffd24a')}SFX.weapon()}
+   else if(p.t==='B'){P.bombs+=8;if(P.veh)P.veh.ammo+=8;pop(p.x,p.y-20,tr('GRENADES +8'),'#ffd24a');SFX.pick()}
+   else if(p.t==='gold'){addScore(3000);pop(p.x,p.y-20,tr('+3000 GOLD (CONFISCATED)'),'#ffd24a');SFX.pick()}
    else{addScore(800);pop(p.x,p.y-20,M().food,'#ffd24a');SFX.pick()}}}
  pickups=pickups.filter(p=>!p.dead&&p.x>camX-40);
  for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;if(p.smoke){p.s+=.06;p.vx*=.98}
@@ -367,7 +367,7 @@ function render(){
  for(const p of pickups)drawPickup(p);
  for(const w of pows)if(w.st!=='gone')drawPeasant(w);
  if(boss){const k=boss.kind;if(k==='truck')drawTruck(boss);else if(k==='tank')drawTank(boss);else if(k==='train')drawTrain(boss);else if(k==='car')drawCar(boss);else if(k==='press')drawPress(boss);else if(k==='gunboat')drawGunboat(boss);else if(k==='mech'){if(boss.dead&&boss.dt>95)drawMirror(boss);else drawMech(boss)}}
- for(const v of vehicles){if(v.rider&&!P.dead)continue;if(v.kind==='donkey')drawDonkey(v);else drawSV(v);if(!v.rider&&Math.abs(v.x+v.w/2-P.x-8)<50&&T%40<26)txt('▼ RIDE',v.x-camX+v.w/2-20,v.y-58,'#9fe0a0')}
+ for(const v of vehicles){if(v.rider&&!P.dead)continue;if(v.kind==='donkey')drawDonkey(v);else drawSV(v);if(!v.rider&&Math.abs(v.x+v.w/2-P.x-8)<50&&T%40<26)txt(tr('▼ RIDE'),v.x-camX+v.w/2-20,v.y-58,'#9fe0a0')}
  for(const e of enemies)drawEnemy(e);
  if(P.veh&&!P.dead){P.veh.riderEmo=shouts.some(b=>b.ent===P&&b.t>15)?'shout':held('fire')?'grit':'determined';if(P.veh.kind==='donkey')drawDonkey(P.veh);else drawSV(P.veh)}
  else if(!(P.inv>0&&!P.dead&&T%6<3)){const sx=P.x-camX;
@@ -379,7 +379,7 @@ function render(){
  if(boss&&boss.kind==='bomber')drawBomber(boss);
  drawShallow();
  for(const b of bullets){const x=b.x-camX;
-  if(b.txt){ctx.font=F;ctx.textAlign='left';ctx.textBaseline='middle';r(x-2,b.y-6,b.w+4,12,'#120d0ccc');ctx.fillStyle=b.hp<3&&T%2?'#fff':'#ff7d6e';ctx.fillText(b.txt,x,b.y+1);ctx.textBaseline='top';continue}
+  if(b.txt){ctx.font=fontFor(b.txt);ctx.textAlign='left';ctx.textBaseline='middle';r(x-2,b.y-6,b.w+4,12,'#120d0ccc');ctx.fillStyle=b.hp<3&&T%2?'#fff':'#ff7d6e';ctx.fillText(b.txt,x,b.y+1);ctx.textBaseline='top';continue}
   if(b.note){const fl=Math.abs(Math.sin(b.ph*2));r(x-4,b.y-2,8,Math.max(1,fl*5|0),'#8aa070');r(x-2,b.y-1,2,1,'#3a5a2a');continue}
   if(b.wave){r(x,b.y-6,b.w,6,'#8a7656');r(x+2,b.y-9,b.w-4,3,'#a89060');continue}
   if(b.homing){r(x-3,b.y-2,7,4,'#e9dcc2');r(x-1,b.y-3,3,6,'#c8372d');continue}
@@ -401,7 +401,7 @@ function render(){
  ctx.restore();
  drawWeather();
  for(const w of pows)if(w.st==='free'&&w.t<150)drawBubble(w.say,w.x-camX+7,w.y-44);
- for(const p of pops){const w=p.s.length*8,x=clamp(p.x-camX,w/2+4,W-w/2-4);if(p.life<20&&T%4<2)continue;txt(p.s,x,p.y,p.c,'center')}
+ for(const p of pops){const w=tw(p.s),x=clamp(p.x-camX,w/2+4,W-w/2-4);if(p.life<20&&T%4<2)continue;txt(p.s,x,p.y,p.c,'center')}
  for(const b of shouts){const e=b.ent;if(e.dead)continue;drawShout(b.s,e.x-camX+8,e.y-(e===P&&P.veh?60:42),b.hero)}
  ctx.restore();
  ctx.drawImage(VIG,0,0);
@@ -413,18 +413,18 @@ function drawMirror(b){const x=Math.round(b.x-camX),y=b.y;for(const lx of[10,66]
 function drawHUD(){
  r(0,0,W,24,'#120d0cb0');
  txt(`${M().lives} x${Math.max(0,lives)}`,4,4,'#e9dcc2');
- if(P.veh){txt(`SHELLS ${P.veh.ammo}`,W-4,4,'#ffd24a','right');const hw=50;r(W-hw-4,15,hw,5,'#3a1714');r(W-hw-4,15,hw*P.veh.hp/P.veh.max,5,'#9fe0a0');txt(P.veh.kind==='donkey'?'DONKEY':'SV-46',W-hw-10,14,'#9fe0a0','right')}
- else{const wn={pistol:'PISTOL',hmg:'H',shotgun:'S',rocket:'R',flame:'F'}[P.wpn];txt(P.wpn==='pistol'?'PISTOL':`${wn} ${P.ammo}`,W-4,4,P.wpn==='pistol'?'#e9dcc2':'#ffd24a','right');txt(`BOMB ${P.bombs}`,W-4,14,'#ff9a6a','right')}
- if(S==='kmt'){const infl=Math.pow(1.6,(LV*3000+T)/600);txt(`PAY ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)} EGGS`,4,14,'#ffd24a')}
+ if(P.veh){txt(`${tr('SHELLS')} ${P.veh.ammo}`,W-4,4,'#ffd24a','right');const hw=50;r(W-hw-4,15,hw,5,'#3a1714');r(W-hw-4,15,hw*P.veh.hp/P.veh.max,5,'#9fe0a0');txt(tr(P.veh.kind==='donkey'?'DONKEY':'SV-46'),W-hw-10,14,'#9fe0a0','right')}
+ else{const wn={pistol:'PISTOL',hmg:'H',shotgun:'S',rocket:'R',flame:'F'}[P.wpn];txt(P.wpn==='pistol'?tr('PISTOL'):`${wn} ${P.ammo}`,W-4,4,P.wpn==='pistol'?'#e9dcc2':'#ffd24a','right');txt(`${tr('BOMB')} ${P.bombs}`,W-4,14,'#ff9a6a','right')}
+ if(S==='kmt'){const infl=Math.pow(1.6,(LV*3000+T)/600);txt(LANG==='zh'?`餉 ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)}顆蛋`:`PAY ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)} EGGS`,4,14,'#ffd24a')}
  else txt(`MERIT ${score} · YOURS 0`,4,14,'#ff9a6a');
  txt(`M${LV+1}`,W/2,4,'#a8977c','center');
  if(boss&&!boss.dead)bossBar(boss);
- if(radioCur){const Lr=wrap(radioCur.s,34).slice(0,4),h=Lr.length*10+10,x=24,y=boss?52:28,w=W-48;
+ if(radioCur){const zr=isZ(radioCur.s),LH=zr?13:10;if(zr)ctx.font=zf(F);const Lr=(zr?wrapPx(radioCur.s,W-48-34):wrap(radioCur.s,34)).slice(0,4),h=Lr.length*LH+10,x=24,y=boss?52:28,w=W-48;
   r(x,y,w,h,boss?'#120d0c88':'#120d0cdd');ctx.strokeStyle=S==='kmt'?'#4a6aa3':'#c8372d';ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,w-1,h-1);
   ctx.save();ctx.translate(x+3,y+31);ctx.beginPath();ctx.rect(0,-29,20,22);ctx.clip();ctx.translate(2,0);chibiHead((T>>3)%2?'shout':'determined',0);cap(S);ctx.restore();
-  ctx.font=F;ctx.textAlign='left';ctx.textBaseline='top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*2);let cnt=0;
-  Lr.forEach((l,i)=>{const vis=l.slice(0,Math.max(0,shown-cnt));cnt+=l.length+1;ctx.fillStyle='#e9dcc2';ctx.fillText(vis,x+28,y+6+i*10)})}
- if(T<200&&state==='play'){txt(`MISSION ${LV+1}`,W/2,80,'#ffd24a','center',F16);txt(L.name,W/2,102,'#e9dcc2','center');txt(L.sub,W/2,116,'#a8977c','center')}
- if(lockX!=null&&boss&&!boss.dead&&boss.t<120&&T%40<26)txt('WARNING',W/2,100,'#ff6a5a','center',F16);
- if(winT>30){txt('MISSION COMPLETE!',W/2,90,'#ffd24a','center',F16)}
- if(state==='pause'){r(0,0,W,H,'#0008');txt('PAUSED',W/2,92,'#ffd24a','center',F16);txt('THE WAR WILL WAIT. IT ALWAYS DOES.',W/2,116,'#e9dcc2','center')}}
+  ctx.font=zr?zf(F):F;ctx.textAlign='left';ctx.textBaseline=zr?'middle':'top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*(zr?1:2));let cnt=0;
+  Lr.forEach((l,i)=>{const vis=l.slice(0,Math.max(0,shown-cnt));cnt+=l.length+(zr?0:1);ctx.fillStyle='#e9dcc2';ctx.fillText(vis,x+28,y+6+i*LH+(zr?6:0))});ctx.textBaseline='top'}
+ if(T<200&&state==='play'){txt(LANG==='zh'?`任務 ${LV+1}`:`MISSION ${LV+1}`,W/2,80,'#ffd24a','center',F16);txt(L.name,W/2,102,'#e9dcc2','center');txt(L.sub,W/2,116,'#a8977c','center')}
+ if(lockX!=null&&boss&&!boss.dead&&boss.t<120&&T%40<26)txt(tr('WARNING'),W/2,100,'#ff6a5a','center',F16);
+ if(winT>30){txt(tr('MISSION COMPLETE!'),W/2,90,'#ffd24a','center',F16)}
+ if(state==='pause'){r(0,0,W,H,'#0008');txt(tr('PAUSED'),W/2,92,'#ffd24a','center',F16);txt(tr('THE WAR WILL WAIT. IT ALWAYS DOES.'),W/2,116,'#e9dcc2','center')}}

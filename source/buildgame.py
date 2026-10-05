@@ -9,5 +9,5 @@ js='\n'.join(parts)
 if test:js+="\nwindow.__g={get state(){return state},ev:s=>eval(s)};"
 html=open(d+'/head.html').read()+'\n<script>\n(()=>{\n'+js+'\n})();\n</script>\n'
 open((d+'-test.html') if test else out,'w').write(html)
-open('_chk.js','w').write('(()=>{\n'+js+'\n})();')
+open('_chk-'+d+'.js','w').write('(()=>{\n'+js+'\n})();')
 print(len(html))

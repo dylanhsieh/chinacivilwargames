@@ -1,6 +1,19 @@
-<title>Civil Slug 1946</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>國共大戰 Civil Slug 1946</title>
+<meta name="description" content="Civil Slug 1946 (國共大戰): a free pixel run-and-gun satire of the Chinese Civil War. Five missions, Gold Yuan hyperinflation, one very temporary relocation. English / 繁體中文.">
+<meta name="theme-color" content="#120d0c">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Civil Slug">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23120d0c'/%3E%3Crect x='1' y='1' width='14' height='14' fill='none' stroke='%23c8372d' stroke-width='2'/%3E%3Crect x='5' y='4' width='6' height='2' fill='%232f4f8a'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e9c9a0'/%3E%3Crect x='4' y='10' width='8' height='3' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: one-screen arcade cabinet — letterboxed pixel canvas, poster-stamp overlays, thumb pads in the bottom corners */
 :root{
@@ -9,6 +22,7 @@
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
   --han:"Noto Serif TC","Songti TC","PMingLiU","SimSun",serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
@@ -28,8 +42,7 @@ h1 span{display:block;font-size:.32em;color:var(--gold);text-shadow:2px 2px 0 #0
 h2{font-size:clamp(16px,4.6vw,28px);color:var(--gold);text-shadow:3px 3px 0 #000}
 p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-width:60ch;margin-inline:auto}
 .tag{color:var(--dim)}
-.sides{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media (max-width:480px){.sides{grid-template-columns:1fr}}
+.sides{display:grid;grid-template-columns:minmax(0,360px);justify-content:center;gap:12px}
 .side{display:flex;flex-direction:column;gap:8px;align-items:center;padding:14px 12px;cursor:pointer;color:var(--paper);border:3px solid;text-align:center;min-width:0;transition:transform .12s}
 .side:hover,.side:focus-visible,.side.sel{transform:translateY(-3px)}
 .side.kmt{background:linear-gradient(#1d2a44,#141c2c);border-color:var(--blue)}
@@ -66,38 +79,88 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 .tb[data-k=jump]{width:66px;height:66px;right:86px;bottom:0;border-color:var(--blue)}
 .tb[data-k=bomb]{width:54px;height:54px;right:96px;bottom:84px;border-color:var(--gold)}
 #rot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 190px);text-align:center;font:9px var(--px);color:var(--dim);display:none}
-body.pt #rot{display:block}
+body.noplay #stick,body.noplay #btns{visibility:hidden}
+body.pt #rot{display:block;bottom:calc(env(safe-area-inset-bottom,0px) + 250px)}
+body.pt #hud{bottom:calc(env(safe-area-inset-bottom,0px) + 196px)}
+.lang{display:flex;gap:0;position:fixed;z-index:11;top:calc(env(safe-area-inset-top,0px) + 10px);right:calc(env(safe-area-inset-right,0px) + 10px)}
+.lang button{font:11px var(--px);padding:9px 12px;border:2px solid var(--dim);background:rgba(18,13,12,.85);color:var(--dim);cursor:pointer;min-width:64px}
+.lang button+button{border-left:0}
+.lang button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh);padding:7px 12px}
+#hud #bLang{font:700 12px/1 var(--zh);padding:6px 8px}
+html[lang^=zh] #hud #bLang{font:10px var(--px);padding:7px 8px}
+/* 繁體中文: same layout, CJK-capable fonts and sizes */
+html[lang^=zh] h1{font-family:var(--zh);font-weight:700;letter-spacing:.06em}
+html[lang^=zh] h1 span{font-family:var(--px);font-size:.3em;letter-spacing:.12em}
+html[lang^=zh] h2{font-family:var(--zh);font-weight:700}
+html[lang^=zh] p{font:clamp(15px,3.4vw,18px)/1.55 var(--zh)}
+html[lang^=zh] .keys{font-size:14px}
+html[lang^=zh] .fine{font-size:13px}
+html[lang^=zh] .side i{font:700 14px var(--zh);letter-spacing:.2em}
+html[lang^=zh] .side small{font:15px/1.5 var(--zh)}
+html[lang^=zh] .side em{font:700 13px var(--zh)}
+html[lang^=zh] .btn{font:700 15px var(--zh);padding:12px 16px}
+html[lang^=zh] .mbtn span{font:700 17px/1.2 var(--zh)}
+html[lang^=zh] .mbtn small{font:14px var(--zh)}
+html[lang^=zh] dl{font:16px/1.5 var(--zh)}
+html[lang^=zh] #hud button:not(#bLang){font:700 12px var(--zh);padding:6px 8px}
+html[lang^=zh] .tb{font:700 14px var(--zh)}
+html[lang^=zh] .tb[data-k=bomb]{font-size:12px;letter-spacing:-.04em}
+html[lang^=zh] #rot{font:700 13px var(--zh)}
+/* short landscape phones: the whole title card (and ENLIST) fits without scrolling */
+@media (max-height:520px){
+  .card{gap:7px;padding-block:2px}
+  .seal{font-size:20px;padding:3px 8px 4px;border-width:3px}
+  h1{font-size:clamp(20px,4.6vw,30px);text-shadow:2px 2px 0 var(--red),4px 4px 0 #000}
+  h1 span{margin-top:5px}
+  .tag{display:none}
+  .side{padding:8px 12px;gap:4px}
+  .side b{font-size:22px}
+  .side small{font-size:16px}
+  .keys{font-size:15px}
+  .fine{font-size:14px}
+  html[lang^=zh] .side small{font-size:13px;line-height:1.4}
+  html[lang^=zh] .keys{font-size:12px}
+  html[lang^=zh] .fine{font-size:12px}
+  .mbtn{padding:7px 12px}
+  .ov{padding:8px 16px}
+}
+@media (max-height:520px) and (pointer:coarse){.kbd{display:none}}
+@media (max-height:360px){.keys{display:none}.side small{display:none}}
 @media (prefers-reduced-motion:reduce){.side{transition:none}}
 </style>
 
+</head>
+<body>
 <div id="app"><canvas id="cv" width="384" height="216" aria-label="Civil Slug game screen"></canvas></div>
 
 <div id="hud" hidden>
   <button id="bPause" aria-label="Pause">II</button>
   <button id="bSnd" aria-label="Toggle sound">SND</button>
+  <button id="bLang" aria-label="切換語言 / Switch language" lang="zh-Hant">中文</button>
 </div>
 
 <div id="touch" hidden>
-  <div id="rot">TURN SIDEWAYS FOR A BIGGER WAR</div>
+  <div id="rot" data-t="rot">TURN SIDEWAYS FOR A BIGGER WAR</div>
   <div id="stick"><div id="ring"></div><div id="knob"></div></div>
   <div id="btns">
-    <div class="tb" data-k="fire">FIRE</div>
-    <div class="tb" data-k="jump">JUMP</div>
-    <div class="tb" data-k="bomb">BOMB</div>
+    <div class="tb" data-k="fire" data-t="tfire">FIRE</div>
+    <div class="tb" data-k="jump" data-t="tjump">JUMP</div>
+    <div class="tb" data-k="bomb" data-t="tbomb">BOMB</div>
   </div>
 </div>
 
 <div id="title" class="ov">
   <div class="card">
     <div class="seal">兄弟鬩牆</div>
-    <h1>CIVIL SLUG<span>1946 – 1949 · FIVE MISSIONS</span></h1>
-    <p class="tag">A run-and-gun about a war where the enemy was usually somebody's cousin.</p>
+    <h1 data-t="h1">CIVIL SLUG<span>1946 – 1949 · FIVE MISSIONS</span></h1>
+    <p class="tag" data-t="tag">A run-and-gun about a war where the enemy was usually somebody's cousin.</p>
     <div class="sides">
-      <button class="side kmt sel" data-side="kmt"><b>國軍</b><i>NATIONALIST</i><small>Paid in Gold Yuan. Paid daily, because by tomorrow it's worthless.</small><em>▶ ENLIST</em></button>
-      <button class="side ccp" data-side="ccp"><b>共軍</b><i>COMMUNIST</i><small>Paid in Merit. Merit belongs to the Collective.</small><em>▶ VOLUNTEER</em></button>
+      <button class="side kmt sel" data-side="kmt"><b>國軍</b><i data-t="nat">NATIONALIST</i><small data-t="natd">Paid in Gold Yuan. Paid daily, because by tomorrow it's worthless. Win every battle. See how that works out.</small><em data-t="enlist">▶ ENLIST</em></button>
     </div>
-    <p class="keys">Keys: ← → move · ↑ aim up · ↓ crouch · J fire (knife up close) · K jump · L grenade / cannon · ↓+K leave vehicle · P pause<br>Phone: thumb-stick left, buttons right. Tap FIRE to skip story scenes.</p>
-    <p class="fine">Satire. Both armies get roasted equally. The villagers lost either way.</p>
+    <p class="keys" data-t="keys"><span class="kbd">Keys: ← → move · ↑ aim up · ↓ crouch · J fire (knife up close) · K jump · L grenade / cannon · ↓+K leave vehicle · P pause<br></span>Phone: thumb-stick left, buttons right. Tap the screen to skip story scenes.</p>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="en" aria-pressed="true" lang="en">EN</button><button data-l="zh" aria-pressed="false" lang="zh-Hant">中文</button></div>
+    <p class="fine" data-t="fine">Satire. Both armies get roasted equally. The villagers lost either way. Spoiler: so do you.</p>
   </div>
 </div>
 
@@ -105,7 +168,7 @@ body.pt #rot{display:block}
   <div class="card">
     <h2 id="mH">CHOOSE A MISSION</h2>
     <div class="mlist" id="mlist"></div>
-    <div class="row"><button class="btn alt" id="mBack">BACK</button></div>
+    <div class="row"><button class="btn alt" id="mBack" data-t="back">BACK</button></div>
   </div>
 </div>
 
@@ -114,7 +177,7 @@ body.pt #rot{display:block}
     <h2 id="endH">OUT OF CONSCRIPTS</h2>
     <p id="endP"></p>
     <dl id="endS"></dl>
-    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">DEFECT</button><button class="btn alt" id="e3">TITLE</button></div>
+    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">MISSIONS</button><button class="btn alt" id="e3">TITLE</button></div>
   </div>
 </div>
 
@@ -757,7 +820,7 @@ function loadLevel(i){LV=i;L=LEVELS[i];buildBG();T=0;camX=0;lockX=null;shake=0;w
 function newPlayer(x,y){P={x,y,vx:0,vy:0,face:1,on:false,crouch:false,aim:0,wpn:'pistol',ammo:0,bombs:10,inv:150,dead:0,cool:0,anim:0,drop:0,muzz:0,slash:0,veh:null,vehCD:0,cryAt:0}}
 function radio(s){if(s)radioQ.push(s)}
 function pop(x,y,s,c='#e9dcc2',life=110){pops.push({x,y,s,c,life,max:life})}
-function addScore(n){score=Math.max(0,score+n);if(score>=nextLife){nextLife+=40000;lives++;SFX.oneup();pop(camX+W/2,60,'1UP! ANOTHER CONSCRIPT ARRIVES','#9fe0a0',150)}}
+function addScore(n){score=Math.max(0,score+n);if(score>=nextLife){nextLife+=40000;lives++;SFX.oneup();pop(camX+W/2,60,tr('1UP! ANOTHER CONSCRIPT ARRIVES'),'#9fe0a0',150)}}
 function cry(force){if(!P||P.dead||(!force&&cryCD>0))return;const s=pick(CRIES[S]);shouts=shouts.filter(b=>b.ent!==P);shouts.push({ent:P,s,t:85,hero:1});cryCD=300}
 function taunt(e){shouts.push({ent:e,s:pick(TAUNTS[EN]),t:85});e.shout=40}
 
@@ -848,34 +911,34 @@ function killEnemy(e,dir,big){e.dead=true;e.vy=big?-4.2:-2.6;e.vx=dir*(big?2.2:1
  blood(e.x+8,e.y-16,8,dir);parts.push({x:e.x+8,y:e.y-26,vx:dir*.8,vy:-2.8,life:80,c:PAL[EN].h,s:4,g:.12,hat:1});
  puff(e.x+8,e.y-12,6,['#7a6a5a','#4a3a33']);if(rnd()<.45)SFX.scream();
  if(e.t==='officer'){pickups.push({x:e.x+8,y:e.y-10,vy:-2,t:'gold'});pop(e.x+8,e.y-44,M().officer,'#ffd24a',140)}
- else if(e.t==='cavalry'){pop(e.x+16,e.y-50,'THE HORSE WAS ALSO CONSCRIPTED','#c9b9a0');SFX.horse()}
+ else if(e.t==='cavalry'){pop(e.x+16,e.y-50,tr('THE HORSE WAS ALSO CONSCRIPTED'),'#c9b9a0');SFX.horse()}
  else if(rnd()<.35)pop(e.x+8,e.y-44,pick(M().kills),'#ffd24a')}
 function hitEnemy(e,d,fromX){if(e.dead)return;
- if(e.surr){e.dead=true;e.vy=-2.4;e.vx=sgn(e.x-(fromX??P.x));addScore(-500);pop(e.x+8,e.y-46,'-500. EVEN THIS WAR HAS PAPERWORK','#ff6a5a');return}
+ if(e.surr){e.dead=true;e.vy=-2.4;e.vx=sgn(e.x-(fromX??P.x));addScore(-500);pop(e.x+8,e.y-46,tr('-500. EVEN THIS WAR HAS PAPERWORK'),'#ff6a5a');return}
  e.hp-=d;e.flash=6;SFX.hit();sparks(e.x+8,e.y-14,4,['#fff','#ffb04a','#a8261c']);
- if(e.para&&e.hp>0){e.para=0;pop(e.x+8,e.y-40,'CHUTE CUT','#e9dcc2',60)}
+ if(e.para&&e.hp>0){e.para=0;pop(e.x+8,e.y-40,tr('CHUTE CUT'),'#e9dcc2',60)}
  if(e.hp<=0)killEnemy(e,sgn(e.x-(fromX??P.x)),d>=3)}
-function killAlly(e){e.dead=true;e.vy=-2.4;e.vx=-1;pop(e.x+8,e.y-44,'DEFECTED ONCE. RETIRED FOR GOOD.','#c9b9a0')}
+function killAlly(e){e.dead=true;e.vy=-2.4;e.vx=-1;pop(e.x+8,e.y-44,tr('DEFECTED ONCE. RETIRED FOR GOOD.'),'#c9b9a0')}
 function hitPart(p,d){const b=boss;if(!b||b.dead||p.hp<=0)return;
- if(p.armor){if(T%6===0){SFX.clang();sparks(b.x+p.ox+p.w/2,b.y-p.oy+p.h/2,3,['#aaa','#fff'])}if(T%40===0)pop(b.x+p.ox+p.w/2,b.y-p.oy-6,'ARMORED','#aaa',40);return}
+ if(p.armor){if(T%6===0){SFX.clang();sparks(b.x+p.ox+p.w/2,b.y-p.oy+p.h/2,3,['#aaa','#fff'])}if(T%40===0)pop(b.x+p.ox+p.w/2,b.y-p.oy-6,tr('ARMORED'),'#aaa',40);return}
  p.hp-=d;p.flash=4;b.flash=3;if(T%3===0)SFX.clang();
- if(b.kind==='tank'){const ph=Math.min(PLATES.length-1,Math.floor((1-p.hp/160)*4)+1);if(p.hp>0&&ph!==b.plate){b.plate=ph;pop(b.x+40,b.y-70,'OWNERSHIP TRANSFERRED','#ffd24a',140)}}
+ if(b.kind==='tank'){const ph=Math.min(PLATES.length-1,Math.floor((1-p.hp/160)*4)+1);if(p.hp>0&&ph!==b.plate){b.plate=ph;pop(b.x+40,b.y-70,tr('OWNERSHIP TRANSFERRED'),'#ffd24a',140)}}
  if(b.kind==='press')b.printed*=1.5;
  if(p.hp<=0){p.hp=0;const bx=partBox(b,p);explode(bx.x+bx.w/2,bx.y+bx.h/2,24,true,true);addScore(1500);
   if(p.plat){p.plat.dead=1;plats=plats.filter(q=>q!==p.plat)}
-  const alive=b.parts.filter(q=>q.hp>0);if(alive.length===1&&alive[0].armor){alive[0].armor=0;pop(camX+W/2,64,'ARMOR GONE! HIT THE CORE!','#ff9a6a',120)}}
+  const alive=b.parts.filter(q=>q.hp>0);if(alive.length===1&&alive[0].armor){alive[0].armor=0;pop(camX+W/2,64,tr('ARMOR GONE! HIT THE CORE!'),'#ff9a6a',120)}}
  b.hp=b.parts.reduce((a,q)=>a+q.hp,0);
  if(b.parts.every(q=>q.hp<=0||!q.req)&&!b.dead){b.dead=true;b.dt=0;hitstop=12;flashA=1;music('off');addScore({truck:3000,tank:10000,train:12000,bomber:15000,car:5000,press:20000,gunboat:8000,mech:50000}[b.kind]||5000)}}
 function hitCrate(c,d){c.hp-=d;c.flash=4;SFX.hit();if(c.hp<=0){puff(c.x+7,c.y-6,10,['#7a5a35','#9c7a4c','#5a4025'],2,2);pickups.push({x:c.x+7,y:c.y-8,vy:-2.5,t:c.item});SFX.clang()}}
 function killPlayer(cause){if(P.dead)return;
- if(P.veh){const v=P.veh;if(P.inv>0)return;v.hp--;v.flash=8;P.inv=30;SFX.clang();sparks(v.x+v.w/2,v.y-16,8);if(v.kind==='donkey'&&v.hp>0&&rnd()<.4){SFX.bray();pop(v.x+18,v.y-48,'HEE-HAW (UNION GRIEVANCE)','#e9dcc2',70)}
+ if(P.veh){const v=P.veh;if(P.inv>0)return;v.hp--;v.flash=8;P.inv=30;SFX.clang();sparks(v.x+v.w/2,v.y-16,8);if(v.kind==='donkey'&&v.hp>0&&rnd()<.4){SFX.bray();pop(v.x+18,v.y-48,tr('HEE-HAW (UNION GRIEVANCE)'),'#e9dcc2',70)}
   if(v.hp<=0)ejectVehicle(true);return}
  if(P.inv>0&&cause!=='drown')return;
  P.dead=1;P.vy=-3.6;P.vx=-P.face*1.2;SFX.die();shake=8;MS.lost++;totals.lost++;flashA=.6;flashC='#c8372d';hitstop=8;
- if(cause==='drown'){P.vy=0;SFX.splash();pop(P.x+8,WATERY-30,"DROWNED. THE RIVER DOESN'T TAKE SIDES",'#9fc0e0',150)}
+ if(cause==='drown'){P.vy=0;SFX.splash();pop(P.x+8,WATERY-30,tr("DROWNED. THE RIVER DOESN'T TAKE SIDES"),'#9fc0e0',150)}
  else{blood(P.x+8,P.y-16,14,-P.face);parts.push({x:P.x+8,y:P.y-26,vx:-P.face,vy:-3.4,life:120,c:PAL[S].h,s:4,g:.12,hat:1})}}
 function ejectVehicle(destroyed){const v=P.veh;if(!v)return;v.rider=false;P.veh=null;P.vehCD=60;P.x=v.x+v.w/2-8;P.y=v.y-24;P.vy=-4.5;P.on=false;P.inv=destroyed?100:20;
- if(destroyed){v.dead=1;explode(v.x+v.w/2,v.y-14,26,true,true);pop(v.x+v.w/2,v.y-50,v.kind==='donkey'?'THE DONKEY HAS FILED FOR RETIREMENT':'SV-46 RETURNED TO ITS SEVENTH OWNER','#e9dcc2',140);if(v.kind==='donkey')SFX.bray()}}
+ if(destroyed){v.dead=1;explode(v.x+v.w/2,v.y-14,26,true,true);pop(v.x+v.w/2,v.y-50,tr(v.kind==='donkey'?'THE DONKEY HAS FILED FOR RETIREMENT':'SV-46 RETURNED TO ITS SEVENTH OWNER'),'#e9dcc2',140);if(v.kind==='donkey')SFX.bray()}}
 function freePow(w){if(w.st!=='tied')return;w.st='free';w.t=0;w.say=POW_LINES[(totals.freed+LV*3)%POW_LINES.length];MS.freed++;totals.freed++;addScore(500);SFX.pick();
  const t=['B','food',pick(['H','S','R','F']),'food','B'][(MS.freed-1)%5];pickups.push({x:w.x+16,y:w.y-10,vy:-2,t})}
 
@@ -899,8 +962,8 @@ function update(){
   if(a==='paras'||k==='paras')for(let i=0;i<3;i++)setTimeout(()=>{if(state==='play')spawn('para')},i*700)}
  while(si<L.spawns.length&&camX+W+30>=L.spawns[si][0]){const[x,t,a]=L.spawns[si++];if(x<camX-10&&a!=='L')continue;spawn(t,x,typeof a==='number'?a:0,a)}
  const A=L.arenas[arenaI];
- if(A&&!boss&&camX>=A.x){camX=lockX=A.x;spawnBoss(A.boss);radio(LT()[A.msg]);SFX.alarm();if(A.boss==='bomber'||A.boss==='mech')pop(camX+W/2,150,A.boss==='mech'?'TIP: GET UNDER IT. HOLD ↑ TO AIM UP':'TIP: HOLD ↑ TO AIM UP','#9fe0a0',240);music(A.boss==='mech'?'final':'boss');cry(true)}
- if(radioCur){if(--radioCur.t<=0)radioCur=null}else if(radioQ.length){const s=radioQ.shift();radioCur={s,t:120+s.length*3.2|0};radioCur.max=radioCur.t;SFX.radio()}
+ if(A&&!boss&&camX>=A.x){camX=lockX=A.x;spawnBoss(A.boss);radio(LT()[A.msg]);SFX.alarm();if(A.boss==='bomber'||A.boss==='mech')pop(camX+W/2,150,tr(A.boss==='mech'?'TIP: GET UNDER IT. HOLD ↑ TO AIM UP':'TIP: HOLD ↑ TO AIM UP'),'#9fe0a0',240);music(A.boss==='mech'?'final':'boss');cry(true)}
+ if(radioCur){if(--radioCur.t<=0)radioCur=null}else if(radioQ.length){const s=radioQ.shift();radioCur={s,t:120+s.length*(CJK_RE.test(s)?6:3.2)|0};radioCur.max=radioCur.t;SFX.radio()}
  // autoscroll + raft
  const pcam=camX;
  if(L.auto&&lockX==null&&camX<L.auto.to){camX=Math.min(L.auto.to,camX+L.auto.speed)}
@@ -921,7 +984,7 @@ function updPlayer(){
   if(pressed.jump){if(held('down')){ejectVehicle(false);return}if(v.on){v.vy=-3.9;SFX.jump()}}
   if(v.cool>0)v.cool--;
   if(held('fire')&&v.cool<=0){const up=v.aimUp,mx=v.x+v.w/2+(up?2*v.face:v.face*22),my=v.y-(up?44:22);bullets.push({x:mx,y:my,vx:up?(rnd()-.5)*.6:v.face*7.5,vy:up?-7.5:(rnd()-.5)*.5,f:1,dmg:1,big:1});SFX.hmg();v.cool=4;P.muzz=3;casing()}
-  if(pressed.bomb){if(v.ammo>0){v.ammo--;const up=v.aimUp;throwG(v.x+v.w/2+v.face*16,v.y-26,up?v.face*1:v.face*3.4+v.vx,up?-5:-2.2,1,'cannon');SFX.boom();shake=4;smoke(v.x+v.w/2+v.face*20,v.y-26,4);if(v.kind==='donkey'&&rnd()<.3)SFX.bray()}else pop(v.x+v.w/2,v.y-46,'OUT OF SHELLS','#ff9a6a',50)}
+  if(pressed.bomb){if(v.ammo>0){v.ammo--;const up=v.aimUp;throwG(v.x+v.w/2+v.face*16,v.y-26,up?v.face*1:v.face*3.4+v.vx,up?-5:-2.2,1,'cannon');SFX.boom();shake=4;smoke(v.x+v.w/2+v.face*20,v.y-26,4);if(v.kind==='donkey'&&rnd()<.3)SFX.bray()}else pop(v.x+v.w/2,v.y-46,tr('OUT OF SHELLS'),'#ff9a6a',50)}
   phys(v,v.w);v.x=clamp(v.x,camX+2,camX+W-v.w-2);if(boss&&!boss.dead&&boss.kind!=='bomber'){const bx=boss.x+(boss.parts[0].ox||0);if(v.x+v.w>bx+6&&boss.kind!=='train'&&boss.kind!=='mech')v.x=bx+6-v.w}
   P.x=v.x+v.w/2-8;P.y=v.y-18;P.face=v.face;P.vx=v.vx;P.on=v.on;if(P.inv>0)P.inv--;if(P.muzz>0)P.muzz--;return}
  P.crouch=!!held('down')&&P.on;if(mv)P.face=mv;const wade=inShallow(P.x+8)&&P.on;P.vx=mv*(P.crouch?.55:wade?.75:1.25);
@@ -936,7 +999,7 @@ function updPlayer(){
  P.x=clamp(P.x,camX+2,camX+W-18);if(raft&&L.auto&&camX<L.auto.to)P.x=clamp(P.x,raft.x,raft.x+raft.w-16);
  if(boss&&!boss.dead){const k=boss.kind;let bx=null;if(k==='truck'||k==='tank'||k==='car')bx=boss.x;else if(k==='press')bx=boss.x-4;else if(k==='train'&&P.y>GY-38)bx=boss.x;if(bx!=null&&P.x+13>bx+6)P.x=bx-7}
  if(groundAt(P.x+8)>1e3&&P.y>WATERY+4&&!P.on)killPlayer('drown');
- if(P.vehCD<=0)for(const v of vehicles)if(!v.rider&&!v.dead&&ov(hb(P),vBox(v))&&(held('down')||(P.vy>0&&!P.on))){P.veh=v;v.rider=true;v.face=P.face;SFX.weapon();if(v.kind==='donkey')SFX.bray();pop(v.x+v.w/2,v.y-50,v.kind==='donkey'?'DONKEY SLUG! (UNDER PROTEST)':'SV-46! (7TH OWNER)','#ffd24a',100);break}}
+ if(P.vehCD<=0)for(const v of vehicles)if(!v.rider&&!v.dead&&ov(hb(P),vBox(v))&&(held('down')||(P.vy>0&&!P.on))){P.veh=v;v.rider=true;v.face=P.face;SFX.weapon();if(v.kind==='donkey')SFX.bray();pop(v.x+v.w/2,v.y-50,tr(v.kind==='donkey'?'DONKEY SLUG! (UNDER PROTEST)':'SV-46! (7TH OWNER)'),'#ffd24a',100);break}}
 
 function updVehicles(){for(const v of vehicles){if(v.dead)continue;if(v.flash>0)v.flash--;if(!v.rider){v.vx=0;phys(v,v.w)}}
  vehicles=vehicles.filter(v=>!v.dead&&v.x>camX-80)}
@@ -974,15 +1037,15 @@ function updBoss(){const b=boss;b.t++;
  if(b.dead){b.dt++;const bx=b.x+(b.parts[0].ox||0);if(b.kind==='bomber'){b.x+=b.face*1.5;b.y+=1.2}
   smoke(bx+rnd()*120,b.y-30,1,true);if(b.dt%7===0&&b.dt<90)explode(bx+rnd()*100,b.y-rnd()*40,1,true,b.dt%21===0);
   if(b.dt===92){explode(bx+50,b.kind==='bomber'?GY-10:b.y-20,40,true,true);flashA=1;hitstop=10}
-  if(b.kind==='mech'&&b.dt===100){pop(camX+W/2,60,'IT WAS A MIRROR. IT WAS ALWAYS A MIRROR.','#ffd24a',260)}
+  if(b.kind==='mech'&&b.dt===100){pop(camX+W/2,120,tr('IT WAS A MIRROR. IT WAS ALWAYS A MIRROR.'),'#ffd24a',260)}
   if(b.dt===(b.kind==='mech'?200:95)){for(const p of b.parts)if(p.plat)plats=plats.filter(q=>q!==p.plat);
    const A=L.arenas[arenaI];arenaI++;boss=null;lockX=null;
-   if(A&&A.final){radio(LT().win);winT=1;SFX.fanfare()}else{music(L.track);pop(camX+W/2,70,{truck:'TRUCK SILENCED. SLOGANS CONTINUE ELSEWHERE',car:'PEACE TALKS HAVE BROKEN DOWN. ALSO THE CAR.',gunboat:'GUNBOAT SUNK. CAPTAIN DEFECTS, AS PROMISED.'}[b.kind]||'CLEARED','#ffd24a',180)}}
+   if(A&&A.final){radio(LT().win);winT=1;SFX.fanfare()}else{music(L.track);pop(camX+W/2,70,tr({truck:'TRUCK SILENCED. SLOGANS CONTINUE ELSEWHERE',car:'PEACE TALKS HAVE BROKEN DOWN. ALSO THE CAR.',gunboat:'GUNBOAT SUNK. CAPTAIN DEFECTS, AS PROMISED.'}[b.kind]||'CLEARED'),'#ffd24a',180)}}
   return}
  const near=(t)=>{if(Math.abs(b.x-b.tx)>1)b.x+=sgn(b.tx-b.x)*(t||.6);else b.tx=camX+(b.kind==='truck'?230+rnd()*80:b.kind==='car'?200+rnd()*110:255+rnd()*45)};
  const alive=k=>b.parts.find(p=>p.kind===k&&p.hp>0);
  if(b.kind==='truck'){near();
-  if(--b.cool<=0&&b.x<camX+W-40){const t=pick(SLOGANS[EN]),w=t.length*8;bullets.push({txt:t,x:b.x-w+20,y:GY-28,vx:-1.4,vy:0,f:0,w,hp:3});SFX.word();b.cool=95+rnd()*30}
+  if(--b.cool<=0&&b.x<camX+W-40){const t=pick(SLOGANS[EN]),w=tw(t);bullets.push({txt:t,x:b.x-w+20,y:GY-28,vx:-1.4,vy:0,f:0,w,hp:3});SFX.word();b.cool=95+rnd()*30}
   if(--b.spawn<=0){spawn('rifle',b.x+62,0);b.spawn=230}}
  else if(b.kind==='tank'){near();
   if(--b.cool<=0&&b.x<camX+W-50){const dx=(P.x+8)-(b.x-6);throwG(b.x-6,b.y-29,clamp(dx/58,-4,-.6),-3.4,0,'shell');puff(b.x-8,b.y-29,8,['#fff3b0','#ffd24a','#777'],1.2,2);SFX.boom();b.cool=120+rnd()*50}
@@ -1016,7 +1079,7 @@ function updBoss(){const b=boss;b.t++;
   if(--b.stomp<=0){b.stomp=200/sp;SFX.stomp();shake=10;bullets.push({wave:1,x:b.x,y:GY-4,vx:-2.6,vy:0,f:0,w:14});bullets.push({wave:1,x:b.x+76,y:GY-4,vx:2.6,vy:0,f:0,w:14})}
   if(b.laser>0){b.laser--;b.eyeT=b.laser;if(b.laser<=40&&b.laser>0&&!P.dead){const hb_=P.veh?vBox(P.veh):hb(P);if(hb_.y<b.laserY+4&&hb_.y+hb_.h>b.laserY-4&&hb_.x<b.x)killPlayer()}if(b.laser===40)SFX.laser()}
   else if(T%Math.floor(260/sp)===0){b.laser=90;b.laserY=rnd()<.5?GY-6:GY-24}
-  if(T%Math.floor(120/sp)===0){const t=pick(SLOGANS[EN]),w=t.length*8;bullets.push({txt:t,x:b.x-w,y:GY-28,vx:-1.6,vy:0,f:0,w,hp:3});SFX.word()}
+  if(T%Math.floor(120/sp)===0){const t=pick(SLOGANS[EN]),w=tw(t);bullets.push({txt:t,x:b.x-w,y:GY-28,vx:-1.6,vy:0,f:0,w,hp:3});SFX.word()}
   if(b.phase>0&&T%Math.floor(150/sp)===0){bullets.push({homing:1,x:b.x+10,y:b.y-150,vx:-1,vy:-1,f:0,hp:2,w:8,life:300});SFX.rocket()}}}
 
 function bossHitTest(x,y){if(!boss||boss.dead)return null;for(const p of boss.parts)if(p.hp>0&&inR(x,y,partBox(boss,p)))return p;return null}
@@ -1034,12 +1097,12 @@ function updBullets(){
     if(!b.dead){const p=bossHitTest(b.x,b.y);if(p){if(b.flame){if(!b.hit.has(p)){b.hit.add(p);hitPart(p,b.dmg)}}else{b.dead=1;if(b.rocket)explode(b.x,b.y,22,true);else hitPart(p,b.dmg);puff(b.x,b.y,3,['#ffd24a','#fff'],1,1)}}}
     if(!b.dead)for(const w of pows)if(w.st==='tied'&&inR(b.x,b.y,{x:w.x,y:w.y-30,w:16,h:30})){b.dead=1;freePow(w)}
     if(!b.dead)for(const c of crates)if(c.hp>0&&inR(b.x,b.y,{x:c.x,y:c.y-12,w:14,h:12})){b.dead=!b.flame;hitCrate(c,b.flame?.2:1)}
-    if(!b.dead)for(const s of bullets)if((s.txt||s.note||s.homing)&&!s.dead&&inR(b.x,b.y,{x:s.x-(s.note?4:0),y:s.y-5,w:s.w,h:10})){b.dead=!b.flame;if(--s.hp<=0){s.dead=1;puff(s.x+s.w/2,s.y,10,['#e9dcc2','#c8372d','#8aa070'],1.6,2);if(s.txt)pop(s.x+s.w/2,s.y-8,'SLOGAN REFUTED','#9fe0a0',70);if(s.homing)explode(s.x,s.y,12,true)}}
+    if(!b.dead)for(const s of bullets)if((s.txt||s.note||s.homing)&&!s.dead&&inR(b.x,b.y,{x:s.x-(s.note?4:0),y:s.y-5,w:s.w,h:10})){b.dead=!b.flame;if(--s.hp<=0){s.dead=1;puff(s.x+s.w/2,s.y,10,['#e9dcc2','#c8372d','#8aa070'],1.6,2);if(s.txt)pop(s.x+s.w/2,s.y-8,tr('SLOGAN REFUTED'),'#9fe0a0',70);if(s.homing)explode(s.x,s.y,12,true)}}
     if(!b.dead&&!b.flame){const g=groundAt(b.x);if(b.y>g+1){b.dead=1;puff(b.x,g,3,['#8a7656','#6e5a40'],1,1);if(b.rocket)explode(b.x,g-4,22,true)}}}
-   else if(b.txt||b.wave){const box=b.wave?{x:b.x,y:b.y-6,w:b.w,h:8}:{x:b.x,y:b.y-4,w:b.w,h:8};if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),box)){b.dead=1;killPlayer();if(b.txt&&!P.veh)pop(P.x+8,P.y-46,'KILLED BY A SLOGAN','#ff6a5a')}
+   else if(b.txt||b.wave){const box=b.wave?{x:b.x,y:b.y-6,w:b.w,h:8}:{x:b.x,y:b.y-4,w:b.w,h:8};if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),box)){b.dead=1;killPlayer();if(b.txt&&P.dead===1)pop(P.x+8,P.y-46,tr('KILLED BY A SLOGAN'),'#ff6a5a')}
     if(b.wave&&T%3===0)puff(b.x+7,GY,2,['#8a7656','#6e5a40'],1,2)}
    else{if(!b.note&&!b.homing&&b.y>groundAt(b.x)+2){b.dead=1;break}
-    const pb=P.veh?vBox(P.veh):hb(P);if(!P.dead&&P.inv<=0&&inR(b.x,b.y,pb)){b.dead=1;if(b.homing)explode(b.x,b.y,16,false);else killPlayer();if(b.note&&!P.dead&&!P.veh)pop(P.x+8,P.y-46,'CRUSHED BY INFLATION','#8aa070')}
+    const pb=P.veh?vBox(P.veh):hb(P);if(!P.dead&&P.inv<=0&&inR(b.x,b.y,pb)){b.dead=1;if(b.homing)explode(b.x,b.y,16,false);else killPlayer();if(b.note&&P.dead===1)pop(P.x+8,P.y-46,tr('CRUSHED BY INFLATION'),'#8aa070')}
     else for(const e of enemies)if(e.ally&&!e.dead&&inR(b.x,b.y,hb(e))){b.dead=1;if(--e.hp<=0)killAlly(e);break}}}
   if(b.x<camX-200||b.x>camX+W+60||b.y<-60||b.y>H+10)b.dead=1}
  bullets=bullets.filter(b=>!b.dead)}
@@ -1060,9 +1123,9 @@ function updMisc(){
  for(const p of pickups){p.vy=Math.min(p.vy+.15,p.para?.55:4);p.y+=p.vy;const g=groundAt(p.x);
   if(raft&&p.x>raft.x&&p.x<raft.x+raft.w&&p.y>=raft.y&&p.y<raft.y+6){p.y=raft.y;p.vy=0;p.para=0;p.x+=raft.vx}else if(g<1e3&&p.y>=g){p.y=g;p.vy=0;p.para=0}else if(g>1e3&&p.y>WATERY+6)p.dead=1;
   if(!P.dead&&ov(P.veh?vBox(P.veh):hb(P),{x:p.x-6,y:p.y-10,w:12,h:10})){p.dead=1;
-   if(WPN_OF[p.t]){if(P.veh){P.veh.ammo+=10;pop(p.x,p.y-20,'SHELLS +10','#ffd24a')}else{const nw=WPN_OF[p.t];P.ammo=P.wpn===nw?P.ammo+WEAPONS[p.t].ammo:WEAPONS[p.t].ammo;P.wpn=nw;pop(p.x,p.y-20,WEAPONS[p.t].name+'!','#ffd24a')}SFX.weapon()}
-   else if(p.t==='B'){P.bombs+=8;if(P.veh)P.veh.ammo+=8;pop(p.x,p.y-20,'GRENADES +8','#ffd24a');SFX.pick()}
-   else if(p.t==='gold'){addScore(3000);pop(p.x,p.y-20,'+3000 GOLD (CONFISCATED)','#ffd24a');SFX.pick()}
+   if(WPN_OF[p.t]){if(P.veh){P.veh.ammo+=10;pop(p.x,p.y-20,tr('SHELLS +10'),'#ffd24a')}else{const nw=WPN_OF[p.t];P.ammo=P.wpn===nw?P.ammo+WEAPONS[p.t].ammo:WEAPONS[p.t].ammo;P.wpn=nw;pop(p.x,p.y-20,WEAPONS[p.t].name+'!','#ffd24a')}SFX.weapon()}
+   else if(p.t==='B'){P.bombs+=8;if(P.veh)P.veh.ammo+=8;pop(p.x,p.y-20,tr('GRENADES +8'),'#ffd24a');SFX.pick()}
+   else if(p.t==='gold'){addScore(3000);pop(p.x,p.y-20,tr('+3000 GOLD (CONFISCATED)'),'#ffd24a');SFX.pick()}
    else{addScore(800);pop(p.x,p.y-20,M().food,'#ffd24a');SFX.pick()}}}
  pickups=pickups.filter(p=>!p.dead&&p.x>camX-40);
  for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;if(p.smoke){p.s+=.06;p.vx*=.98}
@@ -1098,7 +1161,7 @@ function render(){
  for(const p of pickups)drawPickup(p);
  for(const w of pows)if(w.st!=='gone')drawPeasant(w);
  if(boss){const k=boss.kind;if(k==='truck')drawTruck(boss);else if(k==='tank')drawTank(boss);else if(k==='train')drawTrain(boss);else if(k==='car')drawCar(boss);else if(k==='press')drawPress(boss);else if(k==='gunboat')drawGunboat(boss);else if(k==='mech'){if(boss.dead&&boss.dt>95)drawMirror(boss);else drawMech(boss)}}
- for(const v of vehicles){if(v.rider&&!P.dead)continue;if(v.kind==='donkey')drawDonkey(v);else drawSV(v);if(!v.rider&&Math.abs(v.x+v.w/2-P.x-8)<50&&T%40<26)txt('▼ RIDE',v.x-camX+v.w/2-20,v.y-58,'#9fe0a0')}
+ for(const v of vehicles){if(v.rider&&!P.dead)continue;if(v.kind==='donkey')drawDonkey(v);else drawSV(v);if(!v.rider&&Math.abs(v.x+v.w/2-P.x-8)<50&&T%40<26)txt(tr('▼ RIDE'),v.x-camX+v.w/2-20,v.y-58,'#9fe0a0')}
  for(const e of enemies)drawEnemy(e);
  if(P.veh&&!P.dead){P.veh.riderEmo=shouts.some(b=>b.ent===P&&b.t>15)?'shout':held('fire')?'grit':'determined';if(P.veh.kind==='donkey')drawDonkey(P.veh);else drawSV(P.veh)}
  else if(!(P.inv>0&&!P.dead&&T%6<3)){const sx=P.x-camX;
@@ -1110,7 +1173,7 @@ function render(){
  if(boss&&boss.kind==='bomber')drawBomber(boss);
  drawShallow();
  for(const b of bullets){const x=b.x-camX;
-  if(b.txt){ctx.font=F;ctx.textAlign='left';ctx.textBaseline='middle';r(x-2,b.y-6,b.w+4,12,'#120d0ccc');ctx.fillStyle=b.hp<3&&T%2?'#fff':'#ff7d6e';ctx.fillText(b.txt,x,b.y+1);ctx.textBaseline='top';continue}
+  if(b.txt){ctx.font=fontFor(b.txt);ctx.textAlign='left';ctx.textBaseline='middle';r(x-2,b.y-6,b.w+4,12,'#120d0ccc');ctx.fillStyle=b.hp<3&&T%2?'#fff':'#ff7d6e';ctx.fillText(b.txt,x,b.y+1);ctx.textBaseline='top';continue}
   if(b.note){const fl=Math.abs(Math.sin(b.ph*2));r(x-4,b.y-2,8,Math.max(1,fl*5|0),'#8aa070');r(x-2,b.y-1,2,1,'#3a5a2a');continue}
   if(b.wave){r(x,b.y-6,b.w,6,'#8a7656');r(x+2,b.y-9,b.w-4,3,'#a89060');continue}
   if(b.homing){r(x-3,b.y-2,7,4,'#e9dcc2');r(x-1,b.y-3,3,6,'#c8372d');continue}
@@ -1132,7 +1195,7 @@ function render(){
  ctx.restore();
  drawWeather();
  for(const w of pows)if(w.st==='free'&&w.t<150)drawBubble(w.say,w.x-camX+7,w.y-44);
- for(const p of pops){const w=p.s.length*8,x=clamp(p.x-camX,w/2+4,W-w/2-4);if(p.life<20&&T%4<2)continue;txt(p.s,x,p.y,p.c,'center')}
+ for(const p of pops){const w=tw(p.s),x=clamp(p.x-camX,w/2+4,W-w/2-4);if(p.life<20&&T%4<2)continue;txt(p.s,x,p.y,p.c,'center')}
  for(const b of shouts){const e=b.ent;if(e.dead)continue;drawShout(b.s,e.x-camX+8,e.y-(e===P&&P.veh?60:42),b.hero)}
  ctx.restore();
  ctx.drawImage(VIG,0,0);
@@ -1144,21 +1207,21 @@ function drawMirror(b){const x=Math.round(b.x-camX),y=b.y;for(const lx of[10,66]
 function drawHUD(){
  r(0,0,W,24,'#120d0cb0');
  txt(`${M().lives} x${Math.max(0,lives)}`,4,4,'#e9dcc2');
- if(P.veh){txt(`SHELLS ${P.veh.ammo}`,W-4,4,'#ffd24a','right');const hw=50;r(W-hw-4,15,hw,5,'#3a1714');r(W-hw-4,15,hw*P.veh.hp/P.veh.max,5,'#9fe0a0');txt(P.veh.kind==='donkey'?'DONKEY':'SV-46',W-hw-10,14,'#9fe0a0','right')}
- else{const wn={pistol:'PISTOL',hmg:'H',shotgun:'S',rocket:'R',flame:'F'}[P.wpn];txt(P.wpn==='pistol'?'PISTOL':`${wn} ${P.ammo}`,W-4,4,P.wpn==='pistol'?'#e9dcc2':'#ffd24a','right');txt(`BOMB ${P.bombs}`,W-4,14,'#ff9a6a','right')}
- if(S==='kmt'){const infl=Math.pow(1.6,(LV*3000+T)/600);txt(`PAY ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)} EGGS`,4,14,'#ffd24a')}
+ if(P.veh){txt(`${tr('SHELLS')} ${P.veh.ammo}`,W-4,4,'#ffd24a','right');const hw=50;r(W-hw-4,15,hw,5,'#3a1714');r(W-hw-4,15,hw*P.veh.hp/P.veh.max,5,'#9fe0a0');txt(tr(P.veh.kind==='donkey'?'DONKEY':'SV-46'),W-hw-10,14,'#9fe0a0','right')}
+ else{const wn={pistol:'PISTOL',hmg:'H',shotgun:'S',rocket:'R',flame:'F'}[P.wpn];txt(P.wpn==='pistol'?tr('PISTOL'):`${wn} ${P.ammo}`,W-4,4,P.wpn==='pistol'?'#e9dcc2':'#ffd24a','right');txt(`${tr('BOMB')} ${P.bombs}`,W-4,14,'#ff9a6a','right')}
+ if(S==='kmt'){const infl=Math.pow(1.6,(LV*3000+T)/600);txt(LANG==='zh'?`餉 ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)}顆蛋`:`PAY ¥${fmtBig(Math.max(0,score)*infl)} ≈${Math.max(0,score/60|0)} EGGS`,4,14,'#ffd24a')}
  else txt(`MERIT ${score} · YOURS 0`,4,14,'#ff9a6a');
  txt(`M${LV+1}`,W/2,4,'#a8977c','center');
  if(boss&&!boss.dead)bossBar(boss);
- if(radioCur){const Lr=wrap(radioCur.s,34).slice(0,4),h=Lr.length*10+10,x=24,y=boss?52:28,w=W-48;
+ if(radioCur){const zr=isZ(radioCur.s),LH=zr?13:10;if(zr)ctx.font=zf(F);const Lr=(zr?wrapPx(radioCur.s,W-48-34):wrap(radioCur.s,34)).slice(0,4),h=Lr.length*LH+10,x=24,y=boss?52:28,w=W-48;
   r(x,y,w,h,boss?'#120d0c88':'#120d0cdd');ctx.strokeStyle=S==='kmt'?'#4a6aa3':'#c8372d';ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,w-1,h-1);
   ctx.save();ctx.translate(x+3,y+31);ctx.beginPath();ctx.rect(0,-29,20,22);ctx.clip();ctx.translate(2,0);chibiHead((T>>3)%2?'shout':'determined',0);cap(S);ctx.restore();
-  ctx.font=F;ctx.textAlign='left';ctx.textBaseline='top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*2);let cnt=0;
-  Lr.forEach((l,i)=>{const vis=l.slice(0,Math.max(0,shown-cnt));cnt+=l.length+1;ctx.fillStyle='#e9dcc2';ctx.fillText(vis,x+28,y+6+i*10)})}
- if(T<200&&state==='play'){txt(`MISSION ${LV+1}`,W/2,80,'#ffd24a','center',F16);txt(L.name,W/2,102,'#e9dcc2','center');txt(L.sub,W/2,116,'#a8977c','center')}
- if(lockX!=null&&boss&&!boss.dead&&boss.t<120&&T%40<26)txt('WARNING',W/2,100,'#ff6a5a','center',F16);
- if(winT>30){txt('MISSION COMPLETE!',W/2,90,'#ffd24a','center',F16)}
- if(state==='pause'){r(0,0,W,H,'#0008');txt('PAUSED',W/2,92,'#ffd24a','center',F16);txt('THE WAR WILL WAIT. IT ALWAYS DOES.',W/2,116,'#e9dcc2','center')}}
+  ctx.font=zr?zf(F):F;ctx.textAlign='left';ctx.textBaseline=zr?'middle':'top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*(zr?1:2));let cnt=0;
+  Lr.forEach((l,i)=>{const vis=l.slice(0,Math.max(0,shown-cnt));cnt+=l.length+(zr?0:1);ctx.fillStyle='#e9dcc2';ctx.fillText(vis,x+28,y+6+i*LH+(zr?6:0))});ctx.textBaseline='top'}
+ if(T<200&&state==='play'){txt(LANG==='zh'?`任務 ${LV+1}`:`MISSION ${LV+1}`,W/2,80,'#ffd24a','center',F16);txt(L.name,W/2,102,'#e9dcc2','center');txt(L.sub,W/2,116,'#a8977c','center')}
+ if(lockX!=null&&boss&&!boss.dead&&boss.t<120&&T%40<26)txt(tr('WARNING'),W/2,100,'#ff6a5a','center',F16);
+ if(winT>30){txt(tr('MISSION COMPLETE!'),W/2,90,'#ffd24a','center',F16)}
+ if(state==='pause'){r(0,0,W,H,'#0008');txt(tr('PAUSED'),W/2,92,'#ffd24a','center',F16);txt(tr('THE WAR WILL WAIT. IT ALWAYS DOES.'),W/2,116,'#e9dcc2','center')}}
 
 /* ---------------- flow: scenes → mission → tally → scene → next ---------------- */
 function progress(){return store.get('civslug-progress',{kmt:1,ccp:1})}
@@ -1168,42 +1231,62 @@ function beginMission(i){LV=i;L=LEVELS[i];buildBG();const pre=SCENES[i].pre;if(p
 function startPlay(i){loadLevel(i);state='play';$('#hud').hidden=false}
 function missionComplete(){$('#hud').hidden=true;state='tally';music('off');SFX.fanfare();
  const bonusP=MS.freed*1000,bonusK=MS.kills*50,bonusN=MS.lost===0?10000:0;
- tally={t:0,rows:[['ENEMIES DISPATCHED',MS.kills,bonusK],['VILLAGERS UNTIED',MS.freed,bonusP],['DEFECTORS RECRUITED',MS.defects,MS.defects*300],[`${M().lives} SPENT`,MS.lost,bonusN]],total:bonusK+bonusP+MS.defects*300+bonusN,
+ tally={t:0,rows:[['ENEMIES DISPATCHED',MS.kills,bonusK],['VILLAGERS UNTIED',MS.freed,bonusP],['DEFECTORS RECRUITED',MS.defects,MS.defects*300],['$LIVES SPENT',MS.lost,bonusN]],total:bonusK+bonusP+MS.defects*300+bonusN,
   rank:MS.lost===0?'HERO OF THE (CORRECT) PEOPLE':MS.lost<3?'DECORATED (TIN MEDAL)':MS.lost<6?'ADEQUATE CANNON FODDER':'STATISTIC'};
  addScore(tally.total);unlock(LV+1)}
 function afterTally(){const post=SCENES[LV].post;const next=()=>{if(LV+1<LEVELS.length)beginMission(LV+1);else ending()};if(post)showScene(post,next);else next()}
-function ending(){const e=ENDING,side=e[S];store.set('civslug-cleared-'+S,true);
- showScene({date:e.date,place:e.place,fact:e.fact,joke:side.joke,draw:side.draw},()=>showScene({date:'AND THEN',place:'THE TAIWAN STRAIT',fact:e.last,joke:"The donkey, for the record, stayed neutral.",draw:'strait'},()=>{state='credits';credits={t:0};music('ending')}))}
+// KMT-only epilogue: you win every battle, and still end up on the boat.
+const KMT_ENDING=[
+ {date:'APRIL - NOVEMBER 1949',place:'EVERYWHERE ELSE',draw:'medals',
+  fact:"You won all five of your missions. Meanwhile the rest of the army lost Nanjing, Shanghai, Guangzhou and most of the map.",
+  joke:"Headquarters awards you a medal for winning. And a boat ticket, for the same reason."},
+ {date:'DECEMBER 1949',place:'THE LAST BOAT',draw:'dock',
+  fact:"The government 'temporarily relocates' to Taiwan. The national gold reserves sailed months ago, quietly, ahead of everyone.",
+  joke:"Your ticket costs one sack of Gold Yuan. You have one sack. By boarding time it costs two."},
+ {date:'DECEMBER 1949 →',place:'TAIPEI (TEMPORARILY)',draw:'island',
+  fact:"Back in October, the People's Republic was proclaimed in Beijing. Headquarters calls it 'a temporary setback'. Very temporary.",
+  joke:"'We counterattack the mainland next year!' Said in 1950. And 1951. And 1952. And 1953. And..."},
+ {date:'AND THEN',place:'THE TAIWAN STRAIT',draw:'strait',fact:ENDING.last,joke:"The donkey, for the record, stayed neutral."}];
+const KMT_CREDITS=["CIVIL SLUG 1946–1949","","MISSIONS WON: 5 OF 5","CIVIL WARS WON: 0 OF 1","","STARRING","MILLIONS OF CONSCRIPTS (UNPAID)","ONE DONKEY (UNWILLING)","A TANK WITH SIX OWNERS","THE GOLD RESERVES (LEFT EARLY)","A SACK OF GOLD YUAN (WORTHLESS)","","NO VILLAGERS WERE CONSULTED","DURING THE MAKING OF THIS WAR","","COUNTERATTACK ON THE MAINLAND:","SCHEDULED FOR NEXT YEAR","(EVERY YEAR)","","THANK YOU FOR PLAYING"];
+function ending(){store.set('civslug-cleared-kmt',true);
+ const run=i=>{if(i<KMT_ENDING.length)showScene(KMT_ENDING[i],()=>run(i+1));else{state='credits';credits={t:0};music('ending')}};run(0)}
 function gameOver(){state='over';music('off');showEnd('over');if(AC){const t=now();[62,61,60,55].forEach((n,i)=>tone(mf(n),mf(n),.35,'square',.05,t+i*.3))}}
 let endMode='over';
 function showEnd(mode){endMode=mode;const m=M();$('#end').hidden=false;$('#hud').hidden=true;
- const pay=S==='kmt'?`¥${fmtBig(Math.max(0,score)*Math.pow(1.6,(LV*3000+T)/600))} Gold Yuan (≈ ${Math.max(0,score/60|0)} eggs)`:`${score} merit (your share: 0)`;
- $('#endH').textContent=mode==='win'?'THE WAR IS OVER (OFFICIALLY)':`OUT OF ${m.lives}`;
- $('#endP').textContent=mode==='win'?(S==='kmt'?"You've cleared the Nationalist campaign. Now try it from the other side of the river.":"You've cleared the Communist campaign. Now try it from the other side of the strait."):pick(m.over);
- $('#endS').innerHTML=`<dt>Reached</dt><dd>Mission ${LV+1}: ${LEVELS[LV].name}</dd><dt>Enemies dispatched</dt><dd>${totals.kills}</dd><dt>${m.lives==='CONSCRIPTS'?'Conscripts':'Comrades'} spent</dt><dd>${totals.lost}</dd><dt>Defectors gained</dt><dd>${totals.defects}</dd><dt>Villagers untied</dt><dd>${totals.freed}</dd><dt>${S==='kmt'?'Pay':'Merit'}</dt><dd>${pay}</dd>`;
- $('#e1').textContent=mode==='win'?'PLAY AGAIN':'DRAFT 3 MORE';$('#e2').textContent=mode==='win'?'PLAY THE OTHER SIDE':'DEFECT (SWITCH SIDES)';setTimeout(()=>$('#e1').focus(),50)}
+ if(!showEnd.keep)endOverI=rnd()*m.over.length|0;showEnd.keep=false;const zh=LANG==='zh',money=fmtBig(Math.max(0,score)*Math.pow(1.6,(LV*3000+T)/600)),eggs=Math.max(0,score/60|0);
+ const pay=zh?`金圓券 ¥${money}（≈ ${eggs} 顆蛋）`:`¥${money} Gold Yuan (≈ ${eggs} eggs)`;
+ $('#endH').textContent=mode==='win'?tr("YOU WON. THE WAR DIDN'T."):zh?'壯丁用完了':`OUT OF ${m.lives}`;
+ $('#endP').textContent=mode==='win'?tr("Five missions won. One civil war lost. Report to the island for temporary duty. The counterattack is scheduled for next year. It always will be."):m.over[endOverI%m.over.length];
+ const row=(k,v)=>`<dt>${tr(k)}</dt><dd>${v}</dd>`;
+ $('#endS').innerHTML=row('Reached',zh?`任務 ${LV+1}：${LEVELS[LV].name}`:`Mission ${LV+1}: ${LEVELS[LV].name}`)+row('Enemies dispatched',totals.kills)+row('Conscripts spent',totals.lost)+row('Defectors gained',totals.defects)+row('Villagers untied',totals.freed)+row('Pay',pay);
+ $('#e1').textContent=tr(mode==='win'?'PLAY AGAIN':'DRAFT 3 MORE');$('#e2').textContent=tr('MISSIONS');$('#e3').textContent=tr('TITLE');if(!showEnd.nofocus)setTimeout(()=>$('#e1').focus(),50);showEnd.nofocus=false}
+let endOverI=0;
 $('#e1').addEventListener('click',()=>{$('#end').hidden=true;if(endMode==='win'){startCampaign(S,0);return}
- lives=2;state='play';$('#hud').hidden=false;music(boss?(boss.kind==='mech'?'final':'boss'):L.track);let x=clamp(P.x,camX+20,camX+W-40);if(groundAt(x+8)>1e3)x=raft?raft.x+raft.w/2-8:camX+60;newPlayer(x,-10);pop(x+8,60,'3 MORE DRAFTED. THEIR VILLAGE IS NOW EMPTY','#ffd24a',160)});
-$('#e2').addEventListener('click',()=>{$('#end').hidden=true;openMissions(S==='kmt'?'ccp':'kmt')});
+ lives=2;state='play';$('#hud').hidden=false;music(boss?(boss.kind==='mech'?'final':'boss'):L.track);let x=clamp(P.x,camX+20,camX+W-40);if(groundAt(x+8)>1e3)x=raft?raft.x+raft.w/2-8:camX+60;newPlayer(x,-10);pop(x+8,60,tr('3 MORE DRAFTED. THEIR VILLAGE IS NOW EMPTY'),'#ffd24a',160)});
+$('#e2').addEventListener('click',()=>{$('#end').hidden=true;openMissions('kmt')});
 $('#e3').addEventListener('click',()=>{$('#end').hidden=true;toTitle()});
 function toTitle(){state='title';$('#title').hidden=false;$('#hud').hidden=true;$('#missions').hidden=true;music('off');LV=0;L=LEVELS[0];buildBG();loadLevel(0);music('off')}
-function startCampaign(side,i){initAudio();S=side;EN=side==='kmt'?'ccp':'kmt';score=0;lives=2;nextLife=30000;totals={kills:0,lost:0,freed:0,defects:0};
+function startCampaign(side,i){initAudio();S='kmt';EN='ccp';/* KMT-only: the side argument is ignored */score=0;lives=2;nextLife=30000;totals={kills:0,lost:0,freed:0,defects:0};
  $('#title').hidden=true;$('#missions').hidden=true;$('#end').hidden=true;fit();beginMission(i)}
-function openMissions(side){selSide=side;const p=progress(),un=p[side]||1;
+function openMissions(side){side='kmt';selSide=side;const p=progress(),un=p[side]||1;
  if(un<=1){startCampaign(side,0);return}
- $('#title').hidden=true;$('#missions').hidden=false;$('#mH').textContent=(side==='kmt'?'NATIONALIST':'COMMUNIST')+' CAMPAIGN';
+ $('#title').hidden=true;$('#missions').hidden=false;$('#mH').textContent=tr('NATIONALIST CAMPAIGN');
  const ml=$('#mlist');ml.innerHTML='';LEVELS.forEach((lv,i)=>{const b=document.createElement('button');b.className='mbtn';b.disabled=i>=un;
-  b.innerHTML=`<b>M${i+1}</b><span>${lv.name}</span><small>${i<un?SCENES[i].pre.date:'LOCKED'}</small>`;b.addEventListener('click',()=>startCampaign(side,i));ml.appendChild(b)});
+  b.innerHTML=`<b>M${i+1}</b><span>${lv.name}</span><small>${i<un?SCENES[i].pre.date:tr('LOCKED')}</small>`;b.addEventListener('click',()=>startCampaign(side,i));ml.appendChild(b)});
  setTimeout(()=>ml.querySelector('button:not(:disabled)')?.focus(),30)}
 $('#mBack').addEventListener('click',()=>{$('#missions').hidden=true;$('#title').hidden=false});
 function markSel(){document.querySelectorAll('.side').forEach(b=>b.classList.toggle('sel',b.dataset.side===selSide))}
-document.querySelectorAll('.side').forEach(b=>{b.addEventListener('click',()=>{initAudio();openMissions(b.dataset.side)});b.addEventListener('mouseenter',()=>{selSide=b.dataset.side;markSel()})});
+document.querySelectorAll('.side').forEach(b=>{b.addEventListener('click',()=>{initAudio();openMissions('kmt')})});
 function togglePause(){if(state==='play'){state='pause';music('off')}else if(state==='pause'){state='play';music(boss?(boss.kind==='mech'?'final':'boss'):L.track)}}
 $('#bPause').addEventListener('click',e=>{togglePause();e.currentTarget.blur()});
-$('#bSnd').addEventListener('click',e=>{initAudio();setMute(!muted);e.currentTarget.textContent=muted?'MUTE':'SND';e.currentTarget.blur()});
+$('#bSnd').addEventListener('click',e=>{initAudio();setMute(!muted);sndLabel();e.currentTarget.blur()});
+function sndLabel(){const b=$('#bSnd');b.textContent=tr(muted?'MUTE':'SND');b.setAttribute('aria-pressed',String(!muted))}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play')togglePause()});
 addEventListener('keydown',e=>{
- if(state==='title'&&$('#missions').hidden){if(e.code==='ArrowLeft'||e.code==='ArrowRight'){selSide=selSide==='kmt'?'ccp':'kmt';markSel();e.preventDefault()}else if(e.code==='Enter'){openMissions(selSide);e.preventDefault()}return}
+ const ae=document.activeElement,onBtn=ae&&ae.tagName==='BUTTON'&&ae.closest('.ov');
+ if(onBtn&&(e.code==='Enter'||e.code==='Space'||e.code==='NumpadEnter'))return;
+ if(state==='title'){if($('#missions').hidden&&e.code==='Enter'){openMissions('kmt');e.preventDefault()}return}
+ if(state==='over')return;
  if(e.code==='KeyP'||e.code==='Escape'){togglePause();return}
  const k=KEYMAP[e.code];if(!k)return;if(document.activeElement&&document.activeElement.tagName==='BUTTON'&&!$('#end').hidden)return;e.preventDefault();if(!e.repeat&&!kb[k])pressed[k]=1;kb[k]=1;initAudio()});
 addEventListener('keyup',e=>{const k=KEYMAP[e.code];if(k)kb[k]=0});
@@ -1211,37 +1294,65 @@ addEventListener('keyup',e=>{const k=KEYMAP[e.code];if(k)kb[k]=0});
 /* ---------------- non-play screens ---------------- */
 function updScene(){scene.t++;T++;const adv=pressed.fire||pressed.jump||pressed.bomb;for(const k in pressed)delete pressed[k];
  if(scene.t%3===0&&scene.t<500)SFX.type();
- if(adv){if(!scene.complete)scene.t=9999;else{const d=scene.done;scene=null;d()}}}
+ if(adv){if(!scene.complete)scene.t=Math.max(scene.t,600);else{const d=scene.done;scene=null;d()}}}
 function updTally(){tally.t++;T++;const adv=pressed.fire||pressed.jump;for(const k in pressed)delete pressed[k];if(tally.t%4===0&&tally.t<120)SFX.tally();if(adv&&tally.t>60){if(tally.t<150)tally.t=150;else{tally=null;afterTally()}}}
 function drawTally(){r(0,0,W,H,'#120d0c');ctx.globalAlpha=.25;sceneArt(SCENES[LV].pre.draw,T);ctx.globalAlpha=1;r(0,0,W,H,'#120d0cc0');
- txt(`MISSION ${LV+1} COMPLETE`,W/2,18,'#ffd24a','center',F16);txt(L.name,W/2,40,'#a8977c','center');
- tally.rows.forEach((row,i)=>{if(tally.t<20+i*25)return;const y=64+i*18,cnt=Math.min(row[1],Math.floor((tally.t-20-i*25)/2));txt(row[0],30,y,'#e9dcc2');txt(String(cnt),250,y,'#e9dcc2','right');txt('+'+row[2],W-30,y,'#9fe0a0','right')});
- if(tally.t>130){txt('BONUS',30,142,'#ffd24a');txt('+'+tally.total,W-30,142,'#ffd24a','right');txt('RANK: '+tally.rank,W/2,166,'#ff9a6a','center')}
- if(tally.t>150&&T%40<26)txt('▶ CONTINUE',W/2,194,'#d9a441','center')}
-function drawCredits(){credits.t++;T++;r(0,0,W,H,'#0b0808');for(let i=0;i<40;i++)r((i*53)%W,(i*37+credits.t*.2)%H,1,1,'#3a2a2a');
- CREDITS.forEach((l,i)=>{const y=H+10+i*16-credits.t*.5;if(y>-10&&y<H+10)txt(l,W/2,y,i===0?'#ffd24a':'#e9dcc2','center')});
+ txt(LANG==='zh'?`任務 ${LV+1} 完成`:`MISSION ${LV+1} COMPLETE`,W/2,18,'#ffd24a','center',F16);txt(L.name,W/2,40,'#a8977c','center');
+ tally.rows.forEach((row,i)=>{if(tally.t<20+i*25)return;const y=64+i*18,cnt=Math.min(row[1],Math.floor((tally.t-20-i*25)/2));txt(row[0]==='$LIVES SPENT'?(LANG==='zh'?'消耗壯丁':`${M().lives} SPENT`):tr(row[0]),30,y,'#e9dcc2');txt(String(cnt),250,y,'#e9dcc2','right');txt('+'+row[2],W-30,y,'#9fe0a0','right')});
+ if(tally.t>130){txt(tr('BONUS'),30,142,'#ffd24a');txt('+'+tally.total,W-30,142,'#ffd24a','right');txt(tr('RANK: ')+tr(tally.rank),W/2,166,'#ff9a6a','center')}
+ if(tally.t>150&&T%40<26)txt(tr('▶ CONTINUE'),W/2,194,'#d9a441','center')}
+function drawCredits(){r(0,0,W,H,'#0b0808');for(let i=0;i<40;i++)r((i*53)%W,(i*37+credits.t*.2)%H,1,1,'#3a2a2a');
+ KMT_CREDITS.forEach((l,i)=>{const y=H+10+i*16-credits.t*.5;if(y>-10&&y<H+10)txt(l,W/2,y,i===0?'#ffd24a':'#e9dcc2','center')});
  const adv=pressed.fire||pressed.jump;for(const k in pressed)delete pressed[k];
- if(credits.t>CREDITS.length*32+H*2||(adv&&credits.t>60)){credits=null;state='over';showEnd('win')}}
+ if(credits.t>KMT_CREDITS.length*32+H*2||(adv&&credits.t>60)){credits=null;state='over';showEnd('win')}}
 // extra scene art for the epilogue
-const _sceneArt=sceneArt;sceneArt=function(name,t){if(name!=='strait')return _sceneArt(name,t);
+const _sceneArt=sceneArt;sceneArt=function(name,t){
+ if(name==='medals'){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#2a2a3a');g.addColorStop(1,'#5a4a4a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
+  // war map behind: red arrows everywhere, one tiny blue checkmark
+  r(180,10,190,96,'#c8b48a');r(180,10,190,3,'#8a7450');for(let i=0;i<7;i++){const ax=196+i*24,ay=24+(i%3)*22;seg(ax,ay,ax+14,ay+18,3,'#b8322a');r(ax+12,ay+16,5,5,'#b8322a')}
+  txt(tr('FRONT'),186,94,'#120d0c');
+  r(40,112,110,24,'#6a4a2a');r(40,112,110,3,'#8a6a3a');
+  drawSoldier(86,112,{fac:'kmt',face:1,emo:(t>>5)%2?'happy':'smug',gun:null,officer:0});
+  for(let i=0;i<5;i++){r(89+i*2,100,1,2,'#c8372d');r(89+i*2,102,2,2,'#ffd24a')}
+  drawSoldier(130,112,{fac:'kmt',face:-1,emo:'smug',officer:1,gun:null});
+  r(8,30,150,26,'#120d0c');txt(tr('MISSIONS: 5/5'),14,34,'#9fe0a0');txt(tr('WAR: 0/1'),14,46,(t>>4)%2?'#ff6a5a':'#a8977c');
+  if(t>60){r(114,98,12,7,'#e9dcc2');r(114,98,12,2,'#2f4f8a')}return}
+ if(name==='dock'){const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#3a3a50');g.addColorStop(1,'#9a7a6a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
+  r(0,80,W,56,'#2a3a58');for(let i=0;i<22;i++)r((i*31+t*.3)%W,84+(i%6)*8,10,1,'#5a7aa0');
+  // the gold ship, long gone over the horizon
+  r(338,74,22,5,'#2a2a30');r(346,68,4,6,'#2a2a30');for(let k=0;k<3;k++)r(348+k*4+((t>>3)%2),60-k*5,3,3,'rgba(80,80,90,.7)');
+  r(300,52,80,11,'#120d0c');txt(tr('GOLD →'),306,54,'#ffd24a');
+  // overloaded boat
+  r(160,92,130,16,'#4a3a30');r(160,92,130,3,'#6a5a48');r(166,108,118,4,'#3a2a22');r(250,62,12,30,'#3a3a3a');r(250,62,12,4,'#b8322a');
+  for(let i=0;i<5;i++)drawSoldier(168+i*16,92,{fac:'kmt',face:1,emo:i%2?'cry':'scared',gun:null});
+  for(let k=0;k<3;k++)r(254+k*3,52-k*7-((t>>2)%7),4,4,'rgba(60,60,60,.6)');
+  // pier
+  r(0,108,150,6,'#6a4a2a');for(let x=10;x<150;x+=30)r(x,114,4,22,'#4a3220');
+  drawSoldier(118,108,{fac:'kmt',face:1,emo:'grit',gun:null});r(100,90,18,16,'#c8b48a');r(104,86,10,4,'#a89470');txt('¥',105,94,'#120d0c');
+  r(14,40,96,30,'#e9dcc2');r(14,40,96,2,'#b8322a');txt(tr('TICKET'),22,44,'#120d0c');txt('¥'+fmtBig(5e6*Math.pow(1.12,Math.min(t,400)/5)),22,56,'#b8322a');return}
+ if(name!=='strait')return _sceneArt(name,t);
  const g=ctx.createLinearGradient(0,0,0,136);g.addColorStop(0,'#2a3a5a');g.addColorStop(1,'#d08a5a');ctx.fillStyle=g;ctx.fillRect(0,0,W,136);
  r(0,96,W,40,'#2a4a70');for(let i=0;i<24;i++)r((i*31+t*.3)%W,100+(i%6)*5,10,1,'#6a8ab0');
  r(0,84,90,16,'#4a5a3a');r(300,84,84,16,'#3a5a3a');
  drawSoldier(30,88,{fac:'ccp',face:1,emo:(t>>5)%2?'shout':'determined',gun:null});drawSoldier(330,88,{fac:'kmt',face:-1,emo:(t>>5)%2?'determined':'shout',gun:null});
  r(50,70,10,6,'#888');r(326,70,10,6,'#888');
- if((t>>5)%2){drawShout('ONE CHINA!',100,60,false)}else drawShout('ONE CHINA!',280,60,false);
+ if((t>>5)%2){drawShout(tr('ONE CHINA!'),100,60,false)}else drawShout(tr('ONE CHINA!'),280,60,false);
  drawDonkey({x:camX+170,y:100,face:1,hp:1,max:1,anim:0});r(150,100,80,6,'#6a4a2a')};
 const _drawScene=drawScene;
 
+// touch pads only during play/pause: story scenes, tallies and credits keep their text clear, and a tap anywhere advances them
+let lastSt='';function syncStateClass(){if(state!==lastSt){lastSt=state;document.body.classList.toggle('noplay',state!=='play'&&state!=='pause')}}
+addEventListener('pointerdown',e=>{if((state==='scene'||state==='tally'||state==='credits')&&!e.target.closest('button')){pressed.fire=1;initAudio()}});
 /* ---------------- loop ---------------- */
 loadLevel(0);music('off');fit();
 let last=performance.now(),acc=0;
-function loop(nowT){acc+=Math.min(100,nowT-last);last=nowT;
+function loop(nowT){acc+=Math.min(100,nowT-last);last=nowT;syncStateClass();
  while(acc>=16.67){acc-=16.67;
   if(state==='play')update();
   else if(state==='title'){T++;ambient();camX=(camX+.4)%2400}
   else if(state==='scene')updScene();
   else if(state==='tally')updTally();
+  else if(state==='credits'&&credits){credits.t++;T++}
   else if(state==='pause'||state==='over'){for(const k in pressed)delete pressed[k]}}
  if(state==='scene'&&scene)scene.complete=drawScene(scene.sc,scene.t);
  else if(state==='tally'&&tally)drawTally();
@@ -1249,6 +1360,193 @@ function loop(nowT){acc+=Math.min(100,nowT-last);last=nowT;
  else render();
  requestAnimationFrame(loop)}
 (document.fonts?document.fonts.load(F):Promise.resolve()).catch(()=>{}).finally(()=>requestAnimationFrame(loop));
+
+/* ---------------- i18n: English / 繁體中文 (Civil Slug only — shared data is swapped in place, never edited) ---------------- */
+var LANG='en';
+const LANG_KEY='civilslug.lang';
+const ZFAM='"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC","Source Han Sans TC",sans-serif';
+const CJK_RE=/[⺀-鿿豈-﫿＀-￯　-〿]/;
+const isZ=s=>LANG==='zh'&&CJK_RE.test(String(s));
+// canvas CJK font for a given pixel-font size (8px pixel text -> 11px CJK, 16px -> bold 16px)
+function zf(font){const m=/(\d+)px/.exec(font||F),p=m?+m[1]:8;return p>=16?`700 16px ${ZFAM}`:p<=6?`500 8px ${ZFAM}`:`500 11px ${ZFAM}`}
+function fontFor(s,font=F){return isZ(s)?zf(font):font}
+// text width: English keeps the original fixed 8px/char metric so layout is unchanged
+function tw(s,font=F){s=String(s);if(!isZ(s))return s.length*(/16px/.test(font)?16:8);ctx.font=zf(font);return Math.ceil(ctx.measureText(s).width)}
+// wrap by measured width (uses the current ctx.font); CJK breaks anywhere, latin words stay whole, no closing punctuation at line start
+function wrapPx(s,maxW){const toks=String(s).match(/[A-Za-z0-9¥$%'’.,!?:\/+\-–—()]+|\s+|[\s\S]/gu)||[];const out=[];let line='';
+ for(const tk of toks){const test=line+tk;
+  if(line.trim()&&ctx.measureText(test.trimEnd()).width>maxW&&!/^[，。、！？：；）」』…—,.!?)\s]/.test(tk)){out.push(line.trim());line=/^\s+$/.test(tk)?'':tk}else line=test}
+ if(line.trim())out.push(line.trim());return out}
+
+/* ---- UI strings (English source -> 繁體中文) ---- */
+const ZH_UI={
+ '1UP! ANOTHER CONSCRIPT ARRIVES':'1UP！又抓來一個壯丁',
+ 'THE HORSE WAS ALSO CONSCRIPTED':'這匹馬也是被抓來的',
+ '-500. EVEN THIS WAR HAS PAPERWORK':'-500。打仗也是要寫報告的',
+ 'CHUTE CUT':'傘繩斷了',
+ 'DEFECTED ONCE. RETIRED FOR GOOD.':'投誠一次，永久退休。',
+ 'ARMORED':'有裝甲',
+ 'OWNERSHIP TRANSFERRED':'所有權已轉移',
+ 'ARMOR GONE! HIT THE CORE!':'裝甲沒了！打核心！',
+ 'HEE-HAW (UNION GRIEVANCE)':'咿──啊（向工會申訴）',
+ "DROWNED. THE RIVER DOESN'T TAKE SIDES":'淹死了。江水不選邊站',
+ 'THE DONKEY HAS FILED FOR RETIREMENT':'驢子已提出退休申請',
+ 'SV-46 RETURNED TO ITS SEVENTH OWNER':'SV-46 回到第七任車主手上',
+ 'OUT OF SHELLS':'砲彈打完了',
+ 'DONKEY SLUG! (UNDER PROTEST)':'驢子戰車！（驢子抗議中）',
+ 'SV-46! (7TH OWNER)':'SV-46！（第七任車主）',
+ 'TIP: GET UNDER IT. HOLD ↑ TO AIM UP':'提示：鑽到它底下，按住 ↑ 朝上射擊',
+ 'TIP: HOLD ↑ TO AIM UP':'提示：按住 ↑ 朝上射擊',
+ 'IT WAS A MIRROR. IT WAS ALWAYS A MIRROR.':'那是一面鏡子。從頭到尾都是鏡子。',
+ 'TRUCK SILENCED. SLOGANS CONTINUE ELSEWHERE':'廣播車閉嘴了。口號在別處繼續喊',
+ 'PEACE TALKS HAVE BROKEN DOWN. ALSO THE CAR.':'和談破裂了。車子也破了。',
+ 'GUNBOAT SUNK. CAPTAIN DEFECTS, AS PROMISED.':'砲艇擊沉。艦長依約投誠。',
+ 'CLEARED':'清除完畢',
+ 'SLOGAN REFUTED':'口號已駁斥',
+ 'KILLED BY A SLOGAN':'被口號打死了',
+ 'CRUSHED BY INFLATION':'被通膨壓垮了',
+ 'SHELLS +10':'砲彈 +10',
+ 'GRENADES +8':'手榴彈 +8',
+ '+3000 GOLD (CONFISCATED)':'+3000 黃金（充公）',
+ '▼ RIDE':'▼ 搭乘',
+ 'SHELLS':'砲彈','DONKEY':'驢子','PISTOL':'手槍','BOMB':'手榴彈',
+ 'WARNING':'警告','MISSION COMPLETE!':'任務完成！','PAUSED':'暫停',
+ 'THE WAR WILL WAIT. IT ALWAYS DOES.':'戰爭會等你。它一向很有耐心。',
+ // tally
+ 'ENEMIES DISPATCHED':'擊倒敵軍','VILLAGERS UNTIED':'解救村民','DEFECTORS RECRUITED':'招降投誠','BONUS':'獎勵','RANK: ':'評價：','▶ CONTINUE':'▶ 繼續',
+ 'HERO OF THE (CORRECT) PEOPLE':'（正確的）人民英雄','DECORATED (TIN MEDAL)':'獲頒勳章（錫做的）','ADEQUATE CANNON FODDER':'合格砲灰','STATISTIC':'統計數字',
+ // end / menus
+ "YOU WON. THE WAR DIDN'T.":'你贏了。但戰爭輸了。',
+ 'Five missions won. One civil war lost. Report to the island for temporary duty. The counterattack is scheduled for next year. It always will be.':'五場任務全勝，一場內戰全敗。請到島上報到，執行「暫時性」勤務。反攻大陸預定明年發動。永遠都是明年。',
+ 'Reached':'抵達','Enemies dispatched':'擊倒敵軍','Conscripts spent':'消耗壯丁','Defectors gained':'招降投誠','Villagers untied':'解救村民','Pay':'薪餉',
+ 'PLAY AGAIN':'再玩一次','DRAFT 3 MORE':'再抓三個壯丁','MISSIONS':'任務選單','TITLE':'回標題',
+ '3 MORE DRAFTED. THEIR VILLAGE IS NOW EMPTY':'又抓了三個壯丁。他們村子空了',
+ 'NATIONALIST CAMPAIGN':'國軍戰役','LOCKED':'未解鎖','CHOOSE A MISSION':'選擇任務',
+ 'SND':'音效','MUTE':'靜音',
+ // KMT ending art
+ 'FRONT':'前線','MISSIONS: 5/5':'任務：5/5','WAR: 0/1':'戰爭：0/1','GOLD →':'黃金 →','TICKET':'船票','ONE CHINA!':'一個中國！',
+ // labels drawn by the shared scene art (translated at draw time)
+ 'HELP!':'救命！','APPROVAL':'待核准','COATS':'冬衣','APR':'四月','MANUAL':'說明書','FLAGS · 旗':'各式旗幟','TEMPORARY':'暫時','FORM 1':'表格一'
+};
+const ZH_PREFIX=[['RICE: ¥','米價：¥'],['NOTES PRINTED: ','已印鈔票：'],['PROPERTY OF: ','所屬：']];
+function tr(s){if(LANG!=='zh')return s;const z=ZH_UI[s];if(z!=null)return z;for(const[a,b]of ZH_PREFIX)if(typeof s==='string'&&s.startsWith(a))return b+s.slice(a.length);return s}
+
+/* ---- data tables: zh-TW versions of the shared tables (swapped in place on language change) ---- */
+const ZH={
+ POW_LINES:["這禮拜兩邊都來抓我當兵。下禮拜我兩邊都不想去。","你是哪一邊的？……算了。這個拿去，牛留下。","他們牽走我的牛。另一邊抓走牛的替代品：我。","地主跑了。收稅的不知道為什麼還在。","謝謝！下次麻煩去解放別的村子。","我保持中立。結果兩邊都朝我開槍。","大兒子跟你們，小兒子跟他們。吃年夜飯很尷尬。","我已經被解放六次了。好累。","拿去。本來要留給打贏的那邊，先給你吧。","跟你們將軍說，我還在等1946年的軍餉。我是農夫欸。"],
+ DEFECT:["我投降！我是來吃飯的","我要投誠！在哪裡簽名？","換邊！一樣打仗，飯比較好吃？","長官跑了，我也跑。","全連都要過來。我們投票表決過了。"],
+ CRIES:{kmt:["去死吧！共匪！","去死吧！共匪！","去死吧！共匪！","吃子彈吧，赤匪！","為了我的薪餉！"],ccp:["打倒國民黨走狗！","打倒國民黨走狗！","為了集體！","粉碎反動派！"]},
+ TAUNTS:{kmt:["去死吧，赤匪！","你的人頭值金圓券！","我們有美國槍！","我長官就在我後面！……應該吧"],ccp:["快跑啊，走狗！","你們的錢是衛生紙！","加入我們！我們有小米！","投降吧！我們有表格！"]},
+ SLOGANS:{ccp:["土地改革！","投誠有飯吃！","我們有米","快投降！"],kmt:["通膨沒問題","美國要來了","黃金很安全","共匪壞壞！"]},
+ WEAPONS:{H:{name:'重機槍'},S:{name:'霰彈槍'},R:{name:'巴祖卡（美援）'},F:{name:'火焰噴射器'}},
+ TEXT:{kmt:{who:'總部',lives:'壯丁',
+  respawn:["新壯丁到。繩子還綁著上一個","下一位！他一小時前還在買麵","補充兵送達。帳單已寄回他的村子"],
+  kills:["+餉（又貶值了）","賺到薪水：一顆蛋","表哥？好像是","恕不退款","他有一塊田。曾經有。","發餉了！快點花掉"],
+  noammo:"彈藥被軍需官賣掉了",food:"黑市白米",officer:"手提箱：黃金三公斤＋赴台船票一張",
+  over:["您的犧牲將由委員會永遠銘記。該委員會已遷往台灣。","已通知家屬。撫卹金以金圓券發放，剛好夠買一張郵票。"],
+  levels:[
+   {start:"總部：不惜一切代價守住這條路。援軍已在路上。",start2:"總部：更正。援軍被賣掉了。錢安全存在上海。",drop:"總部：美援到了！內容：四百條香菸和一挺機槍。兩樣都不准分。",truck:"總部：敵軍廣播車！不准聽。第三連已經有一半聽進去了。",mid:"總部：你的薪餉已依通膨調整。請匯款給我們。",boss:"總部：摧毀那輛戰車。它上禮拜還是我們的。再之前是美國的。再之前是日本的。",win:"總部會把這場勝利報告成「戰略性撤退」，以策安全。"},
+   {start:"總部：穿越稻田前進。別踩壞莊稼，已經賣給三個買家了。",vehicle:"總部：我們徵用了一頭驢，在牠背上綁了一門砲。驢子沒同意。你也沒有。",mid:"總部：農民一直叫我們「另一群土匪」。請多微笑。",boss:"總部：裝甲列車！1937年以來第一班準點的火車。照樣給我炸了。",win:"總部：幹得好。車上載的是我們自己的軍餉。反正也不值錢了。"},
+   {start:"總部：守住山口。冬衣已經訂了。預計到貨：明年冬天。",mid:"總部：傘兵來了！我們的、他們的……這種高度誰分得出來？",boss:"總部：敵機來襲！別擔心，油是我們賣給他們的。大部分是水。",win:"總部：山口確保！我們現在可以有秩序地從這裡撤退了。"},
+   {start:"總部：保衛大上海！市面平靜。物價從早餐到現在才漲了三倍。",vehicle:"總部：開走那輛戰車。文件上寫「我方所有」。車組員說「已經不是了」。",truck:"總部：前方裝甲車！還有銀行擠兌。只准對其中一個開槍。",mid:"總部：記住，一袋金圓券拿來擋子彈，比拿去買米好用。",boss:"總部：印鈔機落入敵手！沒有它，我們要怎麼印一文不值的錢？",win:"總部：上海守住了一整個下午。個人最佳紀錄。"},
+   {start:"總部：死守長江防線！長官們會在對岸督戰。然後在更遠的地方督戰。",drop:"總部：空投！一支巴祖卡，外加一封措辭強烈的信。",truck:"總部：砲艇！艦長今天已經換邊兩次。看清楚他掛哪面旗。",mid:"總部：前方是陸地。不知道是誰的地。文件審核中。",boss:"總部：有個巨大的東西正在登陸。情報說它有一張臉。那張臉還沒人核准。",win:"總部：幹得好。請登上最後一班船。黃金帶走，收據留下。"}]}},
+ BOSSNAME:{truck:()=>'人民之聲',tank:()=>'多主戰車',train:()=>'準點特快車',bomber:()=>EN==='kmt'?'美援轟炸機':'鹵獲轟炸機（說明書是英文）',
+  car:()=>'裝甲車「和談號」',press:()=>EN==='kmt'?'中央銀行印鈔機':'人民印刷廠',gunboat:()=>'砲艇「忠誠號」（旗子可翻面）',mech:()=>'偉大領袖（臉部待核准）'},
+ PLATES:["美國陸軍","大日本帝國","國軍","共軍","某軍閥","沒人（暫時）"],
+ LEVELS:[{name:'死守公路',sub:'這個村子今年已經易手四次'},{name:'稻田突擊',sub:'每一粒米都有主了。還有兩個。'},{name:'冰封山口',sub:'冬衣：已訂購。到貨：春天。'},{name:'上海 1949',sub:'一條麵包現在要一推車的鈔票'},{name:'長江防線',sub:'江面寬一哩。和談的鴻溝更寬。'}],
+ SCENES:[
+  {pre:{date:'1946年6月',place:'華中',fact:"日本投降了。美國特使居中調停，促成國共停戰。到了夏天，全面內戰還是爆發了。",joke:"雙方只在一件事上意見一致：先破壞停戰的是對方。"},
+   post:{date:'同一週稍晚',place:'同一個村子',fact:"前線的村莊一再易手。家家戶戶學會在家裡同時準備兩面旗子。",joke:"全省唯一發財的，是做旗子的。"}},
+  {pre:{date:'1947年',place:'華北農村',fact:"土地改革席捲農村。兩軍都需要數百萬兵員和成噸糧食，於是徵兵（不一定很客氣），也徵收收成。",joke:"農民終於有了自己的地。然後兩邊軍隊都來借他的兒子。"},
+   post:{date:'那年秋天',place:'鐵路沿線',fact:"鐵路一再被炸斷又修復，整條路線一年易主好幾次。",joke:"鐵路工人投票決定改用驢子。驢子投了棄權票。"}},
+  {pre:{date:'1948年9月',place:'東北',fact:"遼瀋戰役在冰天雪地的東北展開。不到兩個月，國軍丟了整個東北，和將近五十萬兵力。",joke:"冬衣準時送到了──剛好趕上春天。"},
+   post:{date:'1948年11月',place:'山中營地',fact:"鹵獲的美式裝備整列車整列車地換邊，很多還附著沒人看得懂的說明書。",joke:"英文說明書成了全東北最保暖的東西。"}},
+  {pre:{date:'1948年8月',place:'上海',fact:"政府以三百萬比一，用新的金圓券取代舊法幣。不到一年就幾乎一文不值，大家提著整麻袋的鈔票去買菜。",joke:"經濟學家稱之為惡性通膨。上海人稱之為午餐。"},
+   post:{date:'1949年5月',place:'上海',fact:"上海易手。進城的士兵出了名地露宿街頭，不進民宅。",joke:"鈔票也睡在人行道上。沒人想撿。"}},
+  {pre:{date:'1949年4月20日',place:'長江',fact:"和談破裂。當晚，數十萬大軍乘著木船渡過長江。三天後，南京失守。",joke:"大家都記得渡江。沒人記得是誰在划船。"},post:null}],
+ ENDING:{last:"接下來七十五年，海峽兩岸只在一件事上意見一致：只有一個中國。至於是哪一個，到現在還喬不攏。"},
+ KMT_ENDING:[
+  {date:'1949年4月－11月',place:'其他所有地方',fact:"你的五場任務全勝。同一時間，其他部隊丟了南京、上海、廣州，還有地圖上大部分的地方。",joke:"總部頒給你一枚勳章，因為你打贏了。外加一張船票，理由一樣。"},
+  {date:'1949年12月',place:'最後一班船',fact:"政府「暫時遷移」到台灣。國庫黃金好幾個月前就悄悄搶先上船了。",joke:"船票要一袋金圓券。你剛好有一袋。等到登船時，變成要兩袋。"},
+  {date:'1949年12月 →',place:'台北（暫時）',fact:"早在十月，中華人民共和國就在北京宣布成立。總部稱之為「暫時性的挫折」。非常暫時。",joke:"「明年就反攻大陸！」1950年這麼說。1951年也是。1952年。1953年。還有……"},
+  {date:'後來',place:'台灣海峽',fact:"接下來七十五年，海峽兩岸只在一件事上意見一致：只有一個中國。至於是哪一個，到現在還喬不攏。",joke:"順帶一提，那頭驢子始終保持中立。"}],
+ KMT_CREDITS:["國共大戰 1946–1949","","任務勝場：5／5","內戰勝場：0／1","","領銜主演","數百萬壯丁（無薪）","一頭驢（非自願）","一輛換過六個主人的戰車","國庫黃金（提早離場）","一袋金圓券（一文不值）","","本戰爭製作期間","未曾徵詢任何村民意見","","反攻大陸：","預定明年","（每年都是）","","感謝遊玩"]
+};
+const REF={POW_LINES,DEFECT,CRIES,TAUNTS,SLOGANS,WEAPONS,TEXT,BOSSNAME,PLATES,LEVELS,SCENES,ENDING,KMT_ENDING,KMT_CREDITS};
+const isObj=v=>v!==null&&typeof v==='object';
+function grab(tgt,src){if(Array.isArray(src))return src.some(isObj)?src.map((v,i)=>isObj(v)?grab(tgt[i],v):tgt[i]):tgt.slice();const o={};for(const k in src)o[k]=isObj(src[k])?grab(tgt[k],src[k]):tgt[k];return o}
+function put(tgt,src){if(Array.isArray(src)){if(src.some(isObj))src.forEach((v,i)=>{if(isObj(v)&&isObj(tgt[i]))put(tgt[i],v)});else{tgt.length=0;tgt.push(...src)}return}
+ for(const k in src){const v=src[k];if(isObj(v)&&isObj(tgt[k]))put(tgt[k],v);else tgt[k]=v}}
+const EN_DATA={};for(const k in ZH)EN_DATA[k]=grab(REF[k],ZH[k]);
+// bidirectional string map so lines already on screen (radio, shouts, pops, villager bubbles) switch language too
+const X_ZH=new Map(),X_EN=new Map();
+(function pair(e,z){if(typeof e==='string'&&typeof z==='string'){X_ZH.set(e,z);X_EN.set(z,e);return}if(isObj(e)&&isObj(z))for(const k in z)pair(e[k],z[k])})(EN_DATA,ZH);
+for(const k in ZH_UI){X_ZH.set(k,ZH_UI[k]);X_EN.set(ZH_UI[k],k)}
+function relabel(){const m=LANG==='zh'?X_ZH:X_EN,f=s=>m.get(s)??s;
+ if(radioCur)radioCur.s=f(radioCur.s);radioQ=radioQ.map(f);for(const b of shouts)b.s=f(b.s);for(const p of pops)p.s=f(p.s);for(const w of pows)if(w.say)w.say=f(w.say)}
+
+// dark ink on paper props: an outline would turn CJK strokes into a blob
+const isDark=c=>{const m=/^#([0-9a-f]{6})/i.exec(c);if(!m)return false;const v=parseInt(m[1],16);return((v>>16)*.3+((v>>8)&255)*.59+(v&255)*.11)<70};
+/* ---- canvas text: CJK-aware overrides of the shared helpers (English path is the untouched original) ---- */
+const _txt=txt,_drawShout=drawShout,_drawBubble=drawBubble,_drawSceneZ=drawScene,_sceneArtZ=sceneArt,_drawCar=drawCar;
+txt=function(s,x,y,c='#e9dcc2',al='left',font=F){if(LANG!=='zh'){if(!isDark(c))return _txt(s,x,y,c,al,font);ctx.font=font;ctx.textAlign=al;ctx.textBaseline='top';ctx.fillStyle=c;ctx.fillText(s,x,y);return}s=tr(String(s));if(!CJK_RE.test(s))return _txt(s,x,y,c,al,font);
+ const big=/16px/.test(font);ctx.font=zf(font);ctx.textAlign=al;ctx.textBaseline='middle';const yy=y+(big?8:4);ctx.fillStyle='#120d0c';
+ if(!isDark(c))for(const[a,b]of[[1,1],[-1,0],[1,0],[0,-1],[0,1]])ctx.fillText(s,x+a,yy+b);ctx.fillStyle=c;ctx.fillText(s,x,yy);ctx.textBaseline='top'};
+drawShout=function(s,x,y,hero){s=tr(s);if(!isZ(s))return _drawShout(s,x,y,hero);
+ ctx.font=zf(F);const w=Math.ceil(ctx.measureText(s).width)+10,h=16,jig=hero&&T%6<3?1:0,bx=clamp(x-w/2,4,W-w-4),by=Math.max(26,y-h)+jig,bc=hero?'#c8372d':'#120d0c',fc=hero?'#fff4d0':'#d8ccb0';
+ r(bx-1,by-1,w+2,h+2,bc);r(bx-3,by+4,2,3,bc);r(bx+w+1,by+8,2,3,bc);r(bx+8,by-3,3,2,bc);r(bx+w-12,by+h+1,3,2,bc);r(bx,by,w,h,fc);
+ const tx=clamp(x-1,bx+3,bx+w-6);r(tx,by+h+1,3,3,fc);r(tx+1,by+h+4,2,2,fc);
+ ctx.font=zf(F);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=hero?'#c8372d':'#3a2a20';ctx.fillText(s,bx+5,by+h/2+1);ctx.textBaseline='top'};
+drawBubble=function(s,x,y){if(!isZ(s))return _drawBubble(s,x,y);
+ ctx.font=zf(F);const L=wrapPx(s,150),w=Math.ceil(Math.max(...L.map(l=>ctx.measureText(l).width)))+10,h=L.length*13+6;
+ let bx=clamp(x-w/2,4,W-w-4),by=Math.max(28,y-h);r(bx,by,w,h,'#e9dcc2');ctx.strokeStyle='#120d0c';ctx.strokeRect(bx+.5,by+.5,w-1,h-1);
+ r(clamp(x-2,bx+4,bx+w-8),by+h,4,3,'#e9dcc2');ctx.font=zf(F);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='#120d0c';L.forEach((l,i)=>ctx.fillText(l,bx+5,by+3+i*13+7));ctx.textBaseline='top'};
+drawScene=function(sc,t){if(!isZ(sc.fact+sc.joke))return _drawSceneZ(sc,t);
+ ctx.fillStyle='#000';ctx.fillRect(0,0,W,H);ctx.save();ctx.beginPath();ctx.rect(0,0,W,136);ctx.clip();sceneArt(sc.draw,t);ctx.restore();
+ ctx.drawImage(VIG,0,0);r(0,136,W,H-136,'#120d0c');r(0,136,W,2,'#d9a441');
+ txt(sc.date,8,141,'#d9a441');txt(sc.place,W-8,141,'#a8977c','right');
+ let sz=12,LH=13,fl,jl;for(;;){ctx.font=`500 ${sz}px ${ZFAM}`;fl=wrapPx(sc.fact,W-16);jl=wrapPx(sc.joke,W-16);if((fl.length+jl.length)*LH+3<=H-153||sz<=10)break;sz--;LH--}
+ const shown=Math.floor(t*.7);let n=0;ctx.textAlign='left';ctx.textBaseline='middle';
+ fl.forEach((l,i)=>{const v=l.slice(0,Math.max(0,shown-n));n+=l.length;ctx.fillStyle='#e9dcc2';ctx.fillText(v,8,153+i*LH+LH/2)});
+ jl.forEach((l,i)=>{const v=l.slice(0,Math.max(0,shown-n));n+=l.length;ctx.fillStyle='#ff9a6a';ctx.fillText(v,8,156+(fl.length+i)*LH+LH/2)});
+ ctx.textBaseline='top';if(shown>n+10&&T%40<26)_txt('▶',W-16,H-12,'#d9a441');
+ return shown>n};
+// small paper props drawn by the shared art: repaint them with Chinese words
+function zLabel(s,x,y,w,h,px){r(x,y,w,h,'#e9dcc2');ctx.font=`700 ${px}px ${ZFAM}`;ctx.fillStyle='#120d0c';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(s,x+w/2,y+h/2+.5);ctx.textAlign='left';ctx.textBaseline='top'}
+sceneArt=function(name,t){_sceneArtZ(name,t);if(LANG!=='zh')return;
+ if(name==='table'){zLabel('停',152,89,26,12,10);zLabel('戰',202,89,26,12,10)}
+ else if(name==='paddy')zLabel('地契',182,80,20,13,9)};
+drawCar=function(b){_drawCar(b);if(LANG==='zh'){const x=Math.round(b.x-camX);zLabel('和平',x+44,b.y-21,16,9,7)}};
+
+/* ---- HTML overlays ---- */
+const ZH_HTML={
+ h1:'國共大戰<span>CIVIL SLUG · 1946 – 1949 · 五場任務</span>',
+ tag:'一款橫向射擊遊戲，講一場敵人往往是誰家表哥的戰爭。',
+ nat:'國民革命軍',
+ natd:'薪餉用金圓券發。每天發，因為明天就不值錢了。每一仗都打贏，然後看看結果如何。',
+ enlist:'▶ 從軍去',
+ keys:'<span class="kbd">按鍵：← → 移動 · ↑ 朝上瞄準 · ↓ 蹲下 · J 開火（近身用刀）· K 跳躍 · L 手榴彈／砲彈 · ↓+K 下車 · P 暫停<br></span>手機：左手搖桿，右手按鈕。點一下畫面可跳過劇情。',
+ fine:'諷刺作品。兩邊軍隊一樣被挖苦。村民不管誰贏都是輸家。劇透：你也是。',
+ back:'返回',rot:'把手機轉橫，戰爭更大場',tfire:'開火',tjump:'跳',tbomb:'手榴彈'};
+const EN_HTML={};document.querySelectorAll('[data-t]').forEach(el=>EN_HTML[el.dataset.t]=el.innerHTML);
+const ARIA={cv:['Civil Slug game screen','國共大戰遊戲畫面'],bPause:['Pause','暫停'],bSnd:['Toggle sound','切換音效']};
+function applyLang(l,save){LANG=l==='zh'?'zh':'en';const zh=LANG==='zh';
+ if(save)try{localStorage.setItem(LANG_KEY,LANG)}catch(e){}
+ for(const k in ZH)put(REF[k],zh?ZH[k]:EN_DATA[k]);relabel();
+ document.documentElement.lang=zh?'zh-Hant':'en';document.title=zh?'國共大戰 Civil Slug 1946':'Civil Slug 1946';
+ document.querySelectorAll('[data-t]').forEach(el=>{const k=el.dataset.t;el.innerHTML=zh&&ZH_HTML[k]!=null?ZH_HTML[k]:EN_HTML[k]});
+ for(const id in ARIA)$('#'+id).setAttribute('aria-label',ARIA[id][zh?1:0]);
+ document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===LANG)));
+ const bl=$('#bLang');bl.textContent=zh?'EN':'中文';bl.lang=zh?'en':'zh-Hant';
+ $('#mH').textContent=tr('CHOOSE A MISSION');sndLabel();
+ if(!$('#missions').hidden)openMissions('kmt');
+ if(!$('#end').hidden){showEnd.keep=true;showEnd.nofocus=true;showEnd(endMode)}
+ if(zh&&document.fonts)document.fonts.load(zf(F),'國軍').catch(()=>{})}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.l,true)));
+$('#bLang').addEventListener('click',e=>{applyLang(LANG==='zh'?'en':'zh',true);e.currentTarget.blur()});
+applyLang((()=>{try{const v=localStorage.getItem(LANG_KEY);if(v==='en'||v==='zh')return v}catch(e){}return 'zh'})(),false);
+// hyperinflation can outrun the unit table (1e27+): keep the number on screen instead of printing 1.2e+30OC
+{const _fmtBig=fmtBig;fmtBig=function(n){return n>=1e27||!isFinite(n)?'999OC+':_fmtBig(n)}}
 
 
 })();
