@@ -1,0 +1,4 @@
+node_modules/
+*.png
+*-test.html
+_chk.js

@@ -1,0 +1,119 @@
+<title>Civil Slug 1946</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<style>
+/* Layout: one-screen arcade cabinet — letterboxed pixel canvas, poster-stamp overlays, thumb pads in the bottom corners */
+:root{
+  --ink:#120d0c; --ink2:#221815; --paper:#e9dcc2; --dim:#a8977c;
+  --red:#c8372d; --blue:#4a6aa3; --gold:#d9a441;
+  --px:"Press Start 2P", ui-monospace, monospace;
+  --body:"VT323", ui-monospace, monospace;
+  --han:"Noto Serif TC","Songti TC","PMingLiU","SimSun",serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#2a1c18 0%,var(--ink) 70%)}
+body.pt #app{align-items:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
+#cv{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;box-shadow:0 0 0 2px #000,0 0 40px #000}
+#hud{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 8px);left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+#hud button{font:10px var(--px);color:var(--paper);background:rgba(18,13,12,.7);border:2px solid var(--dim);padding:7px 8px;cursor:pointer}
+.ov{position:fixed;inset:0;z-index:10;overflow:auto;display:flex;padding:16px;background:rgba(14,10,9,.9);
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px)}
+.card{margin:auto;max-width:680px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center;padding-block:12px}
+.seal{align-self:center;font:900 clamp(26px,7vw,48px)/1 var(--han);color:var(--red);border:4px solid var(--red);padding:6px 10px 8px;transform:rotate(-4deg);letter-spacing:.08em;box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--red)}
+h1,h2{font-family:var(--px);font-weight:400;margin:0;text-wrap:balance;line-height:1.3}
+h1{font-size:clamp(22px,6.4vw,44px);color:var(--paper);text-shadow:3px 3px 0 var(--red),6px 6px 0 #000}
+h1 span{display:block;font-size:.32em;color:var(--gold);text-shadow:2px 2px 0 #000;margin-top:10px;letter-spacing:.2em}
+h2{font-size:clamp(16px,4.6vw,28px);color:var(--gold);text-shadow:3px 3px 0 #000}
+p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-width:60ch;margin-inline:auto}
+.tag{color:var(--dim)}
+.sides{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.sides{grid-template-columns:1fr}}
+.side{display:flex;flex-direction:column;gap:8px;align-items:center;padding:14px 12px;cursor:pointer;color:var(--paper);border:3px solid;text-align:center;min-width:0;transition:transform .12s}
+.side:hover,.side:focus-visible,.side.sel{transform:translateY(-3px)}
+.side.kmt{background:linear-gradient(#1d2a44,#141c2c);border-color:var(--blue)}
+.side.ccp{background:linear-gradient(#3a1714,#241010);border-color:var(--red)}
+.side.sel{outline:3px solid var(--gold);outline-offset:3px}
+.side b{font:900 32px/1 var(--han)}
+.side.kmt b{color:#9fb6e6}.side.ccp b{color:#ff7d6e}
+.side i{font:normal 11px var(--px);letter-spacing:.06em}
+.side small{font:19px/1.05 var(--body);color:var(--dim)}
+.side em{font:normal 10px var(--px);color:var(--gold);margin-top:4px}
+.keys{font-size:18px;color:var(--dim)}
+.fine{font-size:16px;color:#7d6e5c}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{font:12px var(--px);padding:14px 16px;border:3px solid var(--gold);background:#2a1d10;color:var(--gold);cursor:pointer}
+.btn.alt{border-color:var(--dim);color:var(--paper);background:transparent}
+.mlist{display:grid;gap:8px}
+.mbtn{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-align:left;padding:12px 14px;border:3px solid var(--dim);background:#1b1311;color:var(--paper);cursor:pointer;min-width:0}
+.mbtn b{font:12px var(--px);color:var(--gold)}
+.mbtn span{font:20px/1 var(--body);min-width:0}
+.mbtn small{font:16px var(--body);color:var(--dim);font-variant-numeric:tabular-nums}
+.mbtn:disabled{opacity:.4;cursor:not-allowed}
+.mbtn:not(:disabled):hover{border-color:var(--gold)}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+dl{display:grid;grid-template-columns:auto auto;gap:4px 16px;justify-content:center;margin:0;font:20px var(--body)}
+dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-numeric:tabular-nums}
+#touch{position:fixed;inset:0;pointer-events:none;z-index:4}
+#stick{position:absolute;left:calc(env(safe-area-inset-left,0px) + 6px);bottom:calc(env(safe-area-inset-bottom,0px) + 6px);width:170px;height:170px;pointer-events:auto;touch-action:none}
+#ring{position:absolute;inset:25px;border-radius:50%;border:2px solid rgba(233,220,194,.35);background:rgba(18,13,12,.35)}
+#knob{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:rgba(233,220,194,.28);border:2px solid rgba(233,220,194,.6)}
+#btns{position:absolute;right:calc(env(safe-area-inset-right,0px) + 14px);bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:200px;height:160px;pointer-events:none}
+.tb{position:absolute;border-radius:50%;pointer-events:auto;touch-action:none;font:10px var(--px);color:var(--paper);display:flex;align-items:center;justify-content:center;border:2px solid;background:rgba(18,13,12,.4)}
+.tb.on{background:rgba(217,164,65,.45)}
+.tb[data-k=fire]{width:76px;height:76px;right:0;bottom:30px;border-color:var(--red)}
+.tb[data-k=jump]{width:66px;height:66px;right:86px;bottom:0;border-color:var(--blue)}
+.tb[data-k=bomb]{width:54px;height:54px;right:96px;bottom:84px;border-color:var(--gold)}
+#rot{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 190px);text-align:center;font:9px var(--px);color:var(--dim);display:none}
+body.pt #rot{display:block}
+@media (prefers-reduced-motion:reduce){.side{transition:none}}
+</style>
+
+<div id="app"><canvas id="cv" width="384" height="216" aria-label="Civil Slug game screen"></canvas></div>
+
+<div id="hud" hidden>
+  <button id="bPause" aria-label="Pause">II</button>
+  <button id="bSnd" aria-label="Toggle sound">SND</button>
+</div>
+
+<div id="touch" hidden>
+  <div id="rot">TURN SIDEWAYS FOR A BIGGER WAR</div>
+  <div id="stick"><div id="ring"></div><div id="knob"></div></div>
+  <div id="btns">
+    <div class="tb" data-k="fire">FIRE</div>
+    <div class="tb" data-k="jump">JUMP</div>
+    <div class="tb" data-k="bomb">BOMB</div>
+  </div>
+</div>
+
+<div id="title" class="ov">
+  <div class="card">
+    <div class="seal">兄弟鬩牆</div>
+    <h1>CIVIL SLUG<span>1946 – 1949 · FIVE MISSIONS</span></h1>
+    <p class="tag">A run-and-gun about a war where the enemy was usually somebody's cousin.</p>
+    <div class="sides">
+      <button class="side kmt sel" data-side="kmt"><b>國軍</b><i>NATIONALIST</i><small>Paid in Gold Yuan. Paid daily, because by tomorrow it's worthless.</small><em>▶ ENLIST</em></button>
+      <button class="side ccp" data-side="ccp"><b>共軍</b><i>COMMUNIST</i><small>Paid in Merit. Merit belongs to the Collective.</small><em>▶ VOLUNTEER</em></button>
+    </div>
+    <p class="keys">Keys: ← → move · ↑ aim up · ↓ crouch · J fire (knife up close) · K jump · L grenade / cannon · ↓+K leave vehicle · P pause<br>Phone: thumb-stick left, buttons right. Tap FIRE to skip story scenes.</p>
+    <p class="fine">Satire. Both armies get roasted equally. The villagers lost either way.</p>
+  </div>
+</div>
+
+<div id="missions" class="ov" hidden>
+  <div class="card">
+    <h2 id="mH">CHOOSE A MISSION</h2>
+    <div class="mlist" id="mlist"></div>
+    <div class="row"><button class="btn alt" id="mBack">BACK</button></div>
+  </div>
+</div>
+
+<div id="end" class="ov" hidden>
+  <div class="card">
+    <h2 id="endH">OUT OF CONSCRIPTS</h2>
+    <p id="endP"></p>
+    <dl id="endS"></dl>
+    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">DEFECT</button><button class="btn alt" id="e3">TITLE</button></div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<title>Civil Slug Siege</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<style>
+/* Layout: one-screen arcade cabinet — letterboxed pixel canvas, poster-stamp overlays, twin-thumb controls */
+:root{
+  --ink:#120d0c; --paper:#e9dcc2; --dim:#a8977c;
+  --red:#c8372d; --blue:#4a6aa3; --gold:#d9a441;
+  --px:"Press Start 2P", ui-monospace, monospace;
+  --body:"VT323", ui-monospace, monospace;
+  --han:"Noto Serif TC","Songti TC","PMingLiU","SimSun",serif;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#2a1c18 0%,var(--ink) 70%)}
+body.pt #app{align-items:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + 20px)}
+#cv{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;box-shadow:0 0 0 2px #000,0 0 40px #000;cursor:crosshair}
+#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+#hud button{font:9px var(--px);color:var(--paper);background:rgba(18,13,12,.6);border:2px solid var(--dim);padding:6px 7px;cursor:pointer}
+.ov{position:fixed;inset:0;z-index:10;overflow:auto;display:flex;padding:16px;background:rgba(14,10,9,.9);
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.25) 0 1px,transparent 1px 3px)}
+.card{margin:auto;max-width:660px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center;padding-block:12px}
+.seal{align-self:center;font:900 clamp(26px,7vw,48px)/1 var(--han);color:var(--red);border:4px solid var(--red);padding:6px 10px 8px;transform:rotate(-4deg);letter-spacing:.08em;box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--red)}
+h1,h2{font-family:var(--px);font-weight:400;margin:0;text-wrap:balance;line-height:1.3}
+h1{font-size:clamp(22px,6.4vw,44px);color:var(--paper);text-shadow:3px 3px 0 var(--blue),6px 6px 0 #000}
+h1 span{display:block;font-size:.32em;color:var(--gold);text-shadow:2px 2px 0 #000;margin-top:10px;letter-spacing:.2em}
+h2{font-size:clamp(16px,4.6vw,28px);color:var(--gold);text-shadow:3px 3px 0 #000}
+p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-width:60ch;margin-inline:auto}
+.tag{color:var(--dim)}
+.enlist{display:flex;flex-direction:column;gap:8px;align-items:center;padding:16px 14px;cursor:pointer;color:var(--paper);border:3px solid var(--blue);background:linear-gradient(#1d2a44,#141c2c);max-width:420px;width:100%;margin-inline:auto;transition:transform .12s}
+.enlist:hover,.enlist:focus-visible{transform:translateY(-3px)}
+.enlist b{font:900 34px/1 var(--han);color:#9fb6e6}
+.enlist i{font:normal 11px var(--px);letter-spacing:.06em}
+.enlist small{font:19px/1.05 var(--body);color:var(--dim)}
+.enlist em{font:normal 11px var(--px);color:var(--gold);margin-top:4px}
+.keys{font-size:18px;color:var(--dim)}
+.fine{font-size:16px;color:#7d6e5c}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{font:12px var(--px);padding:14px 16px;border:3px solid var(--gold);background:#2a1d10;color:var(--gold);cursor:pointer}
+.btn.alt{border-color:var(--dim);color:var(--paper);background:transparent}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+dl{display:grid;grid-template-columns:auto auto;gap:4px 16px;justify-content:center;margin:0;font:20px var(--body)}
+dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-numeric:tabular-nums}
+#touch{position:fixed;inset:0;z-index:4;touch-action:none}
+#stickBase{position:fixed;width:110px;height:110px;margin:-55px 0 0 -55px;border-radius:50%;border:2px solid rgba(233,220,194,.35);background:rgba(18,13,12,.3);pointer-events:none}
+#stickKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(233,220,194,.3);border:2px solid rgba(233,220,194,.6)}
+.tb{position:fixed;border-radius:50%;font:9px var(--px);color:var(--paper);display:flex;align-items:center;justify-content:center;border:2px solid;background:rgba(18,13,12,.4)}
+.tb.on{background:rgba(217,164,65,.45)}
+#tFire{width:84px;height:84px;right:calc(env(safe-area-inset-right,0px) + 16px);bottom:calc(env(safe-area-inset-bottom,0px) + 22px);border-color:var(--red)}
+#tGren{width:56px;height:56px;right:calc(env(safe-area-inset-right,0px) + 112px);bottom:calc(env(safe-area-inset-bottom,0px) + 18px);border-color:var(--gold)}
+#tSwap{width:56px;height:56px;right:calc(env(safe-area-inset-right,0px) + 30px);bottom:calc(env(safe-area-inset-bottom,0px) + 118px);border-color:var(--blue)}
+#tHint{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);text-align:center;font:8px var(--px);color:var(--dim);pointer-events:none}
+@media (prefers-reduced-motion:reduce){.enlist{transition:none}}
+</style>
+
+<div id="app"><canvas id="cv" width="384" height="216" aria-label="Civil Slug Siege game screen"></canvas></div>
+<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="touch" hidden>
+  <div id="stickBase" hidden><div id="stickKnob"></div></div>
+  <div class="tb" id="tFire" data-k="fire">FIRE</div>
+  <div class="tb" id="tGren" data-k="gren">BOMB</div>
+  <div class="tb" id="tSwap" data-k="swap">SWAP</div>
+  <div id="tHint">LEFT THUMB: WALK · RIGHT THUMB: DRAG TO LOOK</div>
+</div>
+
+<div id="title" class="ov">
+  <div class="card">
+    <div class="seal">兄弟鬩牆</div>
+    <h1>CIVIL SLUG<span>VILLAGE SIEGE · FIRST PERSON</span></h1>
+    <p class="tag">One village. One tank with six owners. One conscript, paid in Gold Yuan.</p>
+    <button class="enlist" id="go"><b>國軍</b><i>NATIONALIST CONSCRIPT</i><small>Your pay is adjusted for inflation every ten seconds. Downward.</small><em>▶ ENLIST</em></button>
+    <p class="keys">Keys: W A S D move · mouse or ← → turn · click / J fire (knife up close) · G grenade · Q swap weapon · P pause<br>Phone: left thumb walks, right thumb drags to look.</p>
+    <p class="fine">Satire. Nobody in this war comes out looking good. Especially the villagers' landlord.</p>
+  </div>
+</div>
+
+<div id="end" class="ov" hidden>
+  <div class="card">
+    <h2 id="endH">OUT OF CONSCRIPTS</h2>
+    <p id="endP"></p>
+    <dl id="endS"></dl>
+    <div class="row"><button class="btn" id="e1">DRAFT 3 MORE</button><button class="btn alt" id="e2">RESTART</button></div>
+  </div>
+</div>
