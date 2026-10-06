@@ -52,7 +52,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version of Dark Yuan: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. |
 | 06 | [Ming An: Expedition 48](games/06-ming-an-expedition-48/) | Turn-based RPG with real-time dodging | Explore Shanghai in 3D and fight turn-based battles with timed dodges and parries, in the spirit of Clair Obscur: Expedition 33. |
 | 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) ★ | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
-| 08 | [Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) | Rhythm game | Two propaganda troupes, one village square, four lanes. Hit the notes to keep the crowd. |
+| 08 | [軍樂大對決 Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) ★ | Rhythm game | The KMT brass band's six-gig tour against rival troupes, from the village square to the last ferry pier. 繁體中文 / English. |
 | 09 | [Gold Run 1949](games/09-gold-run-1949/) | Tower defense | Guard the gold reserves on the Shanghai docks until the last boat sails. Tower prices rise every wave. |
 | 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
 | 11 | [Sky of Gold Yuan](games/11-sky-of-gold-yuan/) | Shoot 'em up | A vertical shooter in a borrowed biplane. Three stages, power-ups, money bombs and the Printer's airship. |
