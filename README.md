@@ -4,6 +4,8 @@ A series of browser games set in the same world: the Chinese Civil War, 1948–4
 
 Every game is a single self-contained HTML file. Open any `index.html` in a browser to play, on desktop (keyboard and mouse) or on a phone (touch controls).
 
+**Want to make your own?** Read the [development guide (GUIDE.md)](GUIDE.md): pixel art, dark humour, synthesized music and BGM, game feel, bilingual text, testing and release.
+
 ## Background story
 
 **China, 1946–1949.** Japan has surrendered and the Second World War is over, but the truce between the Nationalist government (Kuomintang, KMT, 國民黨) and the Communist Party (CCP, 共產黨) collapses within a year. Full civil war follows.
