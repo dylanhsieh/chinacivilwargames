@@ -57,7 +57,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 08 | [軍樂大對決 Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) ★ | Rhythm game | The KMT brass band's six-gig tour against rival troupes, from the village square to the last ferry pier. 繁體中文 / English. |
 | 09 | [黃金大轉進 Gold Run 1949](games/09-gold-run-1949/) ★ | Tower defense | Guard the KMT gold reserves across six maps, from the bank vault to the last ship; the gold leaves first. 繁體中文 / English. |
 | 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
-| 11 | [Sky of Gold Yuan](games/11-sky-of-gold-yuan/) | Shoot 'em up | A vertical shooter in a borrowed biplane. Three stages, power-ups, money bombs and the Printer's airship. |
+| 11 | [金圓長空 Sky of Gold Yuan 1949](games/11-sky-of-gold-yuan/) ★ | Shoot 'em up | A contract pilot for the KMT air force: six side-scrolling stages and bosses, then one way to Taiwan on Gold Yuan fuel. 繁體中文 / English. |
 | 12 | [Last Ferry Rush](games/12-last-ferry-rush/) | Racing | A pseudo-3D arcade racer: drive a truck of passengers from the village to the docks before the last ferry leaves. |
 | 13 | [紙上將軍 Paper Generals 1949](games/13-paper-generals-1949/) ★ | Turn-based tactics | Six KMT battles where morale is a resource and broken soldiers defect; win all six, then the last ferry. 繁體中文 / English. |
 
