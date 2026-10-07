@@ -37,13 +37,13 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 - No real individual people are named; leaders are "Headquarters" or "the government".
 
 **Play**
-- The goal for every game: a complete campaign of 5–6 stages with a boss or climax, story scenes between stages and a funny ending.
+- Every game is a complete campaign of 5–6 stages with a boss or climax, story scenes between stages and a funny ending.
 - Desktop (keyboard and mouse) and phone (touch) controls in every game; a single self-contained HTML file per game that works offline.
-- Bilingual: 繁體中文 (default) and English (★ games done; the rest in progress).
+- Bilingual: 繁體中文 (default) and English in every game.
 
 ## Games
 
-★ = complete release: full story, Metal Slug-style ending, 繁體中文 (default) and English.
+All 13 games are complete releases: full KMT campaign of 5–6 stages, story scenes, a Metal Slug-style ending on the boat to Taiwan, 繁體中文 (default) and English, and a bilingual README in each folder.
 
 | # | Game | Genre | About |
 |---|------|-------|-------|
