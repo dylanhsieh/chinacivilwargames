@@ -232,7 +232,7 @@ function update(){T++;if(state==='pages'){pgT++;return}
  stT++;hintT++;const dt=1/60,s=STAGES[st];const seg=segAt(pos+PZ),sp=spd/MAXS;
  let acc=false,brk=false,steer=0;
  if(clearT){clearT++;spd=Math.max(0,spd-MAXS*(st===5?1.1:.5)*dt);if(clearT>170){enterTally();return}}
- else{acc=touchUI?!heldK.d:!!heldK.u;brk=!!heldK.d;steer=(heldK.r?1:0)-(heldK.l?1:0)}
+ else{acc=touchUI?!heldK.d:!!heldK.u;brk=!!heldK.d;steer=(heldK.l?1:0)-(heldK.r?1:0)}
  if(crashT>0){crashT--;if(crashT>20&&!(boss&&boss.k==='bridge'&&!boss.dead))spd*=.96}
  if(!clearT){if(acc&&!brk)spd+=MAXS/4.5*dt;else if(brk)spd-=MAXS/1.5*dt;else spd-=MAXS/9*dt}
  // steering: grip is low on ice, the dyke is narrow, curves push you outward
