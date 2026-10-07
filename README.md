@@ -58,7 +58,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 09 | [黃金大轉進 Gold Run 1949](games/09-gold-run-1949/) ★ | Tower defense | Guard the KMT gold reserves across six maps, from the bank vault to the last ship; the gold leaves first. 繁體中文 / English. |
 | 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
 | 11 | [金圓長空 Sky of Gold Yuan 1949](games/11-sky-of-gold-yuan/) ★ | Shoot 'em up | A contract pilot for the KMT air force: six side-scrolling stages and bosses, then one way to Taiwan on Gold Yuan fuel. 繁體中文 / English. |
-| 12 | [Last Ferry Rush](games/12-last-ferry-rush/) | Racing | A pseudo-3D arcade racer: drive a truck of passengers from the village to the docks before the last ferry leaves. |
+| 12 | [末班渡輪 Last Ferry Rush 1949](games/12-last-ferry-rush/) ★ | Racing | Drive a KMT truck of passengers through six legs of the retreat, boss chases included, to the last ferry. 繁體中文 / English. |
 | 13 | [紙上將軍 Paper Generals 1949](games/13-paper-generals-1949/) ★ | Turn-based tactics | Six KMT battles where morale is a resource and broken soldiers defect; win all six, then the last ferry. 繁體中文 / English. |
 
 ## Running locally
