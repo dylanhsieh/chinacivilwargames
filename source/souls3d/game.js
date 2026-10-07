@@ -528,11 +528,11 @@ function restAt(i){const p=PL,first=!G.lit.includes(i);p.state='sit';p.t=0;G.fir
  G.inf*=1.15;p.hp=maxHP();p.flask=G.flaskMax;p.gren=G.grenMax;p.st=maxST();spawnAll();for(const q of projs)if(q.mesh)S3.remove(q.mesh);projs=[];save();
  music('ending');setTimeout(()=>{if(state==='play'&&PL.state==='sit')openFire()},first?1500:500)}
 const fireEl=$('#fire');
-function openFire(){state='fire';fireEl.hidden=false;$('#tU').hidden=true;$('#touch').hidden=true;if(document.pointerLockElement)document.exitPointerLock();$('#fireH').textContent=FIRES[G.fire].name;$('#fireN').textContent=pick(NEWS);$('#fTip').textContent='Tip: '+pick(TIPS);refreshFire();setTimeout(()=>$('#fireGo').focus(),50)}
+function openFire(){state='fire';fireEl.hidden=false;$('#tU').hidden=true;$('#touch').hidden=true;if(document.pointerLockElement)document.exitPointerLock();zFN=pick(NEWS);zFT=pick(TIPS);zFireText();refreshFire();setTimeout(()=>$('#fireGo').focus(),50)}
 function refreshFire(){const c=cost();$('#fY').textContent='¥ '+fmtBig(G.yuan);$('#fC').textContent='¥ '+fmtBig(c);$('#sV').textContent=G.vig;$('#sE').textContent=G.end;$('#sS').textContent=G.str;$('#fL').textContent=SL()+(G.ng?'  (NG+'+G.ng+')':'');
  $('#fD').textContent=maxHP()+' · '+maxST()+' · '+Math.round(ATK());$('#fF').textContent=G.flaskMax+' · '+G.grenMax;
  fireEl.querySelectorAll('.stat button').forEach(b=>b.disabled=G.yuan<c||G[b.dataset.s]>=60);
- const w=$('#warp');w.innerHTML='';G.lit.slice().sort((a,b)=>a-b).forEach(i=>{const b=document.createElement('button');b.textContent=(i===G.fire?'▶ ':'')+FIRES[i].name;if(i===G.fire)b.className='here';b.onclick=()=>{if(i===G.fire)return;closeFire();respawn(i,true);G.fire=i;save();X.fog()};w.appendChild(b)})}
+ const w=$('#warp');w.innerHTML='';G.lit.slice().sort((a,b)=>a-b).forEach(i=>{const b=document.createElement('button');b.textContent=(i===G.fire?'▶ ':'')+zt(FIRES[i].name);if(i===G.fire)b.className='here';b.onclick=()=>{if(i===G.fire)return;closeFire();respawn(i,true);G.fire=i;save();X.fog()};w.appendChild(b)})}
 fireEl.querySelectorAll('.stat button').forEach(b=>b.onclick=()=>{const c=cost();if(G.yuan<c)return;G.yuan-=c;G[b.dataset.s]++;SFX.oneup();PL.hp=maxHP();PL.st=maxST();save();refreshFire()});
 function closeFire(){fireEl.hidden=true;state='play';if(touchUI)$('#touch').hidden=false;music('off')}
 $('#fireGo').onclick=()=>{closeFire();PL.state='free';PL.t=0};
@@ -637,10 +637,10 @@ function hud(){const p=PL;
  r(36,H-26,16,18,'#120d0c');r(37,H-25,14,16,'#2a1e18');r(43,H-22,2,8,WOOD);r(42,H-25,4,4,'#3a4030');txt(String(p.gren),52,H-14,'#e9dcc2');
  const bb=bosses.length?bosses.filter(b=>!b.dead||b.dt<30):ents.filter(e=>e.def.mini&&e.bar&&!e.dead&&e.state!=='idle');
  bb.forEach((b,i)=>{const w=220,x=W/2-w/2,y=36+i*18;stxt(b.name||b.def.name,x,y-6,'#e9dcc2',9,1,'left');bar(x,y,w,3,b.hp,b.max,'#9a1a14')});
- const tu=$('#tU');if(near&&state==='play'&&!reading){if(touchUI){if(tu.hidden||tu.textContent!==near.label){tu.textContent=near.label;tu.hidden=false}}else{const s='E  '+near.label;txt(s,W/2,H-58,'#ffd24a','center')}}else if(!tu.hidden)tu.hidden=true;
- if(reading){const m=reading.m,s=Array.isArray(m.t)?m.t[touchUI?1:0]:m.t,ls=wrap('"'+s+'"',40),h=ls.length*10+22;r(40,16,W-80,h,'rgba(10,6,4,.88)');r(40,16,W-80,1,'#ff9a3a');ls.forEach((l,i)=>txt(l,W/2,24+i*10,'#ffc07a','center'));txt('APPRAISED '+((m.z*137|0)%9000+400).toLocaleString('en-US')+' TIMES',W/2,24+ls.length*10+2,'#6e6050','center')}
- if(itemBox&&!banner){const d=IDESC[itemBox.k];ctx.globalAlpha=Math.min(1,itemBox.t/10);const fl=wrap(d.f,44),h=40+fl.length*9,y0=H/2-h/2-20;r(30,y0,W-60,h,'rgba(10,6,4,.92)');r(30,y0,W-60,1,'#d9a441');txt(d.n,W/2,y0+6,'#ffd24a','center');txt(d.d,W/2,y0+18,'#e9dcc2','center');fl.forEach((l,i)=>txt(l,W/2,y0+32+i*9,'#a8977c','center'));ctx.globalAlpha=1}
- if(areaB&&!banner&&!itemBox){const k=areaB.t,a=k<30?k/30:k>150?Math.max(0,(190-k)/40):1;stxt(areaB.z.name,W/2,62,'#e9dcc2',17,a);ctx.globalAlpha=a*.6;r(W/2-110,74,220,1,'#e9dcc2');ctx.globalAlpha=1;stxt(areaB.z.han,W/2,86,'#a8977c',11,a)}
+ const tu=$('#tU');if(near&&state==='play'&&!reading){if(touchUI){if(tu.hidden||tu.textContent!==zt(near.label)){tu.textContent=zt(near.label);tu.hidden=false}}else{const s='E  '+zt(near.label);txt(s,W/2,H-58,'#ffd24a','center')}}else if(!tu.hidden)tu.hidden=true;
+ if(reading){const m=reading.m,s=Array.isArray(m.t)?m.t[touchUI?1:0]:m.t,ls=zwrap(zq(s),40),lh=zLH(10),h=ls.length*lh+22;r(40,16,W-80,h,'rgba(10,6,4,.88)');r(40,16,W-80,1,'#ff9a3a');ls.forEach((l,i)=>txt(l,W/2,24+i*lh,'#ffc07a','center'));txt('APPRAISED '+((m.z*137|0)%9000+400).toLocaleString('en-US')+' TIMES',W/2,24+ls.length*lh+2,'#6e6050','center')}
+ if(itemBox&&!banner){const d=IDESC[itemBox.k];ctx.globalAlpha=Math.min(1,itemBox.t/10);const fl=zwrap(d.f,44),lh=zLH(9),e=lh-9,h=40+fl.length*lh+2*e,y0=H/2-h/2-20;r(30,y0,W-60,h,'rgba(10,6,4,.92)');r(30,y0,W-60,1,'#d9a441');txt(d.n,W/2,y0+6,'#ffd24a','center');txt(d.d,W/2,y0+18+e,'#e9dcc2','center');fl.forEach((l,i)=>txt(l,W/2,y0+32+2*e+i*lh,'#a8977c','center'));ctx.globalAlpha=1}
+ if(areaB&&!banner&&!itemBox){const k=areaB.t,a=k<30?k/30:k>150?Math.max(0,(190-k)/40):1;stxt(areaB.z.name,W/2,62,'#e9dcc2',17,a);ctx.globalAlpha=a*.6;r(W/2-110,74,220,1,'#e9dcc2');ctx.globalAlpha=1;stxt(LANG==='zh'?areaB.z.name:areaB.z.han,W/2,86,'#a8977c',LANG==='zh'?9:11,a,'center',1)}
  if(banner&&!(banner.delay>banner.t)){const k=banner.t-(banner.delay||0),a=k<20?k/20:k>banner.dur-40?Math.max(0,(banner.dur-k)/40):1;ctx.globalAlpha=a*.7;r(0,H/2-26,W,48,'#000');ctx.globalAlpha=1;stxt(banner.text,W/2,H/2-4,banner.col,banner.size||24,a);if(banner.sub)stxt(banner.sub,W/2,H/2+15,'#a8977c',9,a)}
  if(dead&&dead.t>50){const k=dead.t,a=Math.min(1,(k-50)/50);ctx.globalAlpha=a*.85;r(0,H/2-30,W,56,'#000');ctx.globalAlpha=1;stxt('YOU DIED',W/2,H/2-6,'#b3261e',34,a);if(k>110)stxt('陣亡 · YOUR GOLD YUAN IS INFLATING WHERE YOU FELL',W/2,H/2+17,'#a8977c',8,Math.min(1,(k-110)/30))}
  if(!touchUI&&state==='play'&&!document.pointerLockElement&&T%90<60)txt('CLICK TO CAPTURE MOUSE',W-8,H-12,'#6e6050','right')}
@@ -758,15 +758,14 @@ function newGame(cont){initAudio();ambient();$('#title').hidden=true;$('#end').h
  if(sv)go();else playScene(SC_INTRO,go)}
 function finish(){if(ending)return;ending=true;music('ending');G.done=1;save();
  playScene(SC_END[0],()=>playScene(SC_END[1],()=>playScene(SC_END[2],()=>{state='end';$('#hud').hidden=true;$('#touch').hidden=true;$('#end').hidden=false;
-  $('#endP').textContent=(G.inf<1.01?'You reached the ferry with both stamps and never once rested. Inflation is impressed. ':'You reached the ferry with both stamps. Prices on the mainland rose '+fmtBig((G.inf-1)*100)+'% while you rested. ')+'The war is lost. The government has relocated to Taiwan, temporarily. Counterattack scheduled for next year. And the year after that.';
-  const tm=G.time/60|0;$('#endS').innerHTML=`<dt>Time</dt><dd>${tm/60|0}m ${tm%60}s</dd><dt>Deaths</dt><dd>${G.deaths}</dd><dt>Enemies felled</dt><dd>${G.kills}</dd><dt>Gold Yuan lost to inflation</dt><dd>¥ ${fmtBig(G.lost)}</dd><dt>Soul level</dt><dd>${SL()}</dd><dt>Cycle</dt><dd>${G.ng?'NG+'+G.ng:'First war'}</dd>`;setTimeout(()=>$('#e1').focus(),50)})))}
+  fillEnd();setTimeout(()=>$('#e1').focus(),50)})))}
 $('#bNew').onclick=()=>newGame(false);$('#bCont').onclick=()=>newGame(true);
 $('#e1').onclick=()=>{const o=G;G=newProgress(o.ng+1,{vig:o.vig,end:o.end,str:o.str,whet:Math.min(o.whet,2),vest:Math.min(o.vest,1),flaskMax:o.flaskMax,grenMax:o.grenMax,deaths:o.deaths,lost:o.lost});save();newGame(true)};
 $('#e2').onclick=()=>{$('#end').hidden=true;$('#title').hidden=false;state='title';music('off');showCont()};
 function showCont(){const s=store.get(SAVEK,null);$('#bCont').hidden=!(s&&!s.done)}showCont();
 function togglePause(){if(state==='play'){state='pause';ambSet()}else if(state==='pause'){state='play';ambSet()}}
 $('#bPause').onclick=e=>{togglePause();e.currentTarget.blur()};
-$('#bSnd').onclick=e=>{initAudio();setMute(!muted);e.currentTarget.textContent=muted?'MUTE':'SND';e.currentTarget.blur()};
+$('#bSnd').onclick=e=>{initAudio();setMute(!muted);sndLabel();e.currentTarget.blur()};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play')togglePause()});
 
 /* ---------------- input ---------------- */
