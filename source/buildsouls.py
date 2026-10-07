@@ -1,6 +1,6 @@
 import sys
 core=open('src/2-core.js').read();core=core[:core.index('/* ---------------- input')]
-js='\n'.join([core,open('src/3-data.js').read(),open('src/4-gfx.js').read(),open('souls/game.js').read()])
+js='\n'.join([core,open('src/3-data.js').read(),open('src/4-gfx.js').read(),open('souls/game.js').read(),open('souls/zh.js').read()])
 test='--test' in sys.argv
 if test:
     js=js.replace("/* ---------------- loop ---------------- */","""window.__d={st:()=>({state,x:PL&&Math.round(PL.x),y:PL&&Math.round(PL.y),hp:PL&&Math.round(PL.hp),ps:PL&&PL.state,yuan:G&&G.yuan,inf:G&&G.inf,deaths:G&&G.deaths,ents:ents.filter(e=>!e.dead).length,bosses:bosses.map(b=>({k:b.k,hp:Math.round(b.hp),st:b.state,d:b.dead})),arena:arena&&arena.k,near:near&&near.label,stain:G&&G.stain,boss:G&&G.boss,LV}),

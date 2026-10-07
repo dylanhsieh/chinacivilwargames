@@ -1,6 +1,19 @@
-<title>Dark Yuan</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>黑暗金圓 Dark Yuan</title>
+<meta name="description" content="Dark Yuan (黑暗金圓): a free pixel-art side-scrolling souls-like satire of the Chinese Civil War, 1948–49. A dead Nationalist conscript fights through five areas and five bosses to the last ferry, resting at tea stoves while his Gold Yuan inflates. Then he retreats to Taiwan. Temporarily. 繁體中文 / English.">
+<meta name="theme-color" content="#0c0908">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="黑暗金圓">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230c0908'/%3E%3Crect x='3' y='2' width='10' height='12' fill='%23d9a441'/%3E%3Crect x='2' y='3' width='12' height='10' fill='%23d9a441'/%3E%3Crect x='4' y='3' width='8' height='10' fill='%23b07a22'/%3E%3Crect x='5' y='4' width='2' height='3' fill='%230c0908'/%3E%3Crect x='9' y='4' width='2' height='3' fill='%230c0908'/%3E%3Crect x='7' y='6' width='2' height='5' fill='%230c0908'/%3E%3Crect x='5' y='8' width='6' height='1' fill='%230c0908'/%3E%3Crect x='5' y='10' width='6' height='1' fill='%230c0908'/%3E%3Crect x='14' y='1' width='1' height='14' fill='%23b3261e'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: letterboxed pixel canvas; candle-dark serif overlays for title, the tea stove and the ending */
 :root{
@@ -8,14 +21,15 @@
   --red:#b3261e; --gold:#d9a441; --ember:#ff8a3a; --soul:#b9e0a0;
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
 html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 45%,#1e1512 0%,var(--ink) 70%)}
 #cv{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;box-shadow:0 0 0 2px #000,0 0 60px #000}
-#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);right:calc(env(safe-area-inset-right,0px) + 8px);display:flex;gap:6px;z-index:6}
+#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);right:calc(env(safe-area-inset-right,0px) + 8px);display:flex;gap:6px;z-index:11}
 #hud button{font:9px var(--px);color:var(--paper);background:rgba(12,9,8,.7);border:2px solid var(--faint);padding:6px 7px;cursor:pointer}
 .ov{position:fixed;inset:0;z-index:10;overflow:auto;display:flex;padding:16px;background:rgba(8,6,5,.9)}
 .card{margin:auto;max-width:640px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center;padding-block:12px}
@@ -68,30 +82,68 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 #tW{--r:150px;--b:72px;width:44px;height:44px;border-color:var(--ember)}
 #tN{--r:88px;--b:130px;width:40px;height:40px}
 #tU{left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:auto;height:40px;border-radius:6px;padding:0 16px;border-color:var(--gold);color:var(--gold);font-size:9px}
+/* language: 繁體中文 default */
+#hud #bLang{font:700 12px/1 var(--zh)}
+html[lang^=zh] #hud #bLang{font:9px var(--px)}
+html[lang^=zh] #hud #bSnd{font:700 12px/1 var(--zh)}
+.lang{display:flex;gap:8px;justify-content:center}
+.lang button{font:11px var(--px);padding:6px 12px;border:2px solid var(--faint);background:transparent;color:var(--paper);cursor:pointer;min-height:36px}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh)}
+.lang button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+html[lang^=zh] h1{font:900 clamp(40px,11vw,76px)/1 var(--serif);letter-spacing:.14em}
+html[lang^=zh] h1 span{letter-spacing:.12em}
+html[lang^=zh] h2{letter-spacing:.14em}
+html[lang^=zh] h3{font:700 13px var(--zh);letter-spacing:.12em}
+html[lang^=zh] p{font-family:var(--zh);font-size:clamp(14px,3.4vw,17px);line-height:1.55;text-wrap:pretty}
+html[lang^=zh] .keys{font-size:14px}html[lang^=zh] .fine{font-size:13px}
+html[lang^=zh] .news{font-size:15px;line-height:1.5}
+html[lang^=zh] .btn{font:700 15px var(--zh);letter-spacing:.08em}
+html[lang^=zh] .stat{font:700 16px/1.1 var(--zh)}html[lang^=zh] .stat small{font:500 12px/1.4 var(--zh)}
+html[lang^=zh] .kv{font:500 15px/1.3 var(--zh)}
+html[lang^=zh] .warp button{font:700 14px/1.3 var(--zh)}
+html[lang^=zh] dl{font:500 15px/1.4 var(--zh)}
+html[lang^=zh] .tb{font:700 14px/1.15 var(--zh)}html[lang^=zh] #tG{font-size:12px}html[lang^=zh] #tA{font-size:16px}
+html[lang^=zh] #tU{font:700 15px var(--zh)}
+#rot{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 54px);text-align:center;font:9px/1.6 var(--px);color:var(--gold);display:none;z-index:12;pointer-events:none;padding:0 12px}
+html[lang^=zh] #rot{font:700 15px var(--zh)}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:block}}
+@media (max-height:520px){.card{gap:9px;padding-block:4px}.seal{font-size:22px}h1{font-size:clamp(28px,8vh,40px)}html[lang^=zh] h1{font-size:clamp(34px,10vh,48px)}h1 span{margin-top:8px}
+ p{font-size:17px}.keys{font-size:15px}html[lang^=zh] p{font-size:13px;line-height:1.45}html[lang^=zh] .keys{font-size:12px}.fine{display:none}
+ .ov{padding:10px 16px}.menu{gap:10px}.panel{padding:8px 10px;gap:5px}h2{font-size:24px}.stat button{height:28px}.btn{padding:9px 14px}}
+@media (max-height:420px){.seal{display:none}.ov{padding:6px 16px}.card{gap:7px}}
+@media (max-height:520px){#fire .card{gap:6px;padding-block:2px}#fire h2{font-size:22px}.news{font-size:15px}html[lang^=zh] .news{font-size:13px;line-height:1.3}
+ .panel{padding:6px 10px;gap:3px}.kv{font-size:16px}html[lang^=zh] .kv{font-size:13px;line-height:1.25}
+ .stat{font-size:17px}.stat small{display:inline;margin-left:6px;font-size:13px}html[lang^=zh] .stat{font-size:14px}html[lang^=zh] .stat small{display:inline;font-size:11px;margin-left:6px}
+ .stat button{height:24px;width:36px}h3{font-size:8px}html[lang^=zh] h3{font-size:12px}#fire .btn{padding:8px 14px}.warp button{padding:5px 8px}html[lang^=zh] .warp button{font-size:13px}
+ #fTip{font-size:15px!important}html[lang^=zh] #fTip{font-size:13px!important}}
 </style>
+</head>
+<body>
 
 <div id="app"><canvas id="cv" width="384" height="216" aria-label="Dark Yuan game screen"></canvas></div>
-<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="hud" hidden><button id="bLang" aria-label="Switch to English" lang="en">EN</button><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
 <div id="touch" hidden>
   <div id="stickBase" hidden><div id="stickKnob"></div></div>
-  <div class="tb R" id="tA" data-k="atk">ATTACK</div>
-  <div class="tb R" id="tH" data-k="heavy">HEAVY</div>
-  <div class="tb R" id="tR" data-k="roll">ROLL</div>
-  <div class="tb R" id="tJ" data-k="jump">JUMP</div>
-  <div class="tb R" id="tG" data-k="guard">GUARD<br>PARRY</div>
-  <div class="tb R" id="tW" data-k="wine">WINE</div>
-  <div class="tb R" id="tN" data-k="gren">BOMB</div>
+  <div class="tb R" id="tA" data-t="tA" data-k="atk">ATTACK</div>
+  <div class="tb R" id="tH" data-t="tH" data-k="heavy">HEAVY</div>
+  <div class="tb R" id="tR" data-t="tR" data-k="roll">ROLL</div>
+  <div class="tb R" id="tJ" data-t="tJ" data-k="jump">JUMP</div>
+  <div class="tb R" id="tG" data-t="tG" data-k="guard">GUARD<br>PARRY</div>
+  <div class="tb R" id="tW" data-t="tW" data-k="wine">WINE</div>
+  <div class="tb R" id="tN" data-t="tN" data-k="gren">BOMB</div>
   <div class="tb" id="tU" data-k="use" hidden>USE</div>
 </div>
 
+<div id="rot" data-t="rot">Turn your phone sideways: this war is fought in landscape</div>
 <div id="title" class="ov">
   <div class="card">
     <div class="seal">金圓券</div>
-    <h1>DARK YUAN<span>PREPARE TO INFLATE</span></h1>
-    <p class="tag">China, 1948. Soldiers who die without discharge papers get back up and keep fighting. You are a Nationalist (KMT) conscript who died in a roped column. Nobody discharged you. The Communists want you dead; your own officers want you back. Reach the last ferry.</p>
-    <div class="row"><button class="btn" id="bNew">NEW GAME</button><button class="btn alt" id="bCont" hidden>CONTINUE</button></div>
-    <p class="keys">A D move · Space jump · J attack · U heavy · K roll · L guard (tap to parry) · R rice wine · G grenade · W / E use · P pause<br>Mouse: left click attack, right click guard · Phone: left thumb moves, buttons on the right</p>
-    <p class="fine">Satire. Very hard. Your Gold Yuan loses value every time you rest. When you die, it keeps losing value on the ground.</p>
+    <h1 data-t="h1">DARK YUAN<span>PREPARE TO INFLATE</span></h1>
+    <p class="tag" data-t="tag">China, 1948. Soldiers who die without discharge papers get back up and keep fighting. You are a Nationalist (KMT) conscript who died in a roped column. Nobody discharged you. The Communists want you dead; your own officers want you back. Reach the last ferry.</p>
+    <div class="row"><button class="btn" id="bNew" data-t="bNew">NEW GAME</button><button class="btn alt" id="bCont" data-t="bCont" hidden>CONTINUE</button></div>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">繁體中文</button><button data-l="en" lang="en" aria-pressed="false">English</button></div>
+    <p class="keys" data-t="keys">A D move · Space jump · J attack · U heavy · K roll · L guard (tap to parry) · R rice wine · G grenade · W / E use · P pause<br>Mouse: left click attack, right click guard · Phone: left thumb moves, buttons on the right</p>
+    <p class="fine" data-t="fine">Satire. Very hard. Your Gold Yuan loses value every time you rest. When you die, it keeps losing value on the ground.</p>
   </div>
 </div>
 
@@ -101,34 +153,35 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
     <p class="news" id="fireN"></p>
     <div class="menu">
       <div class="panel">
-        <h3>LEVEL UP · PAID IN GOLD YUAN</h3>
-        <div class="kv gold"><span>Gold Yuan held</span><b id="fY"></b></div>
-        <div class="kv"><span>Next level costs</span><b id="fC"></b></div>
+        <h3 data-t="lvH">LEVEL UP · PAID IN GOLD YUAN</h3>
+        <div class="kv gold"><span data-t="fYk">Gold Yuan held</span><b id="fY"></b></div>
+        <div class="kv"><span data-t="fCk">Next level costs</span><b id="fC"></b></div>
         <div class="line"></div>
-        <div class="stat"><span>VIGOR<small>More morale (health)</small></span><b id="sV"></b><button data-s="vig" aria-label="Raise vigor">+</button></div>
-        <div class="stat"><span>ENDURANCE<small>More stamina</small></span><b id="sE"></b><button data-s="end" aria-label="Raise endurance">+</button></div>
-        <div class="stat"><span>STRENGTH<small>Bigger dadao damage</small></span><b id="sS"></b><button data-s="str" aria-label="Raise strength">+</button></div>
+        <div class="stat"><span data-t="sVk">VIGOR<small>More morale (health)</small></span><b id="sV"></b><button data-s="vig" aria-label="Raise vigor">+</button></div>
+        <div class="stat"><span data-t="sEk">ENDURANCE<small>More stamina</small></span><b id="sE"></b><button data-s="end" aria-label="Raise endurance">+</button></div>
+        <div class="stat"><span data-t="sSk">STRENGTH<small>Bigger dadao damage</small></span><b id="sS"></b><button data-s="str" aria-label="Raise strength">+</button></div>
         <div class="line"></div>
-        <div class="kv"><span>Soul level</span><b id="fL"></b></div>
-        <div class="kv"><span>HP · Stamina · Damage</span><b id="fD"></b></div>
-        <div class="kv"><span>Rice wine · Grenades</span><b id="fF"></b></div>
+        <div class="kv"><span data-t="fLk">Soul level</span><b id="fL"></b></div>
+        <div class="kv"><span data-t="fDk">HP · Stamina · Damage</span><b id="fD"></b></div>
+        <div class="kv"><span data-t="fFk">Rice wine · Grenades</span><b id="fF"></b></div>
       </div>
       <div class="panel">
-        <h3>TRAVEL BETWEEN STOVES</h3>
+        <h3 data-t="warpH">TRAVEL BETWEEN STOVES</h3>
         <div class="warp" id="warp"></div>
         <p class="tag" style="font-size:17px;margin:0" id="fTip"></p>
       </div>
     </div>
-    <div class="row"><button class="btn" id="fireGo">LEAVE THE STOVE</button></div>
+    <div class="row"><button class="btn" id="fireGo" data-t="fireGo">LEAVE THE STOVE</button></div>
   </div>
 </div>
 
 <div id="end" class="ov" hidden>
   <div class="card">
     <div class="seal">撤退</div>
-    <h2 id="endH">YOU RETREATED</h2>
+    <h2 id="endH" data-t="endH">YOU RETREATED</h2>
     <p id="endP"></p>
     <dl id="endS"></dl>
-    <div class="row"><button class="btn" id="e1">COUNTERATTACK (NG+)</button><button class="btn alt" id="e2">TITLE</button></div>
+    <div class="row"><button class="btn" id="e1" data-t="e1">COUNTERATTACK (NG+)</button><button class="btn alt" id="e2" data-t="e2">TITLE</button></div>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">繁體中文</button><button data-l="en" lang="en" aria-pressed="false">English</button></div>
   </div>
 </div>
