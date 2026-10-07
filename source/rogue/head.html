@@ -1,6 +1,20 @@
-<title>Conscript's Descent</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>壯丁深淵 Conscript's Descent</title>
+<meta name="description" content="Conscript's Descent (壯丁深淵): a free pixel-art action RPG satire of the Chinese Civil War, 1948–49. Pick a Nationalist conscript (dadao brute, sharpshooter or propagandist), loot your way down six floors from a burning village through the Shanghai sewers and the central bank's vault tunnels to the Bund, beat a tank with six owners and a giant face pending approval, and win every fight just in time for the last boat to Taiwan. Temporarily. 繁體中文 / English.">
+<meta name="theme-color" content="#120d0c">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="壯丁深淵">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%23120d0c'/%3E%3Crect x='2' y='11' width='12' height='2' fill='%233a2a20'/%3E%3Crect x='4' y='13' width='8' height='2' fill='%232a1e18'/%3E%3Crect x='4' y='2' width='8' height='3' fill='%234a6aa3'/%3E%3Crect x='3' y='5' width='10' height='1' fill='%23243a66'/%3E%3Crect x='7' y='3' width='2' height='1' fill='%23e9dcc2'/%3E%3Crect x='5' y='6' width='6' height='4' fill='%23e3b184'/%3E%3Crect x='6' y='7' width='1' height='1' fill='%23120d0c'/%3E%3Crect x='9' y='7' width='1' height='1' fill='%23120d0c'/%3E%3Crect x='12' y='4' width='1' height='8' fill='%23c8c8c8'/%3E%3Crect x='11' y='10' width='3' height='1' fill='%237a5230'/%3E%3Crect x='7' y='12' width='2' height='2' fill='%23d9a441'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: one-screen arcade cabinet — letterboxed pixel canvas; ledger-paper overlays for bag, perks and the quartermaster */
 :root{
@@ -9,11 +23,12 @@
   --common:#e9dcc2; --magic:#6a9aff; --rare:#ffd24a; --legend:#ff8a3a;
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
-  --han:"Noto Serif TC","Songti TC","PMingLiU","SimSun",serif;
+  --han:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","SimSun",serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC","Source Han Sans TC",sans-serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
-html,body{height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 40%,#2a1c18 0%,var(--ink) 70%)}
 #cv{image-rendering:pixelated;image-rendering:crisp-edges;display:block;background:#000;box-shadow:0 0 0 2px #000,0 0 40px #000;cursor:crosshair}
 #hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
@@ -85,45 +100,91 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 #t4{width:50px;height:50px;right:calc(env(safe-area-inset-right,0px) + 12px);bottom:calc(env(safe-area-inset-bottom,0px) + 106px)}
 #tP{width:44px;height:44px;right:calc(env(safe-area-inset-right,0px) + 162px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);border-color:var(--red)}
 @media (prefers-reduced-motion:reduce){.cls,.perk{transition:none}}
+/* language switch + Chinese typography (CJK glyphs are wider than the 8px pixel letters) */
+.lang{display:flex;gap:8px;justify-content:center}
+.lang button{font:12px var(--px);padding:6px 12px;border:2px solid #6e6050;background:transparent;color:var(--paper);cursor:pointer;min-height:36px}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh)}
+.lang button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+#hud #bLang{font:700 12px/1 var(--zh)}
+html[lang^=zh] #hud #bLang{font:9px var(--px)}
+html[lang^=zh] #hud #bBag,html[lang^=zh] #hud #bSnd{font:700 12px/1 var(--zh);padding:5px 7px}
+html[lang^=zh] h1{font-family:var(--han);font-weight:900;letter-spacing:.1em;font-size:clamp(30px,8vw,56px)}
+html[lang^=zh] h1 span{font:700 12px/1.6 var(--zh);letter-spacing:.2em}
+html[lang^=zh] h2{font-family:var(--zh);font-weight:700;letter-spacing:.08em;font-size:clamp(18px,4.4vw,26px)}
+html[lang^=zh] h3{font:700 13px var(--zh);letter-spacing:.1em}
+html[lang^=zh] p{font-family:var(--zh);font-size:clamp(14px,3.6vw,16px);line-height:1.55}
+html[lang^=zh] .keys{font-size:13px}html[lang^=zh] .fine{font-size:12.5px}
+html[lang^=zh] .btn{font:700 15px var(--zh);letter-spacing:.08em}
+html[lang^=zh] .cls i{font:700 14px/1.3 var(--zh);letter-spacing:.1em}
+html[lang^=zh] .cls small{font:500 13px/1.45 var(--zh)}
+html[lang^=zh] .cls em{font:700 12px/1.4 var(--zh);letter-spacing:.1em}
+html[lang^=zh] .slot,html[lang^=zh] .it{font:500 14px/1.2 var(--zh)}
+html[lang^=zh] .slot span:first-child{font:700 12px/1.2 var(--zh)}
+#shop .slot span:first-child,#sell .slot span:first-child{width:auto;min-width:72px;white-space:nowrap}
+html[lang^=zh] #shop .slot span:first-child,html[lang^=zh] #sell .slot span:first-child{min-width:96px;font:500 12px/1.2 var(--zh)}
+html[lang^=zh] .detail{font:500 14px/1.5 var(--zh)}
+html[lang^=zh] .detail .nm{font:700 15px/1.4 var(--zh)}
+html[lang^=zh] .detail .flav{font-style:normal}
+html[lang^=zh] .stats{font:500 13px/1.5 var(--zh)}
+html[lang^=zh] .perk b{font:700 16px/1.4 var(--zh);letter-spacing:.06em}
+html[lang^=zh] .perk span{font:500 14px/1.45 var(--zh)}
+html[lang^=zh] .perk small{font:500 12.5px/1.45 var(--zh)}
+html[lang^=zh] dl{font:500 15px/1.5 var(--zh)}
+html[lang^=zh] .tb{font:700 13px/1.2 var(--zh)}
+html[lang^=zh] #tA{font-size:16px}
+html[lang^=zh] #campG{font-size:14px}
+#rot{position:fixed;left:0;right:0;top:0;text-align:center;font:9px/1.6 var(--px);color:var(--gold);display:none;z-index:12;pointer-events:none;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;background:rgba(18,13,12,.94);border-bottom:2px solid #3e2e24}
+html[lang^=zh] #rot{font:700 14px var(--zh)}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:block}.ov{padding-top:60px}}
+@media (pointer:coarse){.kbd{display:none}}
+#title .card{max-width:860px}
+@media (max-height:700px){.card{gap:10px;padding-block:6px}.seal{font-size:34px}.cls{padding:9px 10px}}
+/* short landscape phones: tighter title so everything fits without hunting */
+@media (max-height:520px){.card{gap:9px}.seal{font-size:24px}h1{font-size:clamp(18px,5vh,30px)}html[lang^=zh] h1{font-size:30px}p{font-size:17px}.cls{padding:8px}.cls small{font-size:15px}html[lang^=zh] .cls small{font-size:12px}.keys,.fine{font-size:14px}}
+@media (max-height:420px){.seal{display:none}.ov{padding:8px 16px}.card{gap:7px;padding-block:4px}html[lang^=zh] p{font-size:13px}html[lang^=zh] .keys{font-size:12px}.fine{display:none}}
 </style>
 
+</head>
+<body>
 <div id="app"><canvas id="cv" width="384" height="216" aria-label="Conscript's Descent game screen"></canvas></div>
-<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bBag" aria-label="Open bag">BAG</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="hud" hidden><button id="bLang" aria-label="切換為中文" lang="zh-Hant">中文</button><button id="bPause" aria-label="Pause">II</button><button id="bBag" aria-label="Open bag" data-t="bBag">BAG</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+<div id="rot" data-t="rot">Turn your phone sideways: the dungeon is wider that way</div>
 <div id="touch" hidden>
   <div id="stickBase" hidden><div id="stickKnob"></div></div>
-  <div class="tb" id="tA" data-k="atk">ATTACK</div>
+  <div class="tb" id="tA" data-k="atk" data-t="tA">ATTACK</div>
   <div class="tb" id="t1" data-k="s1">1</div><div class="tb" id="t2" data-k="s2">2</div><div class="tb" id="t3" data-k="s3">3</div><div class="tb" id="t4" data-k="s4">4</div>
-  <div class="tb" id="tP" data-k="pot">WINE</div>
+  <div class="tb" id="tP" data-k="pot" data-t="tP">WINE</div>
 </div>
 
 <div id="title" class="ov">
   <div class="card">
     <div class="seal">兄弟鬩牆</div>
-    <h1>CONSCRIPT'S DESCENT<span>A CIVIL SLUG ACTION RPG · SIX FLOORS · ONE LIFE</span></h1>
-    <p class="tag">Descend through a burning village and the Shanghai sewers. Loot everything. Your pay inflates. Your value doesn't.</p>
+    <h1 data-t="h1">CONSCRIPT'S DESCENT<span>A CIVIL SLUG ACTION RPG · SIX FLOORS · ONE LIFE</span></h1>
+    <p class="tag" data-t="tag">Descend through a burning village and the Shanghai sewers. Loot everything. Your pay inflates. Your value doesn't.</p>
     <div class="classes">
-      <button class="cls" data-c="brute"><b>大刀隊</b><i>BAYONET BRUTE</i><small>Big sword, bigger mouth. Spins, leaps, and roars the national slogan.</small><em>MELEE · TOUGH</em></button>
-      <button class="cls" data-c="sharp"><b>神槍手</b><i>SHARPSHOOTER</i><small>A rifle, some mines, and a talent for strategic withdrawal.</small><em>RANGED · NIMBLE</em></button>
-      <button class="cls" data-c="prop"><b>宣傳員</b><i>PROPAGANDIST</i><small>Slogans that stun, inflation that explodes, defectors on demand.</small><em>CASTER · SUMMONS</em></button>
+      <button class="cls" data-c="brute"><b>大刀隊</b><i data-t="bruteI">BAYONET BRUTE</i><small data-t="bruteS">Big sword, bigger mouth. Spins, leaps, and roars the national slogan.</small><em data-t="bruteE">MELEE · TOUGH</em></button>
+      <button class="cls" data-c="sharp"><b>神槍手</b><i data-t="sharpI">SHARPSHOOTER</i><small data-t="sharpS">A rifle, some mines, and a talent for strategic withdrawal.</small><em data-t="sharpE">RANGED · NIMBLE</em></button>
+      <button class="cls" data-c="prop"><b>宣傳員</b><i data-t="propI">PROPAGANDIST</i><small data-t="propS">Slogans that stun, inflation that explodes, defectors on demand.</small><em data-t="propE">CASTER · SUMMONS</em></button>
     </div>
-    <p class="keys">Mouse: left click to move and attack, right click for skill 1 · Keys 1–4 skills · F rice wine · I bag · W A S D also walk · P pause<br>Phone: left thumb walks, ATTACK and skills auto-aim at the nearest enemy.</p>
-    <p class="fine">Satire. Permadeath. The quartermaster accepts Gold Yuan, reluctantly.</p>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">繁體中文</button><button data-l="en" lang="en" aria-pressed="false">English</button></div>
+    <p class="keys" data-t="keys"><span class="kbd">Mouse: left click to move and attack, right click for skill 1 · Keys 1–4 skills · F rice wine · I bag · W A S D also walk · P pause · L language<br></span>Phone: left thumb walks, ATTACK and skills auto-aim at the nearest enemy.</p>
+    <p class="fine" data-t="fine">Satire. Permadeath. The quartermaster accepts Gold Yuan, reluctantly.</p>
   </div>
 </div>
 
 <div id="bag" class="ov" hidden>
   <div class="card" style="max-width:860px">
-    <h2>KIT BAG</h2>
+    <h2 data-t="bagT">KIT BAG</h2>
     <div class="bagwrap">
-      <div class="panel"><h3>EQUIPPED</h3><div class="slots" id="eq"></div><h3>CONSCRIPT</h3><div class="stats" id="st"></div></div>
-      <div class="panel"><h3 id="bagH">BAG</h3><div class="grid" id="bg"></div><div class="detail" id="dt"><p class="tag">Tap an item to inspect it.</p></div><div class="row" id="dtb"></div></div>
+      <div class="panel"><h3 data-t="eqH">EQUIPPED</h3><div class="slots" id="eq"></div><h3 data-t="stH">CONSCRIPT</h3><div class="stats" id="st"></div></div>
+      <div class="panel"><h3 id="bagH">BAG</h3><div class="grid" id="bg"></div><div class="detail" id="dt"></div><div class="row" id="dtb"></div></div>
     </div>
-    <div class="row"><button class="btn" id="bagClose">BACK TO THE WAR</button></div>
+    <div class="row"><button class="btn" id="bagClose" data-t="bagClose">BACK TO THE WAR</button></div>
   </div>
 </div>
 
 <div id="perk" class="ov" hidden>
-  <div class="card"><h2 id="perkH">FIELD PROMOTION</h2><p class="tag" id="perkP">Choose one. The others go to an officer's nephew.</p><div class="perks" id="perks"></div></div>
+  <div class="card"><h2 id="perkH">FIELD PROMOTION</h2><p class="tag" id="perkP" data-t="perkP">Choose one. The others go to an officer's nephew.</p><div class="perks" id="perks"></div></div>
 </div>
 
 <div id="camp" class="ov" hidden>
@@ -131,11 +192,11 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
     <h2 id="campH">FIELD CAMP</h2>
     <p id="campP"></p>
     <div class="bagwrap">
-      <div class="panel"><h3 id="shopH">QUARTERMASTER (OUR SUPPLIES, HIS PRICES)</h3><div class="slots" id="shop"></div></div>
-      <div class="panel"><h3>SELL FROM YOUR BAG</h3><div class="slots" id="sell"></div></div>
+      <div class="panel"><h3 id="shopH" data-t="shopH">QUARTERMASTER (OUR SUPPLIES, HIS PRICES)</h3><div class="slots" id="shop"></div></div>
+      <div class="panel"><h3 data-t="sellH">SELL FROM YOUR BAG</h3><div class="slots" id="sell"></div></div>
     </div>
     <p class="tag" id="campG"></p>
-    <div class="row"><button class="btn alt" id="campBag">OPEN BAG</button><button class="btn" id="campGo">DESCEND</button></div>
+    <div class="row"><button class="btn alt" id="campBag" data-t="campBag">OPEN BAG</button><button class="btn" id="campGo" data-t="campGo">DESCEND</button></div>
   </div>
 </div>
 
