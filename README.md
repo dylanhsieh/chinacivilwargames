@@ -47,19 +47,19 @@ All 13 games are complete releases: full KMT campaign of 5–6 stages, story sce
 
 | # | Game | Genre | About |
 |---|------|-------|-------|
-| 01 | [國共大戰 Civil Slug 1946](games/01-civil-slug/) ★ | Run-and-gun | The flagship. Five Metal Slug-style missions, KMT side, Taiwan ending. 繁體中文 / English. |
-| 02 | [國共大戰：圍村 Civil Slug: Village Siege](games/02-civil-slug-siege/) ★ | First-person shooter (3D) | Six stages in first person, from the village to the last pier, each with a boss (tank, armored train, bomber, gunboat, printing press, walking billboard). 繁體中文 / English. |
-| 03 | [壯丁深淵 Conscript's Descent](games/03-conscripts-descent/) ★ | Action RPG / roguelike | Six floors, one life: click-to-move looting from a burning village to the Bund, two bosses, then the boat. 繁體中文 / English. |
-| 04 | [黑暗金圓 Dark Yuan](games/04-dark-yuan/) ★ | Souls-like (2D) | A hard 2D action game about an undead KMT conscript: five areas, five bosses, rest stoves that inflate prices, ending in YOU RETREATED. 繁體中文 / English. |
-| 05 | [黑暗金圓 3D Dark Yuan 3D](games/05-dark-yuan-3d/) ★ | Souls-like (3D) | The blocky low-poly 3D version: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. 繁體中文 / English. |
-| 06 | [明暗：第四十八遠征隊 Ming An: Expedition 48](games/06-ming-an-expedition-48/) ★ | Turn-based RPG with real-time dodging | A KMT expedition across six chapters of 1948 China to stop the Printer, then the boat. 3D. 繁體中文 / English. |
-| 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) ★ | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
-| 08 | [軍樂大對決 Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) ★ | Rhythm game | The KMT brass band's six-gig tour against rival troupes, from the village square to the last ferry pier. 繁體中文 / English. |
-| 09 | [黃金大轉進 Gold Run 1949](games/09-gold-run-1949/) ★ | Tower defense | Guard the KMT gold reserves across six maps, from the bank vault to the last ship; the gold leaves first. 繁體中文 / English. |
-| 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) ★ | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
-| 11 | [金圓長空 Sky of Gold Yuan 1949](games/11-sky-of-gold-yuan/) ★ | Shoot 'em up | A contract pilot for the KMT air force: six side-scrolling stages and bosses, then one way to Taiwan on Gold Yuan fuel. 繁體中文 / English. |
-| 12 | [末班渡輪 Last Ferry Rush 1949](games/12-last-ferry-rush/) ★ | Racing | Drive a KMT truck of passengers through six legs of the retreat, boss chases included, to the last ferry. 繁體中文 / English. |
-| 13 | [紙上將軍 Paper Generals 1949](games/13-paper-generals-1949/) ★ | Turn-based tactics | Six KMT battles where morale is a resource and broken soldiers defect; win all six, then the last ferry. 繁體中文 / English. |
+| 01 | [國共大戰 Civil Slug 1946](games/01-civil-slug/) | Run-and-gun | The flagship. Five Metal Slug-style missions, KMT side, Taiwan ending. 繁體中文 / English. |
+| 02 | [國共大戰：圍村 Civil Slug: Village Siege](games/02-civil-slug-siege/) | First-person shooter (3D) | Six stages in first person, from the village to the last pier, each with a boss (tank, armored train, bomber, gunboat, printing press, walking billboard). 繁體中文 / English. |
+| 03 | [壯丁深淵 Conscript's Descent](games/03-conscripts-descent/) | Action RPG / roguelike | Six floors, one life: click-to-move looting from a burning village to the Bund, two bosses, then the boat. 繁體中文 / English. |
+| 04 | [黑暗金圓 Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about an undead KMT conscript: five areas, five bosses, rest stoves that inflate prices, ending in YOU RETREATED. 繁體中文 / English. |
+| 05 | [黑暗金圓 3D Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. 繁體中文 / English. |
+| 06 | [明暗：第四十八遠征隊 Ming An: Expedition 48](games/06-ming-an-expedition-48/) | Turn-based RPG with real-time dodging | A KMT expedition across six chapters of 1948 China to stop the Printer, then the boat. 3D. 繁體中文 / English. |
+| 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
+| 08 | [軍樂大對決 Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) | Rhythm game | The KMT brass band's six-gig tour against rival troupes, from the village square to the last ferry pier. 繁體中文 / English. |
+| 09 | [黃金大轉進 Gold Run 1949](games/09-gold-run-1949/) | Tower defense | Guard the KMT gold reserves across six maps, from the bank vault to the last ship; the gold leaves first. 繁體中文 / English. |
+| 10 | [軍糧消消樂 Ration Crush 1949](games/10-ration-crush-1949/) | Match-3 puzzle | Cook for a retreating KMT unit: 6 chapters, 18 levels, a boss general per chapter, Taiwan ending. 繁體中文 / English. |
+| 11 | [金圓長空 Sky of Gold Yuan 1949](games/11-sky-of-gold-yuan/) | Shoot 'em up | A contract pilot for the KMT air force: six side-scrolling stages and bosses, then one way to Taiwan on Gold Yuan fuel. 繁體中文 / English. |
+| 12 | [末班渡輪 Last Ferry Rush 1949](games/12-last-ferry-rush/) | Racing | Drive a KMT truck of passengers through six legs of the retreat, boss chases included, to the last ferry. 繁體中文 / English. |
+| 13 | [紙上將軍 Paper Generals 1949](games/13-paper-generals-1949/) | Turn-based tactics | Six KMT battles where morale is a resource and broken soldiers defect; win all six, then the last ferry. 繁體中文 / English. |
 
 ## Running locally
 
