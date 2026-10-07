@@ -48,7 +48,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | # | Game | Genre | About |
 |---|------|-------|-------|
 | 01 | [國共大戰 Civil Slug 1946](games/01-civil-slug/) ★ | Run-and-gun | The flagship. Five Metal Slug-style missions, KMT side, Taiwan ending. 繁體中文 / English. |
-| 02 | [Civil Slug: Village Siege](games/02-civil-slug-siege/) | First-person shooter (3D) | Six stages in first person, from the village to the last pier, each with a boss (a tank, an armored train, a bomber, a gunboat, a printing press, a walking billboard). |
+| 02 | [國共大戰：圍村 Civil Slug: Village Siege](games/02-civil-slug-siege/) ★ | First-person shooter (3D) | Six stages in first person, from the village to the last pier, each with a boss (tank, armored train, bomber, gunboat, printing press, walking billboard). 繁體中文 / English. |
 | 03 | [Conscript's Descent](games/03-conscripts-descent/) | Action RPG / roguelike | Six floors, one life. Click-to-move looting through a burning village and the Shanghai sewers. |
 | 04 | [Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about an undead KMT conscript. Five areas, five bosses, ending in YOU RETREATED. |
 | 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version of Dark Yuan: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. |

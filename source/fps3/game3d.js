@@ -142,6 +142,10 @@ const MW=32,MH=22;
 const CHH0={'#':1.15,P:1.15,Q:1.15,W:2.0,F:1.8,R:1.3,Y:2.6,_:.5,z:.25,'.':0,'~':0,':':0};
 let CHH=CHH0;
 const L0=TEXT.kmt.levels;
+const SC3={
+ nanjing:{date:'APRIL 23, 1949',place:'NANJING',draw:'flags',fact:"Three days after the crossing, the capital falls. The government moves south to Guangzhou. Then to Chongqing. Then to Chengdu.",joke:"HQ calls it a 'mobile capital'. It now has wheels, and a timetable."},
+ shanghai:{date:'MAY 1949',place:'SHANGHAI',draw:'bankrun',fact:"The Gold Yuan launched last August at four to the US dollar. It now trades by the million. Workers are paid twice a day.",joke:"A sack of cash buys a sack of rice. The sack is the valuable part."},
+ pier:{date:'DECEMBER 1949',place:'THE LAST PIER',draw:'table',fact:"The People's Republic was proclaimed in October. The government is 'temporarily relocating' across the strait. The last boats are loading.",joke:"HQ boarded first, to inspect the boat for you. The gold boarded before HQ."}};
 const STAGES=[
  {key:'village',name:'VILLAGE SIEGE',sub:['FREE THE VILLAGERS · SILENCE THE SPEAKERS','WATCH THE ROOFTOPS. CAPTURE THE TANK.'],music:'m1',
   roof:[[13.5,3.5],[17.5,6.5],[25.5,7.5],[22.5,18.5],[9.5,9.5]],
@@ -166,14 +170,14 @@ const STAGES=[
   roof:[[5.5,1.5],[19.5,2.5],[4.5,5.5],[20.5,5.5],[13.5,9.5]],
   th:{sky:['#05070f','#0b1024','#1a2440','#2a3858'],gnd:['#0e1830','#0a1020'],sun:'#f0f0d0',sunY:60,hill:['#141c30','#0e1424'],smoke:3,stars:120,bg:0x0b1024,fog:0x18223a,fogF:22,hemi:[0x8098d0,0x1a1a28,1.0],sunL:[0xb0c4ff,.45],dirt:['#3a3428','#2e2a20','#4a4232','#544a38'],wx:'none',sea:0x1a2a48},
   boss:{k:'boat',name:'THE GUNBOAT OF FLEXIBLE LOYALTY',short:'GUNBOAT',where:'THE RIVER',hp:200,spawn:[29.5,15.5],pop:'GUNBOAT SUNK. ITS FLAG WAS STILL UNDECIDED.'},
-  pre:()=>SCENES[4].pre,post:()=>({date:'APRIL 23, 1949',place:'NANJING',draw:'flags',fact:"Three days after the crossing, the capital falls. The government moves south to Guangzhou. Then to Chongqing. Then to Chengdu.",joke:"HQ calls it a 'mobile capital'. It now has wheels, and a timetable."}),
+  pre:()=>SCENES[4].pre,post:()=>SC3.nanjing,
   tx:Object.assign({},L0[4],{boss:"HQ: Gunboat! Its captain changed sides twice today. Check which flag he's flying. Then shoot it anyway.",truck:"HQ: Enemy loudspeakers on the bank. They are announcing the score. Do not look at the score.",start2:"HQ: Correction. The officers have reached the far bank. And the bank after that.",t900:"HQ: Snipers in the boathouses. Also mosquitoes. Only one of them takes bribes.",win:"HQ: Gunboat sunk! Excellent. Unfortunately, a million men crossed somewhere else."})},
  {key:'shanghai',name:'SHANGHAI',sub:['MAY 1949 · PRICES DOUBLE EVERY HOUR','RETAKE THE PRINTING PRESS.'],music:'m4',
   hgt:{R:2.4,P:2.4,Q:2.4},tex:{R:'stucco'},
   roof:[[5.5,1.5],[20.5,1.5],[13.5,5.5],[3.5,8.5],[26.5,8.5],[21.5,12.5]],
   th:{sky:['#120a1a','#2a1430','#4a2040','#8a3a4a'],gnd:['#2a1a28','#1a1220'],sun:'#ffd0a0',sunY:150,hill:['#2a2030','#201828'],smoke:4,stars:20,bg:0x1a1220,fog:0x3a2438,fogF:22,hemi:[0xffc0d0,0x2a1820,1.05],sunL:[0xff8aa0,.5],dirt:['#4a4448','#3a3438','#5a5458','#2a2428'],wx:'money'},
   boss:{k:'press',name:'THE PRINTING PRESS (ENEMY-HELD)',short:'PRESS',where:'THE MINT',hp:240,spawn:[29.5,17.5],pop:'PRESS SILENCED. INFLATION CONTINUES BY ITSELF.'},
-  pre:()=>({date:'MAY 1949',place:'SHANGHAI',draw:'bankrun',fact:"The Gold Yuan launched last August at four to the US dollar. It now trades by the million. Workers are paid twice a day.",joke:"A sack of cash buys a sack of rice. The sack is the valuable part."}),post:()=>SCENES[3].post,
+  pre:()=>SC3.shanghai,post:()=>SCENES[3].post,
   tx:Object.assign({},L0[3],{start2:"HQ: Your pay has arrived. It has already lost value during this sentence.",drop:"HQ: Airdrop! A machine gun, wrapped in banknotes. The banknotes are the packing material.",t900:"HQ: Snipers on the shophouses. Rent up there is cheaper than rice.",win:"HQ: Press secured! We will now print our victory bonus. It will be worth nothing by dinner."})},
  {key:'pier',name:'THE LAST PIER',sub:['DECEMBER 1949 · THE LAST BOAT LEAVES TODAY','HOLD THE PIER. EVERYONE ELSE IS ALREADY ON IT.'],music:'m5',bossMusic:'final',
   hgt:{'#':2.0},tex:{'#':'ware'},
@@ -181,7 +185,7 @@ const STAGES=[
   ship:{x:16,y:26},
   th:{sky:['#3a4250','#5a6474','#8a909a','#c0b8a8'],gnd:['#3a4a5a','#2a3a4a'],sun:'#fff0d0',sunY:176,hill:['#4a5464','#3a4454'],smoke:3,stars:0,bg:0x5a6474,fog:0x7a8290,fogF:30,hemi:[0xe0e4f0,0x2a2a30,1.1],sunL:[0xfff0d8,.5],dirt:['#5a5650','#4a4640','#6a665e','#3a3632'],wx:'drizzle',sea:0x2a3a4e},
   boss:{k:'mech',name:'THE WALKING BILLBOARD (FACE PENDING APPROVAL)',short:'BILLBOARD',where:'THE PIER',hp:280,spawn:[29.5,17.5],pop:'BILLBOARD DOWN. THE BOAT LEAVES IN 5 MINUTES.'},
-  pre:()=>({date:'DECEMBER 1949',place:'THE LAST PIER',draw:'table',fact:"The People's Republic was proclaimed in October. The government is 'temporarily relocating' across the strait. The last boats are loading.",joke:"HQ boarded first, to inspect the boat for you. The gold boarded before HQ."}),post:null,
+  pre:()=>SC3.pier,post:null,
   tx:{start:"HQ: Hold the pier until the last boat sails. HQ will supervise from the boat. The boat is very well supervised.",start2:"HQ: Reminder: one suitcase per soldier. Gold bars count as a suitcase. Officers' gold does not count.",drop:"HQ: A machine gun was found on the pier. It was in the gold's luggage allowance.",truck:"HQ: Loudspeakers are telling you to stay. We are telling you to leave. Nobody is telling you the truth.",mid:"HQ: Your final Gold Yuan pay packet has been issued. Use it as a ticket. It will not work.",t900:"HQ: Snipers on the warehouses. The warehouses are empty. We packed them.",boss:"HQ: Something enormous is coming down the pier. It has a face. Nobody has approved the face.",win:"HQ: Splendid. Victory! Now please board the boat. The war is over. We lost it somewhere else."}}];
 const FW={pistol:{name:'C96 MAUSER',rate:13,dmg:2,spread:.012,sfx:'shot'},tommy:{name:'TOMMY GUN',rate:5,dmg:1.6,spread:.04,sfx:'hmg',ak:'tommy'},bazooka:{name:'BAZOOKA',rate:44,rocket:1,sfx:'rocket',ak:'bazooka'}};
 const WORDER=['pistol','tommy','bazooka'];
@@ -226,8 +230,8 @@ function applyTheme(){if(!glOK)return;const th=ST.th;
 const TEX2={};
 function wallTex(k){if(TEX2[k])return TEX2[k];let c;
  if(k==='rock')c=mk(64,64,g=>{const rr=seeded(77);R(g,0,0,64,64,'#7a808a');for(let i=0;i<40;i++){const w=6+rr()*14|0,h=4+rr()*8|0;R(g,rr()*60|0,rr()*60|0,w,h,rr()<.5?'#6a707a':'#8a909a')}for(let i=0;i<30;i++)R(g,rr()*64|0,rr()*64|0,2,1,'#4a505a');R(g,0,0,64,7,'#eef2f8');for(let x=0;x<64;x+=4)R(g,x,7,4,(x*7)%5+1,'#dfe6ee')});
- else if(k==='stucco')c=mk(64,64,g=>{const rr=seeded(81);R(g,0,0,64,64,'#b8a88c');for(let i=0;i<50;i++)R(g,rr()*64|0,rr()*64|0,2,2,rr()<.5?'#a8987c':'#c8b89c');for(const x of[6,26,46]){R(g,x,10,12,16,'#2a2030');R(g,x+1,11,10,14,(x*3)%2?'#e8c070':'#3a3448');R(g,x+5,11,1,14,'#2a2030');R(g,x,40,12,16,'#2a2030');R(g,x+1,41,10,14,'#3a3448')}R(g,0,30,64,6,'#8a3a2a');g.fillStyle='#f1d27a';g.font='bold 6px monospace';g.fillText('BANK  RICE  GOLD',2,35)});
- else c=mk(64,64,g=>{for(let x=0;x<64;x+=4){R(g,x,0,4,64,x%8?'#5a6470':'#4a5460');R(g,x,0,1,64,'#3a4450')}for(let i=0;i<8;i++)R(g,(i*23)%60,40+(i*7)%20,3,6,'#7a4a2a');R(g,8,24,48,10,'#3a3a3a');g.fillStyle='#e9dcc2';g.font='bold 7px monospace';g.fillText('GODOWN 9',12,32)});
+ else if(k==='stucco')c=lcan(64,64,g=>{const rr=seeded(81);R(g,0,0,64,64,'#b8a88c');for(let i=0;i<50;i++)R(g,rr()*64|0,rr()*64|0,2,2,rr()<.5?'#a8987c':'#c8b89c');for(const x of[6,26,46]){R(g,x,10,12,16,'#2a2030');R(g,x+1,11,10,14,(x*3)%2?'#e8c070':'#3a3448');R(g,x+5,11,1,14,'#2a2030');R(g,x,40,12,16,'#2a2030');R(g,x+1,41,10,14,'#3a3448')}if(LANG==='zh'){R(g,0,29,64,9,'#8a3a2a');signText(g,'','銀行 米行 金號',32,33.5,62,8,'#f1d27a')}else{R(g,0,30,64,6,'#8a3a2a');g.fillStyle='#f1d27a';g.font='bold 6px monospace';g.fillText('BANK  RICE  GOLD',2,35)}});
+ else c=lcan(64,64,g=>{for(let x=0;x<64;x+=4){R(g,x,0,4,64,x%8?'#5a6470':'#4a5460');R(g,x,0,1,64,'#3a4450')}for(let i=0;i<8;i++)R(g,(i*23)%60,40+(i*7)%20,3,6,'#7a4a2a');R(g,8,24,48,10,'#3a3a3a');if(LANG==='zh')signText(g,'','九號倉',32,29.5,46,9,'#e9dcc2');else{g.fillStyle='#e9dcc2';g.font='bold 7px monospace';g.fillText('GODOWN 9',12,32)}});
  return TEX2[k]=c}
 const LAMB=new Map();function lamb(key,o){let m=LAMB.get(key);if(!m){m=new THREE.MeshLambertMaterial(o);LAMB.set(key,m)}return m}
 function boxGeo(h,stretch){const g=new THREE.BoxGeometry(1,h,1),uv=g.attributes.uv;for(let f=0;f<6;f++){if(f===2||f===3)continue;for(let i=0;i<4;i++){const k=f*4+i;uv.setY(k,uv.getY(k)*(stretch?1:h/1.4))}}g.translate(0,h/2,0);return g}
@@ -284,14 +288,14 @@ function buildShip(x,y){const g=new THREE.Group();g.position.set(x,0,y);const L=
  const hull=new THREE.Mesh(new THREE.BoxGeometry(14,2,3.4),L(0x2a2a30));hull.position.y=.6;g.add(hull);const red=new THREE.Mesh(new THREE.BoxGeometry(14.05,.4,3.45),L(0x8a2a22));red.position.y=-.2;g.add(red);
  const sup=new THREE.Mesh(new THREE.BoxGeometry(5,1.6,2.6),L(0xd8d0c0));sup.position.set(1,2.4,0);g.add(sup);const sup2=new THREE.Mesh(new THREE.BoxGeometry(3,1,2.2),L(0xc8c0b0));sup2.position.set(1.4,3.7,0);g.add(sup2);
  const fun=new THREE.Mesh(new THREE.CylinderGeometry(.5,.55,2.2,10),L(0x2f4f8a));fun.position.set(-2.4,3.4,0);g.add(fun);g.userData.funnel=[x-2.4,y,4.6];
- const ban=new THREE.Mesh(new THREE.PlaneGeometry(11,.9),new THREE.MeshBasicMaterial({map:tex(mk(220,18,gg=>{R(gg,0,0,220,18,'#e9dcc2');gg.fillStyle='#b8322a';gg.font='bold 11px monospace';gg.textAlign='center';gg.fillText('TEMPORARY RELOCATION · BACK NEXT YEAR',110,13)})),fog:true}));ban.position.set(0,2.0,-1.72);ban.rotation.y=Math.PI;g.add(ban);
- const gb=new THREE.Mesh(new THREE.PlaneGeometry(4.6,.5),new THREE.MeshBasicMaterial({map:tex(mk(120,13,gg=>{R(gg,0,0,120,13,'#d9a441');gg.fillStyle='#120d0c';gg.font='bold 8px monospace';gg.textAlign='center';gg.fillText('GOLD: BOARDED LAST WEEK',60,10)})),fog:true}));gb.position.set(1.4,3.7,-1.11);gb.rotation.y=Math.PI;g.add(gb);
+ const ban=new THREE.Mesh(new THREE.PlaneGeometry(11,.9),new THREE.MeshBasicMaterial({map:tex(lcan(220,18,gg=>{R(gg,0,0,220,18,'#e9dcc2');signText(gg,'TEMPORARY RELOCATION · BACK NEXT YEAR','暫時遷移 · 明年就回來',110,9.5,214,LANG==='zh'?14:11,'#b8322a')})),fog:true}));ban.position.set(0,2.0,-1.72);ban.rotation.y=Math.PI;g.add(ban);
+ const gb=new THREE.Mesh(new THREE.PlaneGeometry(4.6,.5),new THREE.MeshBasicMaterial({map:tex(lcan(120,13,gg=>{R(gg,0,0,120,13,'#d9a441');signText(gg,'GOLD: BOARDED LAST WEEK','黃金：上週已登船',60,7,116,LANG==='zh'?11:8,'#120d0c')})),fog:true}));gb.position.set(1.4,3.7,-1.11);gb.rotation.y=Math.PI;g.add(gb);
  g.position.y=.5;spritesRoot.add(g);shipFunnel=g.userData.funnel;shipFunnel[2]+=.5}
 let shipFunnel=null;
 function bossM(c){const m=new THREE.MeshLambertMaterial({color:c});boss.mats.push(m);return m}
 function bossHead(parent,x,y,z,sc){boss.head=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(sprite('hudccp|grit',40,28,gg=>frontHead(gg,'ccp','grit')).n),fog:true,alphaTest:.5}));boss.head.center.set(.5,0);boss.head.scale.set(.42*sc,.3*sc,1);boss.head.position.set(x,y,z);parent.add(boss.head)}
 function wheelRow(g,n,x0,dx,z,r,col){for(let i=0;i<n;i++){const w=new THREE.Mesh(new THREE.CylinderGeometry(r,r,.12,10),bossM(col));w.rotation.x=Math.PI/2;w.position.set(x0+i*dx,r,z);g.add(w)}}
-function signPlane(w,h,txt_,bg,fg){const cw=Math.max(64,txt_.length*6+8);return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex(mk(cw,14,gg=>{R(gg,0,0,cw,14,bg);gg.fillStyle=fg;gg.font='bold 9px monospace';gg.textAlign='center';gg.fillText(txt_,cw/2,11)})),fog:true,side:THREE.DoubleSide}))}
+function signPlane(w,h,en,zh,bg,fg){const cw=Math.max(64,en.length*6+8);return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex(lcan(cw,14,gg=>{R(gg,0,0,cw,14,bg);if(LANG==='zh')signText(gg,en,zh,cw/2,7.5,cw-6,12,fg);else{gg.fillStyle=fg;gg.font='bold 9px monospace';gg.textAlign='center';gg.fillText(en,cw/2,11);gg.textAlign='left'}})),fog:true,side:THREE.DoubleSide}))}
 function buildBoss(){const g=new THREE.Group();g.position.set(boss.x,0,boss.y);boss.mesh=g;boss.mats=[];const M=bossM,k=boss.k;
  if(k==='tank'){
   const body=M(0x5d6447),dk=M(0x434833),tr=M(0x262622);
@@ -299,14 +303,14 @@ function buildBoss(){const g=new THREE.Group();g.position.set(boss.x,0,boss.y);b
   const hull=new THREE.Mesh(new THREE.BoxGeometry(1.6,.36,.9),body);hull.position.y=.52;g.add(hull);const slope=new THREE.Mesh(new THREE.BoxGeometry(.3,.2,.9),dk);slope.position.set(.85,.48,0);g.add(slope);
   const tur=new THREE.Group();tur.position.y=.7;g.add(tur);boss.turret=tur;const tb=new THREE.Mesh(new THREE.BoxGeometry(.8,.3,.7),body);tb.position.y=.15;tur.add(tb);const hatch=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.06,10),dk);hatch.position.set(-.1,.32,0);tur.add(hatch);
   const bar=new THREE.Mesh(new THREE.CylinderGeometry(.05,.06,1,8),M(0x2a2a26));bar.rotation.z=-Math.PI/2;bar.position.set(.85,.17,0);tur.add(bar);
-  const pc=mk(96,16,()=>{});boss.plateCv=pc;boss.plateTex=tex(pc);const plate=new THREE.Mesh(new THREE.PlaneGeometry(.9,.15),new THREE.MeshBasicMaterial({map:boss.plateTex,fog:true}));plate.rotation.y=Math.PI/2;plate.position.set(.81,.5,0);g.add(plate);drawPlate();
+  const pc=mk(192,32,()=>{});boss.plateCv=pc;boss.plateTex=tex(pc);const plate=new THREE.Mesh(new THREE.PlaneGeometry(.9,.15),new THREE.MeshBasicMaterial({map:boss.plateTex,fog:true}));plate.rotation.y=Math.PI/2;plate.position.set(.81,.5,0);g.add(plate);drawPlate();
   bossHead(tur,-.1,.36,0,1)}
  else if(k==='train'){const body=M(0x4a5040),dk=M(0x2a2e26),rust=M(0x6a4a32);
   for(const[ox,len]of[[-1.9,1.75],[0,1.75],[1.9,1.75]]){const c=new THREE.Mesh(new THREE.BoxGeometry(len,.75,.95),ox===0?rust:body);c.position.set(ox,.62,0);g.add(c);const rf=new THREE.Mesh(new THREE.BoxGeometry(len-.1,.12,.8),dk);rf.position.set(ox,1.05,0);g.add(rf);wheelRow(g,3,ox-.6,.6,.46,.16,0x2a2a2a);wheelRow(g,3,ox-.6,.6,-.46,.16,0x2a2a2a);
    for(let i=0;i<3;i++){const sl=new THREE.Mesh(new THREE.BoxGeometry(.2,.06,.02),M(0x111111));sl.position.set(ox-.5+i*.5,.75,.48);g.add(sl);const s2=sl.clone();s2.position.z=-.48;g.add(s2)}}
   boss.turrets=[];for(const ox of[-1.9,1.9]){const tur=new THREE.Group();tur.position.set(ox,1.11,0);g.add(tur);const tb=new THREE.Mesh(new THREE.CylinderGeometry(.32,.36,.28,10),dk);tb.position.y=.14;tur.add(tb);const bar=new THREE.Mesh(new THREE.CylinderGeometry(.045,.05,.8,8),M(0x222222));bar.rotation.z=-Math.PI/2;bar.position.set(.5,.16,0);tur.add(bar);boss.turrets.push(tur)}
   const st=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,.5,8),dk);st.position.set(.5,1.3,0);g.add(st);
-  const sg=signPlane(1.6,.2,'ON SCHEDULE SINCE 1937','#e9dcc2','#120d0c');sg.position.set(0,.7,.48);g.add(sg);const sg2=sg.clone();sg2.position.z=-.48;sg2.rotation.y=Math.PI;g.add(sg2);
+  const sg=signPlane(1.6,.2,'ON SCHEDULE SINCE 1937','1937年來首度準點','#e9dcc2','#120d0c');sg.position.set(0,.7,.48);g.add(sg);const sg2=sg.clone();sg2.position.z=-.48;sg2.rotation.y=Math.PI;g.add(sg2);
   bossHead(g,0,1.1,0,1)}
  else if(k==='bomber'){const body=M(0x5a6450),dk=M(0x3a4232);const p=new THREE.Group();g.add(p);boss.plane=p;
   const fus=new THREE.Mesh(new THREE.CylinderGeometry(.22,.14,2.6,10),body);fus.rotation.z=Math.PI/2;p.add(fus);const nose=new THREE.Mesh(new THREE.ConeGeometry(.22,.4,10),M(0x8a9aa8));nose.rotation.z=-Math.PI/2;nose.position.x=1.5;p.add(nose);
@@ -324,7 +328,7 @@ function buildBoss(){const g=new THREE.Group();g.position.set(boss.x,0,boss.y);b
   for(const ox of[-1.3,1.3]){const s=new THREE.Mesh(new THREE.BoxGeometry(.3,1.6,1.2),body);s.position.set(ox,1.05,0);g.add(s)}
   boss.rollers=[];for(const[y,r]of[[.75,.28],[1.3,.24],[1.7,.2]]){const ro=new THREE.Mesh(new THREE.CylinderGeometry(r,r,2.3,12),y===1.3?brass:M(0x5a5a60));ro.rotation.z=Math.PI/2;ro.position.y=y;g.add(ro);boss.rollers.push(ro)}
   const top=new THREE.Mesh(new THREE.BoxGeometry(3,.2,1.3),body);top.position.y=1.95;g.add(top);
-  const sg=signPlane(2.6,.32,'CENTRAL MINT · NOW HIRING','#b8322a','#f1d27a');sg.position.set(0,2.25,-.66);sg.rotation.y=Math.PI;g.add(sg);
+  const sg=signPlane(2.6,.32,'CENTRAL MINT · NOW HIRING','中央造幣廠 · 誠徵印鈔員','#b8322a','#f1d27a');sg.position.set(0,2.25,-.66);sg.rotation.y=Math.PI;g.add(sg);
   const sheet=new THREE.Mesh(new THREE.PlaneGeometry(2,.6),new THREE.MeshBasicMaterial({map:tex(mk(64,20,gg=>{R(gg,0,0,64,20,'#8aa070');for(let i=0;i<4;i++){R(gg,2+i*16,2,13,16,'#6a8050');gg.fillStyle='#e9dcc2';gg.font='6px monospace';gg.fillText('¥1M',3+i*16,12)}})),side:THREE.DoubleSide,fog:true}));sheet.rotation.x=-Math.PI/3;sheet.position.set(0,.6,-.8);g.add(sheet);
   bossHead(g,0,2.05,0,1.3)}
  else{// mech: the walking billboard
@@ -334,11 +338,11 @@ function buildBoss(){const g=new THREE.Group();g.position.set(boss.x,0,boss.y);b
   const bb=new THREE.Mesh(new THREE.BoxGeometry(.1,1.3,2.2),red);bb.position.set(0,2.4,0);g.add(bb);
   for(const s of[-1,1]){const h=new THREE.Mesh(new THREE.CylinderGeometry(.22,.06,.5,8,1,true),M(0xb0b0b0));h.material.side=THREE.DoubleSide;h.rotation.z=-Math.PI/2;h.position.set(.35,1.6,s*.75);g.add(h)}
   const cn=new THREE.Mesh(new THREE.CylinderGeometry(.08,.09,.7,8),M(0x222222));cn.rotation.z=-Math.PI/2;cn.position.set(.6,1.3,0);g.add(cn);
-  const sg=signPlane(2,.26,'FACE PENDING APPROVAL','#f1d27a','#b8322a');sg.position.set(.06,1.85,0);sg.rotation.y=Math.PI/2;g.add(sg);
+  const sg=signPlane(2,.26,'FACE PENDING APPROVAL','臉部待核准','#f1d27a','#b8322a');sg.position.set(.06,1.85,0);sg.rotation.y=Math.PI/2;g.add(sg);
   bossHead(g,.08,2.0,0,3.4);boss.head.position.x=.1}
  spritesRoot.add(g)}
 function drawFlag(){if(!boss||!boss.flagCvs)return;const g=boss.flagCvs.getContext('2d'),ph=boss.plate%3;if(ph===0){R(g,0,0,24,16,'#c8322a');R(g,0,0,12,8,'#2f4f8a');R(g,4,2,4,4,'#f2f2f2')}else if(ph===1){R(g,0,0,24,16,'#c8322a');R(g,3,3,4,4,'#f1d27a')}else R(g,0,0,24,16,'#f2f2f2');boss.flagTex.needsUpdate=true}
-function drawPlate(){if(!boss||!boss.plateCv)return;const g=boss.plateCv.getContext('2d');R(g,0,0,96,16,'#e9dcc2');g.fillStyle='#120d0c';g.font='bold 7px monospace';g.textAlign='center';g.fillText('PROPERTY OF:',48,7);g.fillText(PLATES[boss.plate],48,14);boss.plateTex.needsUpdate=true}
+function drawPlate(){if(!boss||!boss.plateCv)return;const g=boss.plateCv.getContext('2d');R(g,0,0,192,32,'#e9dcc2');signText(g,'PROPERTY OF:','所屬',96,8,184,LANG==='zh'?12:14,'#120d0c');signText(g,PLATES[boss.plate],PLATES[boss.plate],96,23,184,LANG==='zh'?15:14,'#120d0c');boss.plateTex.needsUpdate=true}
 function mkFlames(){flameFrames=[0,1,2,3].map(k=>mk(16,20,g=>{const R_=seeded(30+k*11);for(let x=0;x<16;x+=2){const h=6+R_()*13|0;for(let y=20-h;y<20;y+=2){const t=(y-(20-h))/h;R(g,x,y,2,2,t<.3?'#ffe27a':t<.6?'#ffb04a':'#ff5a1a')}}}))}
 function newSprite(cv,sx,sy){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex(cv),fog:true,color:0xe8dcd0,alphaTest:.5}));sp.center.set(.5,0);sp.scale.set(sx,sy,1);spritesRoot.add(sp);return sp}
 function setSpr(sp,cv,sx,sy){const t=tex(cv);if(sp.material.map!==t){sp.material.map=t;sp.material.needsUpdate=true}if(sx)sp.scale.set(sx,sy,1)}
@@ -386,7 +390,7 @@ function wallDist3(ox,oy,oz,dx,dy,dz){let d=0;while(d<28){d+=.035;const x=ox+dx*
 function aimDir(){const cp=Math.cos(pitch);return[Math.cos(pa)*cp,Math.sin(pitch),Math.sin(pa)*cp]}
 
 /* ---------------- messages ---------------- */
-function radio(s){if(s)radioQ.push(s)}
+function radio(s){if(s)radioQ.push(tr(s))}
 function once(k,s){if(!msgs[k]){msgs[k]=1;radio(s)}}
 function wpop(x,y,s,c='#ffd24a',life=100,z=1){wpops.push({x,y,z,s,c,life})}
 function addScore(n){score=Math.max(0,score+n);if(score>=nextLife){nextLife+=40000;lives++;SFX.oneup();radio('HQ: An extra conscript has been delivered. Do not ask from where.')}}
@@ -620,7 +624,7 @@ function render(){
  ctx.clearRect(0,0,W,H);
  if(!glOK){r(0,0,W,H,'#120d0c');txt('THIS BROWSER BLOCKED 3D GRAPHICS',W/2,96,'#ff6a5a','center');txt('TRY ANOTHER BROWSER OR DEVICE',W/2,112,'#e9dcc2','center');return}
  // world-anchored text
- for(const p of wpops){const pr=proj2(p.x,p.y,p.z);if(!pr||pr.d>12)continue;if(p.life<20&&T%4<2)continue;const w=p.s.length*8;txt(p.s,clamp(pr.sx,w/2+4,W-w/2-4),pr.sy,p.c,'center')}
+ for(const p of wpops){const pr=proj2(p.x,p.y,p.z);if(!pr||pr.d>12)continue;if(p.life<20&&T%4<2)continue;const w=tw(tr(p.s));txt(p.s,clamp(pr.sx,w/2+4,W-w/2-4),pr.sy,p.c,'center')}
  for(const e of ents)if(e.shout>0&&!e.dead){const pr=proj2(e.x,e.y,e.h+1.05);if(pr&&pr.d<10)drawShout(e.shoutTxt,pr.sx,pr.sy,false)}
  for(const v of pows){if(v.st==='free'&&v.t<140){const pr=proj2(v.x,v.y,1.05);if(pr&&pr.d<8)drawBubble(v.say,pr.sx,pr.sy)}else if(v.st==='tied'&&(T>>5)%3===0){const pr=proj2(v.x,v.y,1.0);if(pr&&pr.d<9)txt('HELP!',pr.sx-18,pr.sy,'#e9dcc2')}}
  const wx=ST.th.wx;if(wx==='ember'){for(const e of EMB){e.x-=e.v+.1+lookDXv*30;e.y+=Math.sin((T+e.ph*60)/50)*.25+(e.ash?.25:-.35)+lookDYv*30;if(e.x<-4||e.y<-4||e.y>H){e.x=W+rnd()*20;e.y=rnd()*H}if(e.x>W+30)e.x=-4;r(e.x,e.y,1,1,e.ash?'rgba(200,190,180,.4)':((T+e.ph*10|0)%20<10?'#ffaa46':'#ff6e28'))}}
@@ -662,23 +666,26 @@ function drawMinimap(){const s=2,ox=W-MW*s-6,oy=30;ctx.globalAlpha=.75;r(ox-2,oy
 function drawHUD(){
  const[dx,dy,dz]=aimDir(),tgt=castAt(dx,dy,dz,0,false),cc=tgt&&tgt.en?'#ff4a3a':'#e9dcc2',cy=H/2;r(W/2-1,cy-7,2,4,cc);r(W/2-1,cy+3,2,4,cc);r(W/2-7,cy-1,4,2,cc);r(W/2+3,cy-1,4,2,cc);
  r(0,0,W,24,'#120d0cb0');
- const infl=Math.pow(1.6,T/600);txt(`PAY ¥${fmtBig(score*infl)} ≈${score/60|0} EGGS`,4,4,'#ffd24a');
- txt(`${KT.lives} x${Math.max(0,lives)}`,4,14,'#e9dcc2');
- txt(`VILLAGERS ${freed}/${nV}  SPEAKERS ${speakers}/${nL}`,W-4,4,'#9fe0a0','right');
- txt(`STAGE ${SI+1}/${STAGES.length} · `+ST.boss.short+': '+(boss&&boss.dead?'DONE':boss&&boss.active?'ENGAGED':ST.boss.where),W-4,14,boss&&boss.active?'#ff6a5a':'#a8977c','right');
+ const infl=Math.pow(1.6,T/600);txt(LZ(`PAY ¥${fmtBig(score*infl)} ≈${score/60|0} EGGS`,`薪餉 ¥${fmtBig(score*infl)} ≈${score/60|0} 顆蛋`),4,4,'#ffd24a','left',HF());
+ txt(`${KT.lives} x${Math.max(0,lives)}`,4,14,'#e9dcc2','left',HF());
+ txt(LZ(`VILLAGERS ${freed}/${nV}  SPEAKERS ${speakers}/${nL}`,`村民 ${freed}/${nV}　喇叭 ${speakers}/${nL}`),W-4,4,'#9fe0a0','right',HF());
+ txt(LZ(`STAGE ${SI+1}/${STAGES.length} · `,`第${SI+1}/${STAGES.length}關 · `)+ST.boss.short+LZ(': ','：')+(boss&&boss.dead?tr('DONE'):boss&&boss.active?tr('ENGAGED'):ST.boss.where),W-4,14,boss&&boss.active?'#ff6a5a':'#a8977c','right',HF());
  drawMinimap();
  r(0,H-30,W,30,'#120d0c');r(0,H-30,W,2,'#5b4636');
  const hpC=P.hp>60?'#9fe0a0':P.hp>30?'#ffd24a':'#ff4a3a';txt('MORALE',8,H-26,'#a8977c');txt(`${Math.max(0,Math.ceil(P.hp))}%`,8,H-16,hpC,'left',F16);
  const em=heroEmo(),fs=sprite('hud|'+em,40,28,g=>frontHead(g,'kmt',em));r(W/2-22,H-32,44,32,'#2a1e18');r(W/2-22,H-32,44,1,'#5b4636');ctx.drawImage(fs.n,W/2-20,H-30);
- const w=FW[P.wpn];txt(w.name,W-8,H-26,'#e9dcc2','right');txt(w.ak?String(P.ammo[w.ak]):'∞',W-8,H-16,'#ffd24a','right',F16);txt(`BOMB ${P.gren}`,W-110,H-16,'#ff9a6a','right');
+ const w=FW[P.wpn],bomb=LZ(`BOMB ${P.gren}`,`手榴彈 ${P.gren}`);
+ // phone: the right thumb's buttons cover the bottom-right corner, so weapon + grenades sit just right of the face
+ if(touchUI){const x=W/2+28;txt(w.name,x,H-27,'#e9dcc2','left',HF());txt(w.ak?String(P.ammo[w.ak]):'∞',x,H-16,'#ffd24a','left',F16);txt(bomb,x+58,H-14,'#ff9a6a','left',HF())}
+ else{txt(w.name,W-8,H-26,'#e9dcc2','right');txt(w.ak?String(P.ammo[w.ak]):'∞',W-8,H-16,'#ffd24a','right',F16);txt(bomb,W-110,H-16,'#ff9a6a','right')}
  if(Math.abs(pitch)>.15){const pv=clamp(-pitch*24,-30,30);r(W/2+40,cy-1+pv,4,2,'#a8977c')}
  if(shoutT>0)drawShout(shoutTxt,W/2,H-40,true);
- if(boss&&boss.active&&!boss.dead){const bw=120,bx=W/2-bw/2;r(bx-1,27,bw+2,6,'#120d0c');r(bx,28,bw,4,'#3a1714');r(bx,28,bw*Math.max(0,boss.hp/boss.max),4,'#e0302a');txt(boss.k==='tank'?'PROPERTY OF: '+PLATES[boss.plate]:boss.k==='boat'?'FLAG: '+['NATIONALIST','PEOPLE\'S','WHITE (UNDECIDED)'][boss.plate%3]:ST.boss.name,W/2,35,'#e9dcc2','center')}
- if(radioCur){const Lr=wrap(radioCur.s,36).slice(0,4),h=Lr.length*10+10,x=20,y=boss&&boss.active?46:28,ww=W-40-MW*2-10;
+ if(boss&&boss.active&&!boss.dead){const bw=120,bx=W/2-bw/2;r(bx-1,27,bw+2,6,'#120d0c');r(bx,28,bw,4,'#3a1714');r(bx,28,bw*Math.max(0,boss.hp/boss.max),4,'#e0302a');txt(boss.k==='tank'?LZ('PROPERTY OF: ','所屬：')+PLATES[boss.plate]:boss.k==='boat'?LZ('FLAG: ','旗子：')+LZ(['NATIONALIST','PEOPLE\'S','WHITE (UNDECIDED)'],['青天白日','紅旗','白旗（未決定）'])[boss.plate%3]:ST.boss.name,W/2,35,'#e9dcc2','center')}
+ if(radioCur){const zh=isZ(radioCur.s),lh=zh?13:10,x=20,y=boss&&boss.active?46:28,ww=W-40-MW*2-10;if(zh)ctx.font=zf(F);const Lr=(zh?wrapBal(radioCur.s,ww-30):wrap(radioCur.s,36)).slice(0,4),h=Lr.length*lh+(zh?8:10);
   r(x,y,ww,h,'#120d0ccc');ctx.strokeStyle='#4a6aa3';ctx.lineWidth=1;ctx.strokeRect(x+.5,y+.5,ww-1,h-1);
   const hs=sprite('hud|'+((T>>3)%2?'shout':'determined'),40,28,g=>frontHead(g,'kmt',(T>>3)%2?'shout':'determined'));ctx.drawImage(hs.n,10,0,22,28,x+3,y+3,18,23);
-  ctx.font=F;ctx.textAlign='left';ctx.textBaseline='top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*2);let cnt=0;Lr.forEach((l,i)=>{ctx.fillStyle='#e9dcc2';ctx.fillText(l.slice(0,Math.max(0,shown-cnt)),x+24,y+6+i*10);cnt+=l.length+1})}
- if(T<200&&state==='play'){txt('STAGE '+(SI+1)+' · '+ST.name,W/2,70,'#ffd24a','center',F16);txt(ST.sub[0],W/2,92,'#e9dcc2','center');txt(ST.sub[1],W/2,104,'#a8977c','center')}
+  ctx.font=zh?zf(F):F;ctx.textAlign='left';ctx.textBaseline='top';const shown=Math.min(radioCur.s.length,(radioCur.max-radioCur.t)*(zh?1:2));let cnt=0;Lr.forEach((l,i)=>{ctx.fillStyle='#e9dcc2';ctx.fillText(l.slice(0,Math.max(0,shown-cnt)),x+24,y+(zh?5:6)+i*lh);cnt+=l.length+(zh?0:1)})}
+ if(T<200&&state==='play'){txt(LZ('STAGE '+(SI+1)+' · '+ST.name,'第'+ZN[SI+1]+'關 · '+ST.name),W/2,70,'#ffd24a','center',F16);txt(ST.sub[0],W/2,92,'#e9dcc2','center');txt(ST.sub[1],W/2,LANG==='zh'?107:104,'#a8977c','center')}
  if(winT>30)txt(SI===STAGES.length-1?'PIER HELD! BOAT LEAVING!':'STAGE COMPLETE!',W/2,80,'#ffd24a','center',F16);
  if(P.dead)txt('YOU HAVE BEEN DEMOBILIZED',W/2,80,'#ff6a5a','center');
  if(state==='pause'){r(0,0,W,H,'#0008');txt('PAUSED',W/2,92,'#ffd24a','center',F16);txt('THE WAR WILL WAIT. IT ALWAYS DOES.',W/2,116,'#e9dcc2','center')}}
@@ -686,16 +693,16 @@ function drawHUD(){
 /* ---------------- flow ---------------- */
 function showScene(sc,done){state='scene';scene={sc,t:0,done};music('ending');$('#touch').hidden=true;$('#hud').hidden=true;try{document.exitPointerLock&&document.exitPointerLock()}catch(e){}}
 function startGame(i){i=i|0;endSeen=false;initAudio();lives=2;score=0;nextLife=30000;tot={kills:0,freed:0,speakers:0,defects:0,lost:0};$('#title').hidden=true;$('#end').hidden=true;loadStage(i);showScene(ST.pre(),beginPlay)}
-function beginPlay(){state='play';T=0;music(ST.music);$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false;fit();saveProg()}
+function beginPlay(){state='play';T=0;music(ST.music);$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false;fit();saveProg();const h=$('#tHint');h.classList.remove('fade');void h.offsetWidth;h.classList.add('fade')}
 function saveProg(){try{const v=+localStorage.getItem('csSiegeStage')||0;if(SI>v)localStorage.setItem('csSiegeStage',SI)}catch(e){}}
 function loadProg(){try{return Math.min(STAGES.length-1,+localStorage.getItem('csSiegeStage')||0)}catch(e){return 0}}
 function nextStage(){loadStage(SI+1);showScene(ST.pre(),beginPlay)}
 function startTally(){state='tally';music('off');SFX.fanfare();$('#touch').hidden=true;$('#hud').hidden=true;try{document.exitPointerLock&&document.exitPointerLock()}catch(e){}
  const bk=kills*50,bp=freed*1000,bs=speakers*800,bn=stats.lost===0?10000:0;tot.kills+=kills;tot.freed+=freed;tot.speakers+=speakers;tot.defects+=stats.defects;tot.lost+=stats.lost;
  tally={t:0,rows:[['ENEMIES DISPATCHED',kills,bk],['VILLAGERS UNTIED',freed,bp],['SPEAKERS SILENCED',speakers,bs],['CONSCRIPTS SPENT',stats.lost,bn]],total:bk+bp+bs+bn,rank:stats.lost===0?'HERO OF THE (CORRECT) PEOPLE':stats.lost<2?'DECORATED (TIN MEDAL)':stats.lost<4?'ADEQUATE CANNON FODDER':'STATISTIC'};addScore(tally.total)}
-function drawTally(){r(0,0,W,H,'#120d0c');txt('STAGE '+(SI+1)+' COMPLETE',W/2,18,'#ffd24a','center',F16);txt(ST.name,W/2,40,'#a8977c','center');
+function drawTally(){r(0,0,W,H,'#120d0c');txt(LZ('STAGE '+(SI+1)+' COMPLETE','第'+ZN[SI+1]+'關 完成'),W/2,18,'#ffd24a','center',F16);txt(ST.name,W/2,40,'#a8977c','center');
  tally.rows.forEach((row,i)=>{if(tally.t<20+i*25)return;const y=64+i*18;txt(row[0],30,y,'#e9dcc2');txt(String(Math.min(row[1],(tally.t-20-i*25)>>1)),250,y,'#e9dcc2','right');txt('+'+row[2],W-30,y,'#9fe0a0','right')});
- if(tally.t>130){txt('BONUS',30,142,'#ffd24a');txt('+'+tally.total,W-30,142,'#ffd24a','right');txt('RANK: '+tally.rank,W/2,166,'#ff9a6a','center')}
+ if(tally.t>130){txt('BONUS',30,142,'#ffd24a');txt('+'+tally.total,W-30,142,'#ffd24a','right');txt(tr('RANK: ')+tr(tally.rank),W/2,166,'#ff9a6a','center')}
  if(tally.t>150&&T%40<26)txt('▶ CONTINUE',W/2,194,'#d9a441','center')}
 let endMode='over';
 const END_SCENES=[
@@ -703,23 +710,31 @@ const END_SCENES=[
  {date:'DECEMBER 1949',place:'THE LAST BOAT',draw:'boats',fact:"The government announces a 'temporary relocation' to Taiwan. Very temporary. The gold reserves sailed ahead months ago, first class.",joke:"Your Gold Yuan pay buys standing room. Your medal buys a corner of it. The tank stays behind with owner number seven."},
  {date:'NEW YEAR, 1950',place:'TAIPEI',draw:'island',fact:"Headquarters promises: 'We will counterattack the mainland next year.' The troops cheer. The boat is unpacked. Mostly.",joke:"New Year 1951: 'Next year.' 1952: 'Next year.' The speech is now printed in advance to save on ink."}];
 function playScenes(list,done){if(!list.length){done();return}showScene(list[0],()=>playScenes(list.slice(1),done))}
-let endSeen=false;
+let endSeen=false,endPay=null,endOverI=0;
 function finish(){if(SI<STAGES.length-1){nextStage();return}try{localStorage.setItem('csSiegeStage','0')}catch(e){}
- if(!endSeen){endSeen=true;playScenes(END_SCENES,finish);return}state='over';music('ending');const pay=`¥${fmtBig(score*Math.pow(1.6,T/600))} Gold Yuan (≈ ${score/60|0} eggs)`;
- $('#endH').textContent='YOU WON. WE LOST. SEE YOU IN TAIWAN.';$('#endP').textContent='Six battles. Six victories. One tank, one train, one bomber, one gunboat, one printing press and one billboard. The government lost the war anyway and relocated to Taiwan, temporarily. Your victories have been filed under "next year", with the counterattack.';
- $('#endS').innerHTML=`<dt>Battles won</dt><dd>6 of 6</dd><dt>War won</dt><dd>0 of 1</dd><dt>Enemies dispatched</dt><dd>${tot.kills}</dd><dt>Villagers untied</dt><dd>${tot.freed}</dd><dt>Speakers silenced</dt><dd>${tot.speakers}</dd><dt>Defectors</dt><dd>${tot.defects}</dd><dt>Conscripts spent</dt><dd>${tot.lost}</dd><dt>Pay</dt><dd>${pay}</dd>`;
- $('#e1').textContent='COUNTERATTACK (NEXT YEAR)';$('#e2').textContent='TITLE';$('#end').hidden=false;$('#hud').hidden=true;endMode='win'}
+ if(!endSeen){endSeen=true;playScenes(END_SCENES,finish);return}state='over';music('ending');endPay={y:score*Math.pow(1.6,T/600),eggs:score/60|0};
+ endMode='win';fillEnd();$('#end').hidden=false;$('#hud').hidden=true}
 function gameOver(){state='over';music('off');$('#touch').hidden=true;$('#hud').hidden=true;try{document.exitPointerLock&&document.exitPointerLock()}catch(e){}
- $('#endH').textContent='OUT OF CONSCRIPTS';$('#endP').textContent=pick(KT.over);$('#endS').innerHTML=`<dt>Stage</dt><dd>${SI+1}: ${ST.name}</dd><dt>Enemies dispatched</dt><dd>${kills}</dd><dt>Villagers untied</dt><dd>${freed}/${nV}</dd><dt>Speakers silenced</dt><dd>${speakers}/${nL}</dd>`;
- $('#e1').textContent='DRAFT 3 MORE';$('#e2').textContent='RESTART STAGE';$('#end').hidden=false;endMode='over';if(AC){const t=now();[62,61,60,55].forEach((n,i)=>tone(mf(n),mf(n),.35,'square',.05,t+i*.3))}}
+ endOverI=Math.floor(rnd()*KT.over.length);endMode='over';fillEnd();$('#end').hidden=false;if(AC){const t=now();[62,61,60,55].forEach((n,i)=>tone(mf(n),mf(n),.35,'square',.05,t+i*.3))}}
+function fillEnd(){const row=(e,z,v)=>`<dt>${LZ(e,z)}</dt><dd>${v}</dd>`;
+ if(endMode==='win'){const y=fmtBig(endPay?endPay.y:0),eg=endPay?endPay.eggs:0;
+  $('#endH').textContent=LZ('YOU WON. WE LOST. SEE YOU IN TAIWAN.','你贏了。我們輸了。台灣見。');
+  $('#endP').textContent=LZ('Six battles. Six victories. One tank, one train, one bomber, one gunboat, one printing press and one billboard. The government lost the war anyway and relocated to Taiwan, temporarily. Your victories have been filed under "next year", with the counterattack.','六場仗，六場勝利。一輛戰車、一列火車、一架轟炸機、一艘砲艇、一台印鈔機，外加一塊看板。政府還是輸掉了戰爭，「暫時」遷到台灣。你的戰功已歸檔在「明年」，跟反攻大陸放在一起。');
+  $('#endS').innerHTML=row('Battles won','戰役勝場','6 / 6')+row('War won','戰爭勝場','0 / 1')+row('Enemies dispatched','擊倒敵軍',tot.kills)+row('Villagers untied','解救村民',tot.freed)+row('Speakers silenced','擊毀喇叭',tot.speakers)+row('Defectors','招降投誠',tot.defects)+row('Conscripts spent','消耗壯丁',tot.lost)+row('Pay','薪餉',LZ(`¥${y} Gold Yuan (≈ ${eg} eggs)`,`金圓券 ¥${y}（≈ ${eg} 顆蛋）`));
+  $('#e1').textContent=LZ('COUNTERATTACK (NEXT YEAR)','反攻大陸（明年）');$('#e2').textContent=LZ('TITLE','回標題')}
+ else{$('#endH').textContent=LZ('OUT OF CONSCRIPTS','壯丁用完了');$('#endP').textContent=KT.over[endOverI]||KT.over[0];
+  $('#endS').innerHTML=row('Stage','關卡',LZ(`${SI+1}: ${ST.name}`,`第${ZN[SI+1]}關：${ST.name}`))+row('Enemies dispatched','擊倒敵軍',kills)+row('Villagers untied','解救村民',`${freed}/${nV}`)+row('Speakers silenced','擊毀喇叭',`${speakers}/${nL}`);
+  $('#e1').textContent=LZ('DRAFT 3 MORE','再抓三個壯丁');$('#e2').textContent=LZ('RESTART STAGE','重打這一關')}}
 $('#e1').addEventListener('click',()=>{$('#end').hidden=true;if(endMode==='win'){startGame();return}lives=2;state='play';px=checkpoint.x;py=checkpoint.y;pa=checkpoint.a;pitch=0;Object.assign(P,{x:px,y:py,fy:cellH(px,py),dead:0,hp:100,inv:150});music(playTrack());$('#hud').hidden=false;if(touchUI)$('#touch').hidden=false;wpop(px+Math.cos(pa)*1.5,py+Math.sin(pa)*1.5,'3 MORE DRAFTED. THEIR VILLAGE IS NOW EMPTY','#ffd24a',160,.9)});
 $('#e2').addEventListener('click',()=>{$('#end').hidden=true;if(endMode==='win'){toTitle();return}startGame(SI)});
 function toTitle(){state='title';$('#title').hidden=false;loadStage(0);music('off');showCont()}
-function showCont(){const c=$('#cont'),v=loadProg();if(!c)return;c.hidden=!(v>0);c.textContent='▶ CONTINUE · STAGE '+(v+1)+': '+STAGES[v].name}
+function showCont(){const c=$('#cont'),v=loadProg();if(!c)return;c.hidden=!(v>0);c.textContent=LZ('▶ CONTINUE · STAGE '+(v+1)+': '+STAGES[v].name,'▶ 繼續 · 第'+ZN[v+1]+'關：'+STAGES[v].name)}
 $('#go').addEventListener('click',()=>startGame(0));if($('#cont'))$('#cont').addEventListener('click',()=>startGame(loadProg()));showCont();
 function togglePause(){if(state==='play'){state='pause';music('off')}else if(state==='pause'){state='play';music(playTrack())}}
 $('#bPause').addEventListener('click',e=>{togglePause();e.currentTarget.blur()});
-$('#bSnd').addEventListener('click',e=>{initAudio();setMute(!muted);e.currentTarget.textContent=muted?'MUTE':'SND';e.currentTarget.blur()});
+$('#bSnd').addEventListener('click',e=>{initAudio();setMute(!muted);sndLabel();e.currentTarget.blur()});
+$('#bLang').addEventListener('click',e=>{applyLang(LANG==='zh'?'en':'zh',true);e.currentTarget.blur()});
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>applyLang(b.dataset.l,true)));
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state==='play')togglePause()});
 
 /* ---------------- input ---------------- */
@@ -747,11 +762,11 @@ function tEnd(e){e.preventDefault();for(const t of e.changedTouches){if(t.identi
  const k=btnT[t.identifier];if(k){tch[k]=false;delete btnT[t.identifier];document.querySelector(`.tb[data-k=${k}]`).classList.remove('on')}}}
 tpad.addEventListener('touchend',tEnd,{passive:false});tpad.addEventListener('touchcancel',tEnd,{passive:false});
 cv.addEventListener('touchstart',()=>{pressed.fire=1},{passive:true});
-function fit(){const vw=innerWidth,vh=innerHeight;const s=Math.min(vw/W,vh/H);const st=$('#stage');st.style.width=Math.floor(W*s)+'px';st.style.height=Math.floor(H*s)+'px';$('#tHint').textContent=vh>vw?'TURN YOUR PHONE SIDEWAYS':'LEFT THUMB: WALK · RIGHT THUMB: DRAG TO AIM'}
+function fit(){const vw=innerWidth,vh=innerHeight;const s=Math.min(vw/W,vh/H);const st=$('#stage');st.style.width=Math.floor(W*s)+'px';st.style.height=Math.floor(H*s)+'px';$('#tHint').textContent=vh>vw?LZ('TURN YOUR PHONE SIDEWAYS','請把手機轉橫'):LZ('LEFT THUMB: WALK · RIGHT THUMB: DRAG TO AIM','左手拇指：走路 · 右手拇指：拖曳瞄準')}
 addEventListener('resize',fit);
 
 /* ---------------- loop ---------------- */
-buildTextures();mkFlames();initGL();loadStage();fit();
+buildTextures();mkFlames();initGL();applyLang(LANG,false);loadStage();fit();
 let last=performance.now(),acc=0;
 function loop(nt){acc+=Math.min(100,nt-last);last=nt;
  while(acc>=16.67){acc-=16.67;
@@ -766,4 +781,4 @@ function loop(nt){acc+=Math.min(100,nt-last);last=nt;
  else render();
  requestAnimationFrame(loop)}
 (document.fonts?document.fonts.load(F):Promise.resolve()).catch(()=>{}).finally(()=>requestAnimationFrame(loop));
-if(window.__f)Object.assign(window.__f,{stage:i=>{$('#title').hidden=true;$('#end').hidden=true;initAudio();lives=2;loadStage(i);beginPlay()},si:()=>SI,bossPos:()=>boss&&{x:boss.x,y:boss.y,z:boss.z,k:boss.k,a:boss.active,d:boss.dead,hp:boss.hp}});
+if(window.__f)Object.assign(window.__f,{over:()=>gameOver(),lang:l=>applyLang(l,true),stage:i=>{$('#title').hidden=true;$('#end').hidden=true;initAudio();lives=2;loadStage(i);beginPlay()},si:()=>SI,bossPos:()=>boss&&{x:boss.x,y:boss.y,z:boss.z,k:boss.k,a:boss.active,d:boss.dead,hp:boss.hp}});
