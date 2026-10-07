@@ -1,6 +1,19 @@
-<title>Ming An: Expedition 48</title>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>明暗：第四十八遠征隊 Ming An: Expedition 48</title>
+<meta name="description" content="Ming An: Expedition 48 (明暗：第四十八遠征隊): a free 3D pixel RPG satire of the Chinese Civil War. Lead a Nationalist expedition of three through six chapters, from the Bund in Shanghai to the last pier, in turn-based battles with real-time dodges and parries, and break the Printer that drives the Gold Yuan inflation. Then board the boat to Taiwan anyway. Temporarily. 繁體中文 / English.">
+<meta name="theme-color" content="#0c0908">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="明暗48">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230c0908'/%3E%3Crect x='3' y='2' width='10' height='4' fill='%232f4166'/%3E%3Crect x='2' y='5' width='12' height='1' fill='%231f2c48'/%3E%3Crect x='7' y='3' width='2' height='2' fill='%23f2f2f2'/%3E%3Crect x='3' y='6' width='10' height='6' fill='%23e3b184'/%3E%3Crect x='5' y='8' width='2' height='2' fill='%23120d0c'/%3E%3Crect x='9' y='8' width='2' height='2' fill='%23120d0c'/%3E%3Crect x='6' y='11' width='4' height='1' fill='%23b3261e'/%3E%3Crect x='10' y='12' width='5' height='4' fill='%23d9a441'/%3E%3Crect x='11' y='13' width='3' height='1' fill='%235a3a10'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Noto+Serif+TC:wght@900&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* Layout: letterboxed pixel canvas; candle-dark serif overlays for title, the tea stove and the ending */
 :root{
@@ -8,17 +21,21 @@
   --red:#b3261e; --gold:#d9a441; --ember:#ff8a3a; --soul:#b9e0a0;
   --px:"Press Start 2P", ui-monospace, monospace;
   --body:"VT323", ui-monospace, monospace;
-  --serif:"Noto Serif TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --serif:"Noto Serif TC","Noto Serif CJK TC","Songti TC","PMingLiU","SimSun",Georgia,serif;
+  --zh:"Noto Sans TC","Noto Sans CJK TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif;
   color-scheme:dark;
 }
 [hidden]{display:none!important}
-html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
 #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 45%,#1e1512 0%,var(--ink) 70%)}
 #stage{position:relative;box-shadow:0 0 0 2px #000,0 0 60px #000;background:#000}
 #gl,#cv{image-rendering:pixelated;image-rendering:crisp-edges;display:block;width:100%;height:100%}
 #cv{position:absolute;inset:0}
-#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);right:calc(env(safe-area-inset-right,0px) + 8px);display:flex;gap:6px;z-index:6}
-#hud button{font:9px var(--px);color:var(--paper);background:rgba(12,9,8,.7);border:2px solid var(--faint);padding:6px 7px;cursor:pointer}
+#hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 6px);right:calc(env(safe-area-inset-right,0px) + 8px);display:flex;gap:6px;z-index:11}
+#hud button{font:9px var(--px);color:var(--paper);background:rgba(12,9,8,.75);border:2px solid var(--faint);padding:5px 7px;cursor:pointer;min-width:44px;min-height:34px}
+#hud #bLang{font:700 13px/1 var(--zh)}
+html[lang^=zh] #hud #bLang{font:9px var(--px)}
+html[lang^=zh] #hud #bSnd{font:700 12px/1 var(--zh)}
 .ov{position:fixed;inset:0;z-index:10;overflow:auto;display:flex;padding:16px;background:rgba(8,6,5,.9)}
 .card{margin:auto;max-width:640px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center;padding-block:12px}
 .seal{align-self:center;font:900 clamp(24px,6vw,40px)/1 var(--serif);color:var(--red);border:4px solid var(--red);padding:6px 10px 8px;transform:rotate(-4deg);letter-spacing:.08em;box-shadow:inset 0 0 0 2px var(--ink),inset 0 0 0 4px var(--red)}
@@ -32,7 +49,7 @@ p{margin:0;font:clamp(18px,4.4vw,22px)/1.15 var(--body);color:var(--paper);max-w
 .keys{font-size:18px;color:var(--dim)}
 .fine{font-size:16px;color:var(--faint)}
 .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.btn{font:11px var(--px);padding:12px 16px;border:2px solid var(--gold);background:#1e150c;color:var(--gold);cursor:pointer}
+.btn{font:11px var(--px);padding:12px 16px;border:2px solid var(--gold);background:#1e150c;color:var(--gold);cursor:pointer;min-height:44px}
 .btn.alt{border-color:var(--faint);color:var(--paper);background:transparent}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 button:focus-visible{outline:3px solid var(--ember);outline-offset:3px}
@@ -86,26 +103,55 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
 .shop{display:flex;flex-direction:column;gap:6px}
 .shop button{display:flex;justify-content:space-between;gap:8px;font:9px/1.4 var(--px);text-align:left;padding:10px;border:1px solid #3a2e26;background:#1a1310;color:var(--paper);cursor:pointer}
 .shop button:disabled{opacity:.4;cursor:not-allowed}
+.lang{display:flex;gap:8px;justify-content:center}
+.lang button{font:12px var(--px);padding:6px 12px;border:2px solid var(--faint);background:transparent;color:var(--paper);cursor:pointer;min-height:36px}
+.lang button[data-l=zh]{font:700 14px/1 var(--zh)}
+.lang button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+html[lang^=zh] p{font-family:var(--zh);font-size:clamp(14px,3.6vw,17px);line-height:1.5}
+html[lang^=zh] .btn{font:700 15px var(--zh);letter-spacing:.1em}
+html[lang^=zh] h1 span{font:700 13px/1.6 var(--zh);letter-spacing:.2em}
+html[lang^=zh] h1{letter-spacing:.06em}
+html[lang^=zh] h3{font:700 13px var(--zh);letter-spacing:.06em}
+html[lang^=zh] .stat,html[lang^=zh] .kv,html[lang^=zh] dl{font:500 15px/1.3 var(--zh)}
+html[lang^=zh] .warp button,html[lang^=zh] .shop button{font:500 14px/1.35 var(--zh)}
+html[lang^=zh] .pc b{font:700 15px var(--zh)}
+html[lang^=zh] .pc span{font:500 13px/1.45 var(--zh)}
+html[lang^=zh] .news{font:500 14px/1.5 var(--zh)}
+html[lang^=zh] #touch .tb{font:700 15px/1.2 var(--zh)}
+html[lang^=zh] #touch #tU{font-size:14px}
+html[lang^=zh] #react button{font:700 16px/1.3 var(--zh)}
+@media (max-height:520px){h1{font-size:clamp(26px,7vh,44px)}h1 span{margin-top:8px}.seal{font-size:22px}.card{gap:8px}p{font-size:16px}html[lang^=zh] p{font-size:13px;line-height:1.4}.keys{font-size:14px}.fine{display:none}h2{font-size:22px}
+ .panel{padding:8px;gap:5px}.pc{padding:6px}.shop button{padding:7px 10px}}
+@media (max-height:520px){dl{grid-template-columns:auto auto auto auto;font-size:17px;gap:2px 12px}html[lang^=zh] dl{font-size:13px}#end .seal{display:none}}
+@media (max-height:420px){.seal{display:none}.card{gap:7px;padding-block:4px}.ov{padding:8px 16px}p{font-size:15px}html[lang^=zh] p{font-size:12.5px}}
+#rot{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 44px);text-align:center;font:9px var(--px);color:var(--dim);display:none;z-index:12;pointer-events:none;padding:0 12px}
+html[lang^=zh] #rot{font:700 13px var(--zh)}
+@media (orientation:portrait) and (pointer:coarse){#rot{display:block}}
 </style>
 
-<div id="app"><div id="stage"><canvas id="gl" width="768" height="432" aria-label="Dark Yuan 3D view"></canvas><canvas id="cv" width="384" height="216" aria-label="Dark Yuan game screen"></canvas></div></div>
-<div id="hud" hidden><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
+</head>
+<body>
+
+<div id="app"><div id="stage"><canvas id="gl" width="768" height="432" aria-label="明暗 3D 畫面"></canvas><canvas id="cv" width="384" height="216" aria-label="明暗遊戲畫面"></canvas></div></div>
+<div id="hud" hidden><button id="bLang" aria-label="Switch to English" lang="en">EN</button><button id="bPause" aria-label="Pause">II</button><button id="bSnd" aria-label="Toggle sound">SND</button></div>
 <div id="touch" hidden>
   <div id="stickBase" hidden><div id="stickKnob"></div></div>
-  <div class="tb R" id="tA" data-k="atk">STRIKE</div>
-  <div class="tb R" id="tR" data-k="run">RUN</div>
+  <div class="tb R" id="tA" data-k="atk" data-t="tA">STRIKE</div>
+  <div class="tb R" id="tR" data-k="run" data-t="tR">RUN</div>
   <div class="tb" id="tU" data-k="use" hidden>USE</div>
 </div>
-<div id="react" hidden><button id="bDodge" data-k="dodge">DODGE<small id="kD">SPACE</small></button><button id="bParry" data-k="parry">PARRY<small id="kP">SHIFT</small></button></div>
+<div id="react" hidden><button id="bDodge" data-k="dodge"><span data-t="dodge">DODGE</span><small id="kD">SPACE</small></button><button id="bParry" data-k="parry"><span data-t="parry">PARRY</span><small id="kP">SHIFT</small></button></div>
 
+<div id="rot" data-t="rot">Turn your phone sideways: the expedition marches in landscape</div>
 <div id="title" class="ov">
   <div class="card">
-    <div class="seal">明暗</div>
-    <h1>MING AN<span>EXPEDITION 48 · A CIVIL SLUG RPG</span></h1>
-    <p class="tag">Shanghai, 1948. Every year the Printer paints a bigger number on the banknote, and everyone whose savings are worth less than it is erased. Expedition 48 sets out to stop it. Expedition 47 left a note: <i>bring more money</i>.</p>
-    <div class="row"><button class="btn" id="bNew">NEW EXPEDITION</button><button class="btn alt" id="bCont" hidden>CONTINUE</button></div>
-    <p class="keys">Explore: W A S D · mouse look (click the game) · Shift run · E use · J or click to strike first<br>Battle: W S choose · J / Enter confirm · K back · press J at the gold ring for skill bonus<br>Enemy turn: SPACE dodge as the blow lands · SHIFT parry (tighter) · parry every hit to counter</p>
-    <p class="fine">Satire. Turn-based with real-time dodging. Both sides get roasted, and so does the central bank.</p>
+    <div class="seal">遠征</div>
+    <h1 data-t="h1">MING AN<span>EXPEDITION 48 · A CIVIL SLUG RPG</span></h1>
+    <p class="tag" data-t="tag">Shanghai, 1948. The Printer paints a bigger number on the banknote every year, and everyone whose savings are worth less than it is erased. The Nationalist government, firmly in control, sends Expedition 48 to stop it: six chapters, from the Bund to the last pier. Expedition 47 left a note: <i>bring more money</i>.</p>
+    <div class="row"><button class="btn" id="bNew" data-t="new">NEW EXPEDITION</button><button class="btn alt" id="bCont" data-t="cont" hidden>CONTINUE</button></div>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">繁體中文</button><button data-l="en" lang="en" aria-pressed="false">English</button></div>
+    <p class="keys" data-t="keys">Explore: W A S D · mouse look (click the game) · Shift run · E use · J or click to strike first<br>Battle: W S choose · J / Enter confirm · K back · press J at the gold ring for skill bonus<br>Enemy turn: SPACE dodge as the blow lands · SHIFT parry (tighter) · parry every hit to counter<br>P pause · L language · M sound</p>
+    <p class="fine" data-t="fine">Satire. You play Nationalist (KMT) soldiers, and only them. Turn-based with real-time dodging. Both sides get roasted, and so does the central bank. Progress saves at every tea stove and after every battle.</p>
   </div>
 </div>
 
@@ -114,17 +160,19 @@ dt{color:var(--dim);text-align:right}dd{margin:0;text-align:left;font-variant-nu
     <h2 id="restH">TEA STOVE</h2>
     <p class="news" id="restN"></p>
     <div class="party" id="restP"></div>
-    <div class="panel"><h3 id="shopH">THE QUARTERMASTER (PRICES ADJUSTED HOURLY)</h3><div class="shop" id="shop"></div><div class="kv gold"><span>Gold Yuan</span><b id="restY"></b></div></div>
-    <div class="row"><button class="btn" id="restGo">CONTINUE THE EXPEDITION</button></div>
+    <div class="panel"><h3 id="shopH" data-t="shopH">THE QUARTERMASTER (PRICES ADJUSTED HOURLY)</h3><div class="shop" id="shop"></div><div class="kv gold"><span data-t="gy">Gold Yuan</span><b id="restY"></b></div></div>
+    <div class="panel"><h3 data-t="warpH">TRAVEL BY TEA STOVE (TICKETS FREE, FOR NOW)</h3><div class="warp" id="warp"></div></div>
+    <div class="row"><button class="btn" id="restGo" data-t="restGo">CONTINUE THE EXPEDITION</button></div>
   </div>
 </div>
 
-<div id="end" class="ov" hidden>
+<div id="end" class="ov" style="background:rgba(8,6,5,.97)" hidden>
   <div class="card">
     <div class="seal">終</div>
-    <h2 id="endH">THE PRINTER IS BROKEN</h2>
+    <h2 id="endH" data-t="endH">THE END (TEMPORARILY)</h2>
     <p id="endP"></p>
     <dl id="endS"></dl>
-    <div class="row"><button class="btn" id="e1">NEW EXPEDITION</button><button class="btn alt" id="e2">TITLE</button></div>
+    <div class="row"><button class="btn" id="e1" data-t="e1">NEW EXPEDITION</button><button class="btn alt" id="e2" data-t="e2">TITLE</button></div>
+    <div class="lang" role="group" aria-label="Language / 語言"><button data-l="zh" lang="zh-Hant" aria-pressed="true">繁體中文</button><button data-l="en" lang="en" aria-pressed="false">English</button></div>
   </div>
 </div>

@@ -52,7 +52,7 @@ Every game is a single self-contained HTML file. Open any `index.html` in a brow
 | 03 | [Conscript's Descent](games/03-conscripts-descent/) | Action RPG / roguelike | Six floors, one life. Click-to-move looting through a burning village and the Shanghai sewers. |
 | 04 | [Dark Yuan](games/04-dark-yuan/) | Souls-like (2D) | A hard 2D action game about an undead KMT conscript. Five areas, five bosses, ending in YOU RETREATED. |
 | 05 | [Dark Yuan 3D](games/05-dark-yuan-3d/) | Souls-like (3D) | The blocky low-poly 3D version of Dark Yuan: five areas, five bosses, lock-on, rolls and parries on the way to the last ferry. |
-| 06 | [Ming An: Expedition 48](games/06-ming-an-expedition-48/) | Turn-based RPG with real-time dodging | Explore Shanghai in 3D and fight turn-based battles with timed dodges and parries, in the spirit of Clair Obscur: Expedition 33. |
+| 06 | [明暗：第四十八遠征隊 Ming An: Expedition 48](games/06-ming-an-expedition-48/) ★ | Turn-based RPG with real-time dodging | A KMT expedition across six chapters of 1948 China to stop the Printer, then the boat. 3D. 繁體中文 / English. |
 | 07 | [國共快打 Civil Fighter 1949](games/07-civil-fighter-1949/) ★ | Fighting | Six-stage KMT arcade ladder, final boss the Million-Man Army, Taiwan ending. 繁體中文 / English. |
 | 08 | [軍樂大對決 Battle of the Bands 1949](games/08-battle-of-the-bands-1949/) ★ | Rhythm game | The KMT brass band's six-gig tour against rival troupes, from the village square to the last ferry pier. 繁體中文 / English. |
 | 09 | [黃金大轉進 Gold Run 1949](games/09-gold-run-1949/) ★ | Tower defense | Guard the KMT gold reserves across six maps, from the bank vault to the last ship; the gold leaves first. 繁體中文 / English. |
